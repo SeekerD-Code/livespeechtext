@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveSpeech Text | Free Live Audio Transcription</title>
+    <meta name="description" content="Transcribe live audio to text for free. Real-time voice dictation for PC, smartphone, and tablet. No registration, no limits.">
+    <meta property="og:title" content="LiveSpeech Text - Free Live Audio Transcription">
+    <meta property="og:description" content="Dictate and transcribe your voice in real time. Continuous web application optimized for mobile devices.">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="theme-toggle" title="Cambia tema">🌓</button>
+    <main>
+        <div class="banner-adv">Spazio Pubblicità</div>
+
+        <div class="main-layout-grid">
+            
+            <div id="banner-laterale-sinistro">
+                🛒 <br> Banner <br> Verticale <br> (160x600)
+            </div>
+
+            <div class="app-container">
+                <h1>Assistente Appunti Vocali</h1>
+                <p>Avvia l'ascolto e lascia che l'app scriva la lezione al posto tuo.</p>
+                
+                <div class="controls-section">
+                    <button id="btn-ascolto" class="btn-primary">🎤 Trascrivi da Microfono</button>
+                    <button id="btn-cattura-sistema" style="background-color: #8b5cf6; color: white;">💻 Trascrivi da Call / Video</button>
+                    <button id="btn-cancella" class="btn-danger">🗑️ Cancella Tutto</button>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <button id="btn-pip" style="background-color: #0ea5e9; color: white; width: auto; font-size: 0.95rem; padding: 8px 16px;">🔲 Riduci in primo piano</button>
+                </div>
+
+                <div class="status-badge" id="stato-app">Pronto ad ascoltare</div>
+
+                <div class="international-section" style="margin-bottom: 15px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                    <div>
+                        <label for="select-interfaccia" class="theme-label">📱 App Language:</label>
+                        <select id="select-interfaccia" class="theme-select">
+                            <option value="it">Italiano</option>
+                            <option value="en">English</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="select-lingua" class="theme-label">🎤 Microphone Input:</label>
+                        <select id="select-lingua" class="theme-select">
+                            <option value="it-IT">Italiano (Italia)</option>
+                            <option value="en-US">English (US)</option>
+                            <option value="en-GB">English (UK)</option>
+                            <option value="es-ES">Español (España)</option>
+                            <option value="fr-FR">Français (France)</option>
+                            <option value="de-DE">Deutsch (Deutschland)</option>
+                            <option value="pt-PT">Português (Portugal)</option>
+                            <option value="nl-NL">Nederlands (Paesi Bassi)</option>
+                            <option value="pl-PL">Polski (Polonia)</option>
+                            <option value="el-GR">Ελληνικά (Grecia)</option>
+                            <option value="ro-RO">Română (Romania)</option>
+                            <option value="sv-SE">Svenska (Svezia)</option>
+                            <option value="zh-CN">中文 (Cina - Semplificato)</option>
+                            <option value="ja-JP">日本語 (Giappone)</option>
+                            <option value="ko-KR">한국어 (Corea del Sud)</option>
+                            <option value="hi-IN">हिन्दी (India)</option>
+                            <option value="th-TH">ไทย (Thailandia)</option>
+                            <option value="vi-VN">Tiếng Việt (Vietnam)</option>
+                            <option value="id-ID">Bahasa Indonesia (Indonesia)</option>
+                            <option value="tr-TR">Türkçe (Turchia)</option>
+                            <option value="ru-RU">Русский (Russia)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="notes-container">
+                    <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente anche mentre l'app ascolta!"></textarea>
+                </div>
+
+                <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-top: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left; display: none;">
+                    L'IA sta ascoltando...
+                </div>
+
+                <div class="download-section">
+                    <button id="btn-download" style="display: none;">💾 Scarica Appunti (.txt)</button>
+                </div>
+                
+                <div class="advertising-space">
+                    <div id="banner-principale">
+                        🛒 Spazio Pubblicitario (Banner 728x90)
+                    </div>
+                </div>
+            </div> 
+        </div> 
+    </main>
+
+    <div id="custom-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon">⚠️</div>
+            <h3 id="modal-titolo">Sei sicura?</h3>
+            <p id="modal-messaggio">Questa azione non può essere annullata.</p>
+            <div class="modal-buttons">
+                <button id="modal-btn-annulla" class="btn-modal-secondary">Annulla</button>
+                <button id="modal-btn-conferma" class="btn-modal-danger">Sì, cancella</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js" defer></script>
+</body>
+</html>
