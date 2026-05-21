@@ -408,3 +408,108 @@ body.dark-mode .status-badge {
     background-color: #334155;
     color: #94a3b8;
 }
+/* --- INTEGRAZIONI TEMA SCURO PER MODALE E COMPONENTI ACCESSIBILE --- */
+
+body.dark-mode .modal-box {
+    background: #1e293b;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .modal-box h3 {
+    color: #f1f5f9;
+}
+
+body.dark-mode .modal-box p {
+    color: #94a3b8;
+}
+
+body.dark-mode .btn-modal-secondary {
+    background-color: #334155;
+    color: #cbd5e1;
+}
+body.dark-mode .btn-modal-secondary:hover { 
+    background-color: #475569; 
+}
+
+/* Correzione per il box di anteprima IA in modalità scura (sovrascrive lo stile inline) */
+body.dark-mode #box-anteprima-ia {
+    background-color: #1e1b4b !important; /* Un blu scuro violaceo coerente con lo sfondo */
+    color: #38bdf8 !important;            /* Testo azzurro vivido e leggibile */
+    border-color: #334155 !important;
+}
+
+/* Adattamento dei banner pubblicitari per non "sparare" luce nel buio */
+body.dark-mode .banner-adv,
+body.dark-mode #banner-laterale-sinistro,
+body.dark-mode #banner-principale {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #475569;
+}
+textarea:focus {
+    border-color: #2563eb;
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); /* Crea un alone sfumato blu attorno al bordo */
+}
+
+body.dark-mode textarea:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15); /* Alone azzurro per il tema scuro */
+}
+/* --- STILI EXTRA PER I PULSANTI NEL PIP --- */
+.pip-buttons-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.pip-btn-mini {
+    padding: 8px 14px !important;
+    font-size: 1.1rem !important;
+    border-radius: 6px !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+/* --- RIPOSIZIONAMENTO CONTROLLI IN ALTO A DESTRA --- */
+.top-right-controls {
+    position: fixed;
+    top: 15px;
+    right: 15px; /* Spostato leggermente più a destra per non toccare il banner */
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Allinea sia il box che la luna sul bordo destro dello schermo */
+    gap: 8px;
+}
+
+/* Rendo il pulsante del tema un normale blocco dentro il contenitore flessibile */
+#theme-toggle {
+    position: static !important; 
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.lang-control-box {
+    background: white;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: block; /* Cambiato da flex a block per assecondare il ritorno a capo */
+    text-align: left; /* Mantiene la scritta e la tendina allineati a sinistra dentro il box */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Margine di sicurezza per staccare la tendina dalla scritta soprastante */
+.lang-control-box .theme-select {
+    margin-top: 5px;
+    width: 100%; /* Fa in modo che la tendina prenda tutta la larghezza disponibile del box */
+}
+
+body.dark-mode .lang-control-box {
+    background: #334155;
+    border-color: #475569;
+}

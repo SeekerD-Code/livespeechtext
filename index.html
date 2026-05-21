@@ -11,7 +11,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="theme-toggle" title="Cambia tema">🌓</button>
+
+    <div class="top-right-controls">
+        <div class="lang-control-box">
+            <label for="select-interfaccia" class="theme-label">📱 App Language:</label>
+            <br> <select id="select-interfaccia" class="theme-select">
+                <option value="it">Italiano</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+            </select>
+        </div>
+        <button id="theme-toggle" title="Cambia tema">🌓</button>
+    </div>
+
     <main>
         <div class="banner-adv">Spazio Pubblicità</div>
 
@@ -38,17 +52,6 @@
                 <div class="status-badge" id="stato-app">Pronto ad ascoltare</div>
 
                 <div class="international-section" style="margin-bottom: 15px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                    <div>
-                        <label for="select-interfaccia" class="theme-label">📱 App Language:</label>
-                        <select id="select-interfaccia" class="theme-select">
-                            <option value="it">Italiano</option>
-                            <option value="en">English</option>
-                            <option value="es">Español</option>
-                            <option value="fr">Français</option>
-                            <option value="de">Deutsch</option>
-                        </select>
-                    </div>
-
                     <div>
                         <label for="select-lingua" class="theme-label">🎤 Microphone Input:</label>
                         <select id="select-lingua" class="theme-select">
@@ -110,6 +113,6 @@
         </div>
     </div>
 
-    <script src="app.js" defer></script>
+    <script src="app.js"></script>
 </body>
 </html>
