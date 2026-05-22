@@ -2,7 +2,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 }
 
 body {
@@ -512,4 +515,109 @@ body.dark-mode textarea:focus {
 body.dark-mode .lang-control-box {
     background: #334155;
     border-color: #475569;
+}
+/* --- STILE BRAND LOGO (SEEKER D. CODE) --- */
+.brand-header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-top: 25px;  
+}
+
+.seeker-title-container {
+    position: relative;
+    display: inline-block;
+    z-index: 2; /* Porta Seeker D. Code sopra le scintille */
+}
+/* --------------------------------------------------------------------------
+   1. SCRITTA IN ALTO: "Seeker D. Code"
+   -------------------------------------------------------------------------- */
+.seeker-text {
+    font-family: 'Splash', cursive; /* <-- CAMBIA IL FONT QUI */
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: #1e293b; /* Diventa chiaro in dark mode grazie alle regole successive */
+    filter: contrast(180%) drop-shadow(0px 0px 0.5px rgba(0,0,0,0.3));
+    letter-spacing: 2px;
+    /*transition: color 0.3s ease;*/
+}
+
+/* Il Cappello di Paglia posizionato millimetricamente sopra la S */
+.luffy-hat {
+    position: absolute;
+    top: -10px; /* Lo solleva sopra la scritta */
+    left: 150px; /* Lo inclina e lo appoggia alla S */
+    width: 35px;
+    height: 35px;
+    background-image: url('assets/luffy-hat.png'); /* O un PNG trasparente del solo cappello */
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(-15px);
+}
+
+/* Le Scintille Magiche tra le due scritte */
+.magic-sparkles {
+    position: absolute; /* Rende l'immagine fluttuante su un livello separato */
+    transform: rotate(60deg); /* Ruota di 15 gradi in senso orario */
+    top: -50px;          /* Regola questa altezza per spostare l'immagine più su o più giù */
+    z-index: 1;         /* Mette le scintille su un livello inferiore rispetto al testo */
+    
+    /* Ora puoi cambiare queste dimensioni liberamente, il testo NON si muoverà di un millimetro! */
+    width: 400px;       
+    height: 300px;       
+    
+    background-image: url('assets/sparkles.png'); 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none; /* Evita che l'immagine disturbi il mouse se provi a selezionare il testo */
+}
+
+.main-title {
+    position: relative;
+    z-index: 2; /* Porta Live Speech Text sopra le scintille */
+    font-family: 'Fredericka the Great', serif; /* <-- CAMBIA IL FONT QUI */
+    font-size: 5rem; 
+    font-style: normal;
+    font-weight: 400;
+    color: #05096c;
+    margin: 0;
+    margin-top: -10px;  /* Spinge la scritta "Live Speech Text" verso l'alto di 5 pixel */
+    line-height: 1.0;  /* Ridotto l'interlinea da 1.1 a 1.0 per eliminare lo spazio vuoto superiore */
+    transition: color 0.3s ease;
+}
+
+/* --------------------------------------------------------------------------
+   3. SCRITTA IN BASSO: "Assistente Appunti Vocali"
+   -------------------------------------------------------------------------- */
+.sub-text-bold {
+    font-family: "Oregano", cursive; /* <-- CAMBIA IL FONT QUI (ora è uguale a main-title) */
+    font-size: 2rem; 
+    font-weight: 400;
+    font-style: normal;
+    color: #000000;                                 /* <-- CAMBIA IL COLORE QUI (ora è uguale a main-title) */
+    margin: 0;
+    margin-top: 30px; /* Piccolo distacco per non farla attaccare a quella sopra */
+    line-height: 0.9;
+    transition: color 0.3s ease;
+}
+
+/* --- ADATTAMENTO TEMA SCURO --- */
+body.dark-mode .seeker-text {
+    color: #cbd5e1; /* Il testo Seeker D. Code diventa grigio chiaro rilassante nel buio */
+}
+
+body.dark-mode .main-title {
+    color: #38bdf8; /* Live Speech Text diventa azzurro vivido */
+}
+/* Colore al buio per Assistente Appunti Vocali */
+body.dark-mode .sub-text-bold {
+    color: #38bdf8; 
+}
+
+/* Spazio sotto l'insegna prima del paragrafo descrittivo */
+.brand-header + p {
+    margin-top: 15px;
 }
