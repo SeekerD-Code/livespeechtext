@@ -231,14 +231,20 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- EVENTI CALL ---
+    // --- EVENTI CALL CON REINDIRIZZAMENTO AUDIO COMPLETO ---
     btnCatturaSistema.addEventListener('click', async () => {
         if (!ascoltoAttivo) {
             try {
                 bloccoForzato = false;
+                
+                // Richiediamo lo schermo forzando i parametri audio puliti
                 streamSistema = await navigator.mediaDevices.getDisplayMedia({
                     video: true,
-                    audio: { autoGainControl: true, echoCancellation: false, noiseSuppression: false }
+                    audio: { 
+                        autoGainControl: false, 
+                        echoCancellation: false, 
+                        noiseSuppression: false 
+                    }
                 });
                 
                 const tracceAudio = streamSistema.getAudioTracks();
@@ -247,6 +253,21 @@ window.addEventListener('DOMContentLoaded', () => {
                     mostraModaleAvviso(t.modalAudioMancanteTitolo, t.modalAudioMancanteMessaggio);
                     streamSistema.getTracks().forEach(track => track.stop());
                     return;
+                }
+
+                // --- 🎛️ IL PONTE AUDIO PER YOUTUBE ---
+                // Creiamo un contesto audio per prendere il flusso di YouTube e spararlo nelle casse
+                // mentre l'API vocale continua a girare.
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    const audioCtx = new AudioContext();
+                    const sorgente = audioCtx.createMediaStreamSource(streamSistema);
+                    
+                    // Collega l'audio di YouTube direttamente alle tue casse per non farlo sparire
+                    sorgente.connect(audioCtx.destination);
+                    
+                    // Conserviamo il contesto per chiuderlo quando l'utente clicca STOP
+                    streamSistema.audioCtx = audioCtx;
                 }
 
                 recognition.lang = selectLingua.value;
@@ -263,6 +284,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 disattivaGraficaStato();
             }
         } else {
+            // Se l'utente clicca STOP, chiudiamo anche il contesto audio
+            if (streamSistema && streamSistema.audioCtx) {
+                streamSistema.audioCtx.close();
+            }
             fermaQualsiasiAscolto();
         }
     });
