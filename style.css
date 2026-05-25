@@ -79,6 +79,7 @@ main {
 
 /* --- CONTENITORE APPLICAZIONE --- */
 .app-container {
+    position: relative; /* Fondamentale per bloccare il menu dentro la scheda */
     background: white;
     padding: 30px;
     border-radius: 16px;
@@ -321,6 +322,7 @@ textarea:focus {
 }
 
 @media (max-width: 600px) {
+    /* 1. Gestione controlli generali e bottoni che avevi già */
     .controls-section {
         display: flex;
         flex-direction: column;
@@ -334,6 +336,69 @@ textarea:focus {
     
     #btn-pip {
         width: 100%;
+    }
+
+    /* 2. Ottimizzazione proporzioni dell'app su mobile */
+    .app-container {
+        padding: 20px 15px; /* Sfrutta al massimo lo spazio dello schermo */
+    }
+
+    /* 3. Blocco Titolo e Insegna (Evita che vada a capo o si sovrapponga) */
+    .brand-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 25px;
+        padding-top: 45px; /* Lascia spazio in alto per i menu fluttuanti del tema/lingua */
+    }
+
+    /* Costringe Seeker D. Code a rimanere unito e proporzionato */
+    .seeker-text {
+        font-size: 1.55rem !important; /* Ridotto per stare perfettamente su una riga sola */
+        white-space: nowrap;          /* Impedisce categoricamente di spezzarsi in due */
+        display: inline-block;
+    }
+
+    /* Riposizionamento millimetrico del Cappello di Paglia sulla S ridotta */
+    .luffy-hat {
+        width: 22px;        /* Scala il cappello proporzionalmente alla scritta */
+        height: 22px;
+        top: -6px;          /* Lo riallinea verticalmente */
+        left: 95px;         /* Spostato a sinistra per ancorarsi alla 'S' del testo più piccolo */
+    }
+
+    /* Rimpicciolisce l'enorme titolo principale per non rompere il layout */
+    .main-title {
+        font-size: 2.8rem !important;
+    }
+
+    /* Rimpicciolisce il sottotitolo dell'assistente vocale */
+    .sub-text-bold {
+        font-size: 1.5rem !important;
+        margin-top: 15px;
+    }
+
+    /* Sgancia il posizionamento assoluto del menu per evitare collisioni col testo */
+    .main-nav {
+        position: static !important;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; /* Se non entrano, i tasti del menu vanno sotto tra loro in modo ordinato */
+        gap: 8px;
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .nav-link {
+        font-size: 0.85rem;
+        padding: 5px 10px;
+    }
+
+    /* 4. Ridimensionamento area di testo */
+    textarea {
+        height: 200px; /* Riduce l'altezza per evitare che l'utente debba scrollare all'infinito sul telefono */
+        font-size: 1rem;
     }
 }
 
@@ -523,7 +588,7 @@ body.dark-mode .lang-control-box {
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
-    padding-top: 25px;  
+    padding-top: 5px;  
 }
 
 .seeker-title-container {
@@ -536,7 +601,7 @@ body.dark-mode .lang-control-box {
    -------------------------------------------------------------------------- */
 .seeker-text {
     font-family: 'Splash', cursive; /* <-- CAMBIA IL FONT QUI */
-    font-size: 2.5rem;
+    font-size: 2.1rem;
     font-weight: 400;
     color: #1e293b; /* Diventa chiaro in dark mode grazie alle regole successive */
     filter: contrast(180%) drop-shadow(0px 0px 0.5px rgba(0,0,0,0.3));
@@ -546,15 +611,16 @@ body.dark-mode .lang-control-box {
 
 /* Il Cappello di Paglia posizionato millimetricamente sopra la S */
 .luffy-hat {
-    position: absolute;
-    top: -10px; /* Lo solleva sopra la scritta */
-    left: 150px; /* Lo inclina e lo appoggia alla S */
-    width: 35px;
-    height: 35px;
+position: absolute;
+    top: -7.5px; /* Lo solleva sopra la scritta */
+    left: 128px; /* Lo inclina e lo appoggia alla S */
+    width: 30px;
+    height: 30px;
     background-image: url('assets/luffy-hat.png'); /* O un PNG trasparente del solo cappello */
     background-size: contain;
     background-repeat: no-repeat;
-    transform: rotate(-15px);
+    transform: rotate(20deg); /* Nota: ho corretto anche -15px in -15deg che è l'unità corretta per i gradi! */
+    z-index: 5; /* <--- QUESTO LO PORTA IN PRIMO PIANO RISPETTO AL TESTO */
 }
 
 /* Le Scintille Magiche tra le due scritte */
@@ -620,4 +686,243 @@ body.dark-mode .sub-text-bold {
 /* Spazio sotto l'insegna prima del paragrafo descrittivo */
 .brand-header + p {
     margin-top: 15px;
+}
+
+/* --- NAVIGAZIONE CON POSIZIONAMENTO ASSOLUTO --- */
+.main-nav {
+    position: absolute;
+    top: 10px;            /* Distanza precisa dal bordo superiore della scheda */
+    right: 0px;          /* Sposta il menu a destra per affiancarlo a Seeker D. Code */
+    display: flex;
+    gap: 10px;
+    z-index: 10;          /* Fa fluttuare il menu sopra i titoli, permettendo la sovrapposizione */
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #64748b;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    white-space: nowrap;  /* Impedisce ai pulsanti di andare a capo tra loro */
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: #8b5cf6;
+    color: white;
+}
+
+/* --- STILE CARTE CONTENUTO --- */
+.content-card {
+    background: var(--bg-card, #ffffff);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto 20px auto;
+    text-align: left;
+}
+.content-card h2 {
+    margin-bottom: 20px;
+    color: #1e293b;
+}
+/* Scurisce lo sfondo della scheda About Us e FAQ in modalità notte */
+body.dark-mode .content-card {
+    background-color: #1e293b; /* Un blu/grigio scuro perfetto per la dark mode */
+    border-color: #334155;     /* Scurisce anche l'eventuale bordo */
+}
+
+/* --- ACCORDION (FAQ) --- */
+.accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.accordion-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+body.dark-mode .accordion-item {
+    border-color: #334155;
+}
+.accordion-header {
+    width: 100%;
+    background: #f8fafc;
+    border: none;
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: inherit;
+    color: #334155;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+body.dark-mode .accordion-header {
+    background: #1e293b;
+    color: #f8fafc;
+}
+.accordion-header:hover {
+    background: #f1f5f9;
+}
+body.dark-mode .accordion-header:hover {
+    background: #334155;
+}
+.accordion-header .icon {
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
+}
+/* Quando la scheda è attiva, ruotiamo la freccetta */
+.accordion-item.active .accordion-header .icon {
+    transform: rotate(180deg);
+}
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease;
+    background: #ffffff;
+}
+body.dark-mode .accordion-content {
+    background: #0f172a;
+}
+.accordion-item.active .accordion-content {
+    max-height: 200px; /* Altezza massima indicativa per l'animazione */
+    padding: 15px 20px;
+    border-top: 1px solid #e2e8f0;
+}
+body.dark-mode .accordion-item.active .accordion-content {
+    border-top-color: #334155;
+}
+/* --- STILI COMPLEMENTARI PER LA PAGINA ABOUT --- */
+.about-content h3 {
+    color: #8b5cf6;
+    margin-top: 25px;
+    margin-bottom: 12px;
+}
+
+.about-content p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #475569;
+}
+
+body.dark-mode .about-content p {
+    color: #cbd5e1;
+}
+
+.philosophy-quote {
+    border-left: 4px solid #100c17;
+    padding-left: 15px;
+    margin: 20px 0;
+    font-style: italic;
+    background-color: rgba(139, 92, 246, 0.05);
+    padding: 15px;
+    border-radius: 0 8px 8px 0;
+}
+
+.features-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.features-list li {
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 20px;
+    line-height: 1.5;
+}
+
+.features-list li::before {
+    content: "•";
+    color: #8b5cf6;
+    font-weight: bold;
+    font-size: 1.2rem;
+    position: absolute;
+    left: 0;
+    top: -2px;
+}
+
+.about-footer {
+    font-weight: 500;
+    text-align: center;
+    margin-top: 30px;
+    color: #8b5cf6 !important;
+}
+/* --- STILE CONTATTI & CREDITS --- */
+.about-divider {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #8b5cf6, transparent);
+    margin: 40px 0 25px 0;
+}
+
+.about-credits {
+    text-align: center;
+}
+
+.about-credits h3 {
+    font-size: 1.2rem;
+    color: #8b5cf6;
+    margin-bottom: 10px;
+}
+
+.about-credits p {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+/* Modalità notte per il testo dei contatti */
+body.dark-mode .about-credits p {
+    color: #94a3b8;
+}
+
+.credits-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.credit-link {
+    text-decoration: none;
+    color: #475569;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.credit-link:hover {
+    border-color: #8b5cf6;
+    color: #8b5cf6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.1);
+}
+
+/* Adattamento dei pulsanti link per la Dark Mode */
+body.dark-mode .credit-link {
+    color: #cbd5e1;
+    border-color: #334155;
+    background-color: rgba(30, 41, 59, 0.5);
+}
+
+body.dark-mode .credit-link:hover {
+    color: #a78bfa;
+    border-color: #8b5cf6;
+}
+
+.copyright {
+    font-size: 0.8rem !important;
+    color: #94a3b8 !important;
+    margin-top: 25px;
 }

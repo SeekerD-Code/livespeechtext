@@ -8,26 +8,14 @@
     <meta property="og:title" content="LiveSpeech Text - Free Live Audio Transcription">
     <meta property="og:description" content="Dictate and transcribe your voice in real time. Continuous web application optimized for mobile devices.">
     <meta property="og:type" content="website">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Splash&display=swap" rel="stylesheet">
-
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Splash&display=swap" rel="stylesheet">
     
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Oregano:ital@0;1&family=Splash&display=swap" rel="stylesheet">
-        
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Lexend:wght@100..900&family=Oregano:ital@0;1&family=Splash&display=swap" rel="stylesheet">
 
-        <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="top-right-controls">
         <div class="lang-control-box">
             <label for="select-interfaccia" class="theme-label">📱 App Language:</label>
@@ -52,81 +40,162 @@
             </div>
 
             <div class="app-container">
+                
+                <nav class="main-nav">
+                    <a href="#" id="link-app" class="nav-link active">App</a>
+                    <a href="#" id="link-about" class="nav-link">About Us</a>
+                    <a href="#" id="link-faq" class="nav-link">FAQ</a>
+                </nav>
+
                 <div class="brand-header">
                     <div class="seeker-title-container">
                         <span class="luffy-hat"></span>
                         <span class="seeker-text">Seeker D. Code</span>
                     </div>
-    
                     <div class="magic-sparkles"></div>
-    
                     <h1 class="main-title">Live Speech Text</h1>
                     <h2 class="main-title sub-text-bold">Assistente Appunti Vocali</h2>
+                </div>
+
+                <div id="sezione-app">
+                    <p>Avvia l'ascolto e lascia che l'app scriva la lezione al posto tuo.</p>
+                    
+                    <div class="controls-section">
+                        <button id="btn-ascolto" class="btn-primary">🎤 Trascrivi da Microfono</button>
+                        <button id="btn-cattura-sistema" style="background-color: #8b5cf6; color: white;">💻 Trascrivi da Call / Video</button>
+                        <button id="btn-cancella" class="btn-danger">🗑️ Cancella Tutto</button>
                     </div>
 
-                <p>Avvia l'ascolto e lascia che l'app scriva la lezione al posto tuo.</p>
-                
-                <div class="controls-section">
-                    <button id="btn-ascolto" class="btn-primary">🎤 Trascrivi da Microfono</button>
-                    <button id="btn-cattura-sistema" style="background-color: #8b5cf6; color: white;">💻 Trascrivi da Call / Video</button>
-                    <button id="btn-cancella" class="btn-danger">🗑️ Cancella Tutto</button>
-                </div>
+                    <div style="margin-bottom: 15px;">
+                        <button id="btn-pip" style="background-color: #0ea5e9; color: white; width: auto; font-size: 0.95rem; padding: 8px 16px;">🔲 Riduci in primo piano</button>
+                    </div>
 
-                <div style="margin-bottom: 15px;">
-                    <button id="btn-pip" style="background-color: #0ea5e9; color: white; width: auto; font-size: 0.95rem; padding: 8px 16px;">🔲 Riduci in primo piano</button>
-                </div>
+                    <div class="status-badge" id="stato-app">Pronto ad ascoltare</div>
 
-                <div class="status-badge" id="stato-app">Pronto ad ascoltare</div>
+                    <div class="international-section" style="margin-bottom: 15px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div>
+                            <label for="select-lingua" class="theme-label">🎤 Microphone Input:</label>
+                            <select id="select-lingua" class="theme-select">
+                                <option value="it-IT">Italiano (Italia)</option>
+                                <option value="en-US">English (US)</option>
+                                <option value="en-GB">English (UK)</option>
+                                <option value="es-ES">Español (España)</option>
+                                <option value="fr-FR">Français (France)</option>
+                                <option value="de-DE">Deutsch (Deutschland)</option>
+                                <option value="pt-PT">Português (Portugal)</option>
+                                <option value="nl-NL">Nederlands (Paesi Bassi)</option>
+                                <option value="pl-PL">Polski (Polonia)</option>
+                                <option value="el-GR">Ελληνικά (Grecia)</option>
+                                <option value="ro-RO">Română (Romania)</option>
+                                <option value="sv-SE">Svenska (Svezia)</option>
+                                <option value="zh-CN">中文 (Cina - Semplificato)</option>
+                                <option value="ja-JP">日本語 (Giappone)</option>
+                                <option value="ko-KR">한국어 (Corea del Sud)</option>
+                                <option value="hi-IN">हिन्दी (India)</option>
+                                <option value="th-TH">ไทย (Thailandia)</option>
+                                <option value="vi-VN">Tiếng Việt (Vietnam)</option>
+                                <option value="id-ID">Bahasa Indonesia (Indonesia)</option>
+                                <option value="tr-TR">Türkçe (Turchia)</option>
+                                <option value="ru-RU">Русский (Russia)</option>
+                            </select>
+                        </div>
+                    </div>
 
-                <div class="international-section" style="margin-bottom: 15px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                    <div>
-                        <label for="select-lingua" class="theme-label">🎤 Microphone Input:</label>
-                        <select id="select-lingua" class="theme-select">
-                            <option value="it-IT">Italiano (Italia)</option>
-                            <option value="en-US">English (US)</option>
-                            <option value="en-GB">English (UK)</option>
-                            <option value="es-ES">Español (España)</option>
-                            <option value="fr-FR">Français (France)</option>
-                            <option value="de-DE">Deutsch (Deutschland)</option>
-                            <option value="pt-PT">Português (Portugal)</option>
-                            <option value="nl-NL">Nederlands (Paesi Bassi)</option>
-                            <option value="pl-PL">Polski (Polonia)</option>
-                            <option value="el-GR">Ελληνικά (Grecia)</option>
-                            <option value="ro-RO">Română (Romania)</option>
-                            <option value="sv-SE">Svenska (Svezia)</option>
-                            <option value="zh-CN">中文 (Cina - Semplificato)</option>
-                            <option value="ja-JP">日本語 (Giappone)</option>
-                            <option value="ko-KR">한국어 (Corea del Sud)</option>
-                            <option value="hi-IN">हिन्दी (India)</option>
-                            <option value="th-TH">ไทย (Thailandia)</option>
-                            <option value="vi-VN">Tiếng Việt (Vietnam)</option>
-                            <option value="id-ID">Bahasa Indonesia (Indonesia)</option>
-                            <option value="tr-TR">Türkçe (Turchia)</option>
-                            <option value="ru-RU">Русский (Russia)</option>
-                        </select>
+                    <div class="notes-container">
+                        <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente anche mentre l'app ascolta!"></textarea>
+                    </div>
+
+                    <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-top: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left; display: none;">
+                        L'IA sta ascoltando...
+                    </div>
+
+                    <div class="download-section">
+                        <button id="btn-download" style="display: none;">💾 Scarica Appunti (.txt)</button>
                     </div>
                 </div>
 
-                <div class="notes-container">
-                    <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente anche mentre l'app ascolta!"></textarea>
+                <div id="sezione-about" class="page-section content-card" style="display: none;">
+    <h2 class="section-title">About Us</h2>
+    
+    <div class="about-content">
+        <h3>La storia dietro Seeker D. Code</h3>
+        
+        <p>
+            <strong>Live Speech Text</strong> non nasce semplicemente come l'ennesimo software di dettatura, ma da una reale esigenza di libertà ed efficienza nel flusso di lavoro quotidiano. Troppo spesso gli strumenti di trascrizione tradizionali sono rigidi, vincolati a singole finestre o incapaci di modificare in tempo reale ciò che l'app ha catturato in modo errato.
+        </p>
+        <p>
+            Da questa sfida è nata l'idea: creare uno spazio minimale, reattivo e accessibile, capace di adattarsi istantaneamente sia alla voce dal vivo che all'audio di sistema. Ma la vera spinta è stata il desiderio di rompere gli schemi dell'interfaccia classica, introducendo funzionalità avanzate come il <em>Document Picture-in-Picture</em> — una finestra fluttuante che permette di mantenere il controllo totale delle trascrizioni mentre si naviga, si scrive o si lavora su altri software.
+        </p>
+        <p>
+            Dietro lo sviluppo di questa applicazione c'è la filosofia racchiusa nel nostro brand: <strong>Seeker D. Code</strong>.
+        </p>
+
+        <blockquote class="philosophy-quote">
+            Se il codice è un oceano di infinite possibilità, noi abbiamo scelto di affrontarlo da ricercatori. Questo nome è il nostro piccolo manifesto silenzioso. Rappresenta la nostra volontà, la determinazione incrollabile di chi non si arrende davanti ai limiti tecnici e insegue una visione di totale libertà digitale. È il legame profondo tra la passione per la creatività e la forza di tracciare la propria rotta, portando un sorriso e un tocco di colore (e magari un cappello di paglia ben saldo in testa) anche tra le righe di programmazione più complesse.
+        </blockquote>
+
+        <h3>Le Caratteristiche Principali</h3>
+        <ul class="features-list">
+            <li><strong>Doppia Modalità di Acquisizione:</strong> Passa istantaneamente dalla trascrizione ambientale tramite microfono alla cattura diretta ed esclusiva dei flussi audio di call, video e riunioni online.</li>
+            <li><strong>Focus Multilingue:</strong> Supporto nativo per l'internazionalizzazione, ottimizzato per comprendere i dettagli e le sfumature della voce in contesti dinamici.</li>
+            <li><strong>Area di Lavoro Mobile:</strong> Sfrutta la potenza del Document PiP per ridurre l'applicazione in un angolo dello schermo, continuando a monitorare lo stato e i testi in tempo reale senza interrompere i tuoi compiti principali.</li>
+            <li><strong>Privacy &amp; Controllo:</strong> Nessun dato viene trattenuto. Tutto ciò che viene trascritto rimane locale, pronto per essere scaricato con il pulsante "💾 Scarica Testo" o selezionato e copiato, ed infine ripulito istantaneamente.</li>
+        </ul>
+
+        <p class="about-footer">
+            Siamo qui per esplorare, innovare e rendere la tecnologia uno strumento al servizio della tua produttività. <em>La ricerca del codice definitivo non finisce mai!</em>
+        </p>
+    </div>
+
+    <hr class="about-divider">
+        
+        <div class="about-credits">
+            <h3>Contatti & Credits</h3>
+            <p>Hai riscontrato un problema, vuoi suggerire una funzionalità o semplicemente fare due chiacchiere sul codice?</p>
+            
+            <div class="credits-links">
+                <a href="mailto:seekerdcode@gmail.com" class="credit-link">📧 Email</a>
+                <a href="https://www.linkedin.com/in/code-seeker-d-194633411/" target="_blank" class="credit-link">💼 LinkedIn</a>
+            </div>
+            
+            <p class="copyright">© 2026 Seeker D. Code. Made with 💜 and Determination.</p>
+        </div>
+
+</div>
+
+                <div id="sezione-faq" class="page-section content-card" style="display: none;">
+                    <h2>❓ Domande Frequenti (FAQ)</h2>
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <button class="accordion-header">Come funziona il riconoscimento vocale? <span class="icon">▼</span></button>
+                            <div class="accordion-content">
+                                <p>L'applicazione sfera la tecnologia nativa di riconoscimento vocale del browser. Quando parli o catturi l'audio, il motore analizza i suoni, isola la frequenza della voce e trasforma il parlato in testo definitivo non appena rileva una pausa naturale nel discorso.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">Posso trascrivere una canzone da YouTube o Spotify? <span class="icon">▼</span></button>
+                            <div class="accordion-content">
+                                <p>Il motore di trascrizione è addestrato specificamente per il <em>parlato umano lineare</em> (lezioni, conferenze, dettati). Le canzoni allungano le vocali, alterano il ritmo naturale e contengono strumenti musicali; l'algoritmo tende a scartare questi flussi considerandoli "rumore".</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">Perché sento un effetto eco o il testo si confonde se trascrivo una Call? <span class="icon">▼</span></button>
+                            <div class="accordion-content">
+                                <p>Se riproduci l'audio dalle casse del PC e usi contemporaneamente il microfono, si crea un loop acustico (corto circuito). Per trascrivere video o chiamate senza interferenze usa sempre le <strong>cuffie</strong>, oppure su Windows attiva la funzione nativa <strong>"Missaggio Stereo"</strong> nelle impostazioni audio.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-top: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left; display: none;">
-                    L'IA sta ascoltando...
-                </div>
-
-                <div class="download-section">
-                    <button id="btn-download" style="display: none;">💾 Scarica Appunti (.txt)</button>
-                </div>
-                
                 <div class="advertising-space">
                     <div id="banner-principale">
                         🛒 Spazio Pubblicitario (Banner 728x90)
                     </div>
                 </div>
-            </div> 
-        </div> 
-    </main>
+
+            </div> </div> </main>
 
     <div id="custom-modal" class="modal-overlay">
         <div class="modal-box">

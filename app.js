@@ -161,7 +161,7 @@ window.addEventListener('DOMContentLoaded', () => {
         modalMessaggio.textContent = messaggio;
         modalBtnConferma.style.display = "block"; 
         modalBtnAnnulla.textContent = traduzioni[selectInterfaccia.value].modalAnnulla;
-        azioneDaConfermare = callback;
+        actionDaConfermare = callback;
         modal.classList.add('show');
     }
 
@@ -231,8 +231,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
-// --- EVENTI CALL ---
+    // --- EVENTI CALL ---
     btnCatturaSistema.addEventListener('click', async () => {
         if (!ascoltoAttivo) {
             try {
@@ -329,7 +328,7 @@ window.addEventListener('DOMContentLoaded', () => {
         URL.revokeObjectURL(url);
     });
 
-// --- FUNZIONALITÀ DOCUMENT PICTURE-IN-PICTURE (CON PULSANTI E BANNER) ---
+    // --- FUNZIONALITÀ DOCUMENT PICTURE-IN-PICTURE ---
     btnPip.addEventListener('click', async () => {
         if (!('documentPictureInPicture' in window)) {
             alert("Il tuo browser non supporta il Document Picture-in-Picture. Usa Google Chrome o Edge!");
@@ -344,12 +343,11 @@ window.addEventListener('DOMContentLoaded', () => {
         try {
             const pipWindow = await window.documentPictureInPicture.requestWindow({
                 width: 450,
-                height: 480, // Aumentato leggermente per fare spazio al banner in basso
+                height: 480,
             });
 
             window.pipWindow = pipWindow;
 
-            // Iniezione degli stili nel PiP
             Array.from(document.styleSheets).forEach((styleSheet) => {
                 try {
                     const cssRules = Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('');
@@ -368,7 +366,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 pipWindow.document.body.classList.add('dark-mode');
             }
 
-            // Contenitore principale del PiP
             const pipContainer = document.createElement('div');
             pipContainer.style.padding = '15px';
             pipContainer.style.height = '100vh';
@@ -378,7 +375,6 @@ window.addEventListener('DOMContentLoaded', () => {
             pipContainer.style.boxSizing = 'border-box';
             pipContainer.style.justifyContent = 'space-between';
 
-            // Parte superiore (Stato + Testo)
             const topBox = document.createElement('div');
             topBox.style.display = 'flex';
             topBox.style.flexDirection = 'column';
@@ -387,7 +383,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
             const pipStato = document.createElement('div');
             pipStato.className = 'status-badge';
-            pipStato.style.marginRule = '0';
+            pipStato.style.margin = '0';
             pipStato.style.width = '100%';
             pipStato.style.textAlign = 'center';
             pipStato.textContent = statoApp.textContent;
@@ -400,20 +396,17 @@ window.addEventListener('DOMContentLoaded', () => {
             pipTextarea.style.width = '100%';
             pipTextarea.disabled = true;
 
-            // --- NUOVA RIGA PULSANTI RIDOTTI (SOLO ICONE + TOOLTIP) ---
             const pipButtonsRow = document.createElement('div');
             pipButtonsRow.className = 'pip-buttons-row';
 
             const t = traduzioni[selectInterfaccia.value];
 
-            // 1. Pulsante Microfono Mini
             const miniBtnMicrofono = document.createElement('button');
             miniBtnMicrofono.className = btnAscolto.className + ' pip-btn-mini';
             miniBtnMicrofono.textContent = '🎤';
             miniBtnMicrofono.title = t.btnMicrofono; 
             miniBtnMicrofono.addEventListener('click', () => btnAscolto.click());
 
-            // 2. Pulsante Call Mini
             const miniBtnCall = document.createElement('button');
             miniBtnCall.className = btnCatturaSistema.className + ' pip-btn-mini';
             miniBtnCall.textContent = '💻';
@@ -421,7 +414,6 @@ window.addEventListener('DOMContentLoaded', () => {
             miniBtnCall.style.backgroundColor = btnCatturaSistema.style.backgroundColor;
             miniBtnCall.addEventListener('click', () => btnCatturaSistema.click());
 
-            // 3. Pulsante Cancella Mini
             const miniBtnCancella = document.createElement('button');
             miniBtnCancella.className = btnCancella.className + ' pip-btn-mini';
             miniBtnCancella.textContent = '🗑️';
@@ -432,30 +424,26 @@ window.addEventListener('DOMContentLoaded', () => {
             pipButtonsRow.appendChild(miniBtnCall);
             pipButtonsRow.appendChild(miniBtnCancella);
 
-            // Costruzione blocco superiore
             topBox.appendChild(pipStato);
             topBox.appendChild(pipButtonsRow);
             topBox.appendChild(pipTextarea);
 
-            // --- NUOVO BANNER PUBBLICITARIO IN BASSO DENTRO IL PIP ---
             const pipAdvSpace = document.createElement('div');
             pipAdvSpace.className = 'advertising-space';
             pipAdvSpace.style.marginTop = '10px';
 
             const pipBanner = document.createElement('div');
             pipBanner.id = 'banner-principale';
-            pipBanner.style.lineHeight = '50px'; // Più basso per stare nella finestrina
+            pipBanner.style.lineHeight = '50px'; 
             pipBanner.style.height = '50px';
             pipBanner.textContent = 'Space Advertising';
 
             pipAdvSpace.appendChild(pipBanner);
 
-            // Assemblaggio finale all'interno del PiP
             pipContainer.appendChild(topBox);
             pipContainer.appendChild(pipAdvSpace);
             pipWindow.document.body.appendChild(pipContainer);
 
-            // Sincronizzazione dinamica continua (Stato, Testi e animazioni dei pulsanti)
             const intervalloSincro = setInterval(() => {
                 if (pipWindow.closed) {
                     clearInterval(intervalloSincro);
@@ -463,20 +451,17 @@ window.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 
-                // Aggiorna testo e badge di stato
                 pipTextarea.value = areaAppunti.value;
                 pipStato.textContent = statoApp.textContent;
                 
                 const currentLang = traduzioni[selectInterfaccia.value];
 
-                // Sincronizza lo stato attivo/disattivo delle grafiche e i tooltip dinamici
                 if (statoApp.classList.contains('active')) {
                     pipStato.classList.add('active');
                 } else {
                     pipStato.classList.remove('active');
                 }
 
-                // Sincronizza l'aspetto del pulsante microfono (se sta registrando diventa Stop 🛑)
                 if (btnAscolto.classList.contains('listening')) {
                     miniBtnMicrofono.classList.add('listening');
                     miniBtnMicrofono.textContent = '🛑';
@@ -487,7 +472,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     miniBtnMicrofono.title = currentLang.btnMicrofono;
                 }
 
-                // Sincronizza l'aspetto del pulsante Call
                 if (ascoltoAttivo && !btnAscolto.classList.contains('listening')) {
                     miniBtnCall.textContent = '🛑';
                     miniBtnCall.style.backgroundColor = "#ef4444";
@@ -498,7 +482,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     miniBtnCall.title = currentLang.btnCall;
                 }
 
-                // Aggiorna costantemente lo stato "disabled" per evitare conflitti d'uso
                 miniBtnMicrofono.disabled = btnAscolto.disabled && !btnAscolto.classList.contains('listening');
                 miniBtnCall.disabled = btnCatturaSistema.disabled && miniBtnCall.textContent !== '🛑';
 
@@ -509,6 +492,52 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- INIZIALIZZAZIONE AUTOMATICA ---
+
+    // --- LINGUETTE DI NAVIGAZIONE (CAMBIO PAGINA) ---
+    const linkApp = document.getElementById('link-app');
+    const linkAbout = document.getElementById('link-about');
+    const linkFaq = document.getElementById('link-faq');
+
+    const sezioneApp = document.getElementById('sezione-app') || document.querySelector('.container'); 
+    const sezioneAbout = document.getElementById('sezione-about');
+    const sezioneFaq = document.getElementById('sezione-faq');
+
+    function mostraPagina(paginaDaMostrare, linkAttivo) {
+        sezioneApp.style.display = 'none';
+        sezioneAbout.style.display = 'none';
+        sezioneFaq.style.display = 'none';
+        
+        linkApp.classList.remove('active');
+        linkAbout.classList.remove('active');
+        linkFaq.classList.remove('active');
+
+        paginaDaMostrare.style.display = 'block';
+        linkAttivo.classList.add('active');
+    }
+
+    linkApp.addEventListener('click', (e) => { e.preventDefault(); mostraPagina(sezioneApp, linkApp); });
+    linkAbout.addEventListener('click', (e) => { e.preventDefault(); mostraPagina(sezioneAbout, linkAbout); });
+    linkFaq.addEventListener('click', (e) => { e.preventDefault(); mostraPagina(sezioneFaq, linkFaq); });
+
+
+    // --- LOGICA FUNZIONAMENTO ACCORDION (FAQ) ---
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+    accordionHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const itemCorrente = header.parentElement; // Corretto l'errore dello spazio
+            const eraAttivo = itemCorrente.classList.contains('active');
+            
+            document.querySelectorAll('.accordion-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            if (!eraAttivo) {
+                itemCorrente.classList.add('active');
+            }
+        });
+    });
+
+    // --- INIZIALIZZAZIONE AUTOMATICA LINGUA (Spostata alla fine per sicurezza) ---
     rilevaEImpostaLinguaIniziale();
 });
