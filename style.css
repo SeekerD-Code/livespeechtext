@@ -403,6 +403,7 @@ textarea:focus {
     /* NASCONDE IL TASTO CALL/VIDEO SU MOBILE */
     #btn-cattura-sistema {
         display: none !important;
+    }
 }
 
 /* --- STILE PER IL TASTO FLUTTUANTE IN ALTO A DESTRA --- */
