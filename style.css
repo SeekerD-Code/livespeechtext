@@ -400,6 +400,9 @@ textarea:focus {
         height: 200px; /* Riduce l'altezza per evitare che l'utente debba scrollare all'infinito sul telefono */
         font-size: 1rem;
     }
+    /* NASCONDE IL TASTO CALL/VIDEO SU MOBILE */
+    #btn-cattura-sistema {
+        display: none !important;
 }
 
 /* --- STILE PER IL TASTO FLUTTUANTE IN ALTO A DESTRA --- */
