@@ -370,13 +370,13 @@ textarea:focus {
 
     /* Rimpicciolisce l'enorme titolo principale per non rompere il layout */
     .main-title {
-        font-size: 2.8rem !important;
+        font-size: 2.3rem !important;
     }
 
     /* Rimpicciolisce il sottotitolo dell'assistente vocale */
     .sub-text-bold {
-        font-size: 1.5rem !important;
-        margin-top: 15px;
+        font-size: 1.2rem !important;
+        margin-top: 10px;
     }
 
     /* Sgancia il posizionamento assoluto del menu per evitare collisioni col testo */
