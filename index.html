@@ -16,24 +16,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="top-right-controls">
-        <div class="lang-control-box">
-            <label for="select-interfaccia" class="theme-label">📱 App Language:</label>
-            <br> <select id="select-interfaccia" class="theme-select">
-                <option value="it">Italiano</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-            </select>
-        </div>
-        <button id="theme-toggle" title="Cambia tema">🌓</button>
-    </div>
-
+    
     <main>
         <div class="banner-adv">Spazio Pubblicità</div>
 
-        <div class="main-layout-grid">
+        <div class="page-body-wrapper">
             
             <div id="banner-laterale-sinistro">
                 🛒 <br> Banner <br> Verticale <br> (160x600)
@@ -41,11 +28,28 @@
 
             <div class="app-container">
                 
-                <nav class="main-nav">
-                    <a href="#" id="link-app" class="nav-link active">App</a>
-                    <a href="#" id="link-about" class="nav-link">About Us</a>
-                    <a href="#" id="link-faq" class="nav-link">FAQ</a>
-                </nav>
+                <div id="theme-bubble-container">
+                    <span id="theme-text-label">giorno</span>
+                    <button id="theme-toggle" title="Cambia tema">🌓</button>
+                </div>
+
+                <div class="top-right-controls-inline">
+                    <nav class="main-nav">
+                        <a href="#" id="link-app" class="nav-link active">App</a>
+                        <a href="#" id="link-about" class="nav-link">About Us</a>
+                        <a href="#" id="link-faq" class="nav-link">FAQ</a>
+                    </nav>
+
+                    <div class="controls-cluster">
+                        <div class="lang-control-box">
+                            <label for="select-interfaccia" class="theme-label">📱Language:</label>
+                            <select id="select-interfaccia" class="theme-select">
+                                <option value="it">Italiano</option>
+                                <option value="en">English</option>
+                            </select>
+                        </div>
+                    </div>
+                </div> 
 
                 <div class="brand-header">
                     <div class="seeker-title-container">
@@ -115,77 +119,142 @@
                 </div>
 
                 <div id="sezione-about" class="page-section content-card" style="display: none;">
-    <h2 class="section-title">About Us</h2>
-    
-    <div class="about-content">
-        <h3>La storia dietro Seeker D. Code</h3>
-        
-        <p>
-            <strong>Live Speech Text</strong> non nasce semplicemente come l'ennesimo software di dettatura, ma da una reale esigenza di libertà ed efficienza nel flusso di lavoro quotidiano. Troppo spesso gli strumenti di trascrizione tradizionali sono rigidi, vincolati a singole finestre o incapaci di modificare in tempo reale ciò che l'app ha catturato in modo errato.
-        </p>
-        <p>
-            Da questa sfida è nata l'idea: creare uno spazio minimale, reattivo e accessibile, capace di adattarsi istantaneamente sia alla voce dal vivo che all'audio di sistema. Ma la vera spinta è stata il desiderio di rompere gli schemi dell'interfaccia classica, introducendo funzionalità avanzate come il <em>Document Picture-in-Picture</em> — una finestra fluttuante che permette di mantenere il controllo totale delle trascrizioni mentre si naviga, si scrive o si lavora su altri software.
-        </p>
-        <p>
-            Dietro lo sviluppo di questa applicazione c'è la filosofia racchiusa nel nostro brand: <strong>Seeker D. Code</strong>.
-        </p>
+                    <h2 class="section-title">About Us</h2>
+                    
+                    <div class="about-content">
+                        <h3>La storia dietro Seeker D. Code</h3>
+                        <p>
+                            <strong>Live Speech Text</strong> non nasce semplicemente come l'ennesimo software di dettatura, ma da una reale esigenza di libertà ed efficienza nel flusso di lavoro quotidiano. Troppo spesso gli strumenti di trascrizione tradizionali sono rigidi, vincolati a singole finestre o incapaci di modificare in tempo reale ciò che l'app ha catturato in modo errato.
+                        </p>
+                        <p>
+                            Da questa sfida è nata l'idea: creare uno spazio minimale, reattivo e accessibile, capace di adattarsi istantaneamente sia alla voce dal vivo che all'audio di sistema. Ma la vera spinta è stata il desiderio di rompere gli schemi dell'interfaccia classica, introducendo funzionalità avanzate come il <em>Document Picture-in-Picture</em> — una finestra fluttuante che permette di mantenere il controllo totale delle trascrizioni mentre si naviga, si scrive o si lavora su altri software.
+                        </p>
+                        <p>
+                            Dietro lo sviluppo di questa applicazione c'è la filosofia racchiusa nel nostro brand: <strong>Seeker D. Code</strong>.
+                        </p>
 
-        <blockquote class="philosophy-quote">
-            Se il codice è un oceano di infinite possibilità, noi abbiamo scelto di affrontarlo da ricercatori. Questo nome è il nostro piccolo manifesto silenzioso. Rappresenta la nostra volontà, la determinazione incrollabile di chi non si arrende davanti ai limiti tecnici e insegue una visione di totale libertà digitale. È il legame profondo tra la passione per la creatività e la forza di tracciare la propria rotta, portando un sorriso e un tocco di colore (e magari un cappello di paglia ben saldo in testa) anche tra le righe di programmazione più complesse.
-        </blockquote>
+                        <blockquote class="philosophy-quote">
+                            Se il codice è un oceano di infinite possibilità, noi abbiamo scelto di affrontarlo da ricercatori. Questo nome è il nostro piccolo manifesto silenzioso. Rappresenta la nostra volontà, la determinazione incrollabile di chi non si arrende davanti ai limiti tecnici e insegue una visione di totale libertà digitale. È il legame profondo tra la passione per la creatività e la força di tracciare la propria rotta, portando un sorriso e un tocco di colore (e magari un cappello di paglia ben saldo in testa) anche tra le righe di programmazione più complesse.
+                        </blockquote>
 
-        <h3>Le Caratteristiche Principali</h3>
-        <ul class="features-list">
-            <li><strong>Doppia Modalità di Acquisizione:</strong> Passa istantaneamente dalla trascrizione ambientale tramite microfono alla cattura diretta ed esclusiva dei flussi audio di call, video e riunioni online.</li>
-            <li><strong>Focus Multilingue:</strong> Supporto nativo per l'internazionalizzazione, ottimizzato per comprendere i dettagli e le sfumature della voce in contesti dinamici.</li>
-            <li><strong>Area di Lavoro Mobile:</strong> Sfrutta la potenza del Document PiP per ridurre l'applicazione in un angolo dello schermo, continuando a monitorare lo stato e i testi in tempo reale senza interrompere i tuoi compiti principali.</li>
-            <li><strong>Privacy &amp; Controllo:</strong> Nessun dato viene trattenuto. Tutto ciò che viene trascritto rimane locale, pronto per essere scaricato con il pulsante "💾 Scarica Testo" o selezionato e copiato, ed infine ripulito istantaneamente.</li>
-        </ul>
+                        <h3>Le Caratteristiche Principali</h3>
+                        <ul class="features-list">
+                            <li><strong>Doppia Modalità di Acquisizione:</strong> Passa istantaneamente dalla trascrizione ambientale tramite microfono alla cattura diretta ed esclusiva dei flussi audio di call, video e riunioni online.</li>
+                            <li><strong>Focus Multilingue:</strong> Supporto nativo per l'internazionalizzazione, ottimizzato per comprendere i dettagli e le sfumature della voce in contesti dinamici.</li>
+                            <li><strong>Area di Lavoro Mobile:</strong> Sfrutta la potenza del Document PiP per ridurre l'applicazione in un angolo dello schermo, continuando a monitorare lo stato e i testi in tempo reale senza interrompere i tuoi compiti principali.</li>
+                            <li><strong>Privacy &amp; Controllo:</strong> Nessun dato viene trattenuto. Tutto ciò che viene trascritto rimane locale, pronto per essere scaricato con il pulsante "💾 Scarica Testo" o selezionato e copiato, ed infine ripulito istantaneamente.</li>
+                        </ul>
 
-        <p class="about-footer">
-            Siamo qui per esplorare, innovare e rendere la tecnologia uno strumento al servizio della tua produttività. <em>La ricerca del codice definitivo non finisce mai!</em>
-        </p>
-    </div>
+                        <p class="about-footer">
+                            Siamo qui per esplorare, innovare e rendere la tecnologia uno strumento al servizio della tua produttività. <em>La ricerca del codice definitivo non finisce mai!</em>
+                        </p>
+                    </div>
 
-    <hr class="about-divider">
-        
-        <div class="about-credits">
-            <h3>Contatti & Credits</h3>
-            <p>Hai riscontrato un problema, vuoi suggerire una funzionalità o semplicemente fare due chiacchiere sul codice?</p>
-            
-            <div class="credits-links">
-                <a href="mailto:seekerdcode@gmail.com" class="credit-link">📧 Email</a>
-                <a href="https://www.linkedin.com/in/code-seeker-d-194633411/" target="_blank" class="credit-link">💼 LinkedIn</a>
-            </div>
-            
-            <p class="copyright">© 2026 Seeker D. Code. Made with 💜 and Determination.</p>
-        </div>
-
-</div>
+                    <hr class="about-divider">
+                        
+                    <div class="about-credits">
+                        <h3>Contatti & Credits</h3>
+                        <p>Hai riscontrato un problema, vuoi suggerire una funzionalità o semplicemente fare due chiacchiere sul codice?</p>
+                        
+                        <div class="credits-links">
+                            <a href="mailto:seekerdcode@gmail.com" class="credit-link">📧 Email</a>
+                            <a href="https://www.linkedin.com/in/code-seeker-d-194633411/" target="_blank" class="credit-link">💼 LinkedIn</a>
+                        </div>
+                        
+                        <p class="copyright">© 2026 Seeker D. Code. Made with 💜 and Determination.</p>
+                    </div>
+                </div>
 
                 <div id="sezione-faq" class="page-section content-card" style="display: none;">
                     <h2>❓ Domande Frequenti (FAQ)</h2>
                     <div class="accordion">
+
                         <div class="accordion-item">
-                            <button class="accordion-header">Come funziona il riconoscimento vocale? <span class="icon">▼</span></button>
+                            <button class="accordion-header">
+                                <span>🚀 Come funziona il riconoscimento vocale in tempo reale?</span>
+                                <span class="icon">▼</span>
+                            </button>
                             <div class="accordion-content">
-                                <p>L'applicazione sfera la tecnologia nativa di riconoscimento vocale del browser. Quando parli o catturi l'audio, il motore analizza i suoni, isola la frequenza della voce e trasforma il parlato in testo definitivo non appena rileva una pausa naturale nel discorso.</p>
+                                <p>L'applicazione sfera la tecnologia nativa di riconoscimento vocale del browser. Quando parli o catturi l'audio, il motore analizza i suoni, isola la frequenza della voce e trasforma il parlato in testo definitivo all'interno dell'area di modifica non appena rileva una pausa naturale nel discorso. Al termine della sessione, puoi salvare e scaricare tutto sul tuo dispositivo.</p>
                             </div>
                         </div>
 
                         <div class="accordion-item">
-                            <button class="accordion-header">Posso trascrivere una canzone da YouTube o Spotify? <span class="icon">▼</span></button>
+                            <button class="accordion-header">
+                                <span>💻 Cos'è la funzione "Trascrivi da Call / Video" e perché non la vedo su smartphone?</span>
+                                <span class="icon">▼</span>
+                            </button>
                             <div class="accordion-content">
-                                <p>Il motore di trascrizione è addestrato specificamente per il <em>parlato umano lineare</em> (lezioni, conferenze, dettati). Le canzoni allungano le vocali, alterano il ritmo naturale e contengono strumenti musicali; l'algoritmo tende a scartare questi flussi considerandoli "rumore".</p>
+                                <p>Questa funzione permette di catturare l'audio interno del computer (ad esempio da una scheda del browser, un video o una chiamata su Zoom/Meet) e trascriverlo automaticamente. È disponibile <strong>esclusivamente su PC/Laptop</strong> perché i sistemi operativi mobile (iOS e Android) bloccano la cattura dell'audio di sistema per rigidi motivi di sicurezza e privacy. Per evitare confusione, l'app la nasconde automaticamente quando ti colleghi da uno smartphone.</p>
                             </div>
                         </div>
 
                         <div class="accordion-item">
-                            <button class="accordion-header">Perché sento un effetto eco o il testo si confonde se trascrivo una Call? <span class="icon">▼</span></button>
+                            <button class="accordion-header">
+                                <span>🎵 Posso trascrivere una canzone da YouTube o Spotify?</span>
+                                <span class="icon">▼</span>
+                            </button>
                             <div class="accordion-content">
-                                <p>Se riproduci l'audio dalle casse del PC e usi contemporaneamente il microfono, si crea un loop acustico (corto circuito). Per trascrivere video o chiamate senza interferenze usa sempre le <strong>cuffie</strong>, oppure su Windows attiva la funzione nativa <strong>"Missaggio Stereo"</strong> nelle impostazioni audio.</p>
+                                <p>Il motore di trascrizione è addestrato specificamente per il <em>parlato umano lineare</em> (lezioni, conferenze, dettati). Le canzoni allungano le vocali, alterano il ritmo naturale del discorso e contengono strumenti musicali di sottofondo; l'algoritmo tende a scartare o a confondere questi flussi considerandoli semplicemente come "rumore".</p>
                             </div>
                         </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                <span>🔊 Perché sento un effetto eco o il testo si confonde se trascrivo una Call?</span>
+                                <span class="icon">▼</span>
+                            </button>
+                            <div class="accordion-content">
+                                <p>Se riproduci l'audio dalle casse del PC e usi contemporaneamente il microfono ambientale, si crea un loop acustico (un corto circuito audio). Per trascrivere video o chiamate senza interferenze usa sempre le <strong>cuffie</strong>, oppure su Windows attiva e seleziona la funzione nativa <strong>"Missaggio Stereo"</strong> (Stereo Mix) nelle impostazioni audio di sistema.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                <span>🎤 Il microfono risulta attivo ma l'app non scrive nulla. Cosa faccio?</span>
+                                <span class="icon">▼</span>
+                            </button>
+                            <div class="accordion-content">
+                                <p>Se il badge indica che l'app è in ascolto ma il testo non appare nell'area appunti, verifica questi due dettagli:
+                                <br>1. <strong>Permessi del browser:</strong> Controlla l'icona del lucchetto nella barra degli indirizzi in alto e assicurati di aver concesso l'uso del microfono a questo sito.
+                                <br>2. <strong>Rumore ambientale:</strong> Un ambiente eccessivamente rumoroso o la voce troppo lontana possono confondere l'algoritmo. Prova ad avvicinarti al microfono o a utilizzare un auricolare con microfono integrato.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                <span>⏱️ La trascrizione si interrompe da sola dopo qualche minuto. È normale?</span>
+                                <span class="icon">▼</span>
+                            </button>
+                            <div class="accordion-content">
+                                <p>Sì, è un comportamento standard dei servizi Speech-to-Text dei browser. Se rilevano lunghi periodi di silenzio o se la connessione ha un micro-stacco, tendono ad andare in pausa automatica (timeout) per risparmiare risorse. Ti basta cliccare nuovamente sul pulsante di accensione per riprendere il dettato: il testo già presente non verrà toccato o cancellato.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                <span>🐛 Ho riscontrato un bug o un errore visivo. Come posso segnalarlo?</span>
+                                <span class="icon">▼</span>
+                            </button>
+                            <div class="accordion-content">
+                                <p>Ci teniamo moltissimo a rendere l'applicazione stabile e fluida! Se noti un blocco del testo, una sovrapposizione nel layout o un comportamento anomalo, puoi scriverci direttamente via e-mail all'indirizzo ufficiale <strong>seekerdcode@gmail.com</strong> (che trovi anche nella sezione About Us).</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <button class="accordion-header">
+                                <span>📋 Quali dettagli devo includere nella segnalazione di un errore?</span>
+                                <span class="icon">▼</span>
+                            </button>
+                            <div class="accordion-content">
+                                <p>Per aiutarci a isolare e correggere il problema nel minor tempo possibile, quando ci invii una segnalazione ricordati di specificare:
+                                <br>• Il dispositivo utilizzato (es. PC Windows 11, MacBook, iPhone 15, smartphone Android).
+                                <br>• Il browser web con cui hai aperto l'app (es. Google Chrome, Safari, Mozilla Firefox, Microsoft Edge).
+                                <br>• I passaggi precisi che stavi facendo prima che si verificasse l'errore.
+                                <br>• Un'eventuale descrizione visiva o uno screenshot del problema allegato all'e-mail.</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

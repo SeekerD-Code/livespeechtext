@@ -12,6 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const selectLingua = document.getElementById('select-lingua');
     const selectInterfaccia = document.getElementById('select-interfaccia');
     const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeTextLabel = document.getElementById('theme-text-label');
 
     // --- ELEMENTI MODALE CUSTOM ---
     const modal = document.getElementById('custom-modal');
@@ -71,9 +72,11 @@ window.addEventListener('DOMContentLoaded', () => {
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
             themeToggleBtn.textContent = '☀️';
+            if (themeTextLabel) themeTextLabel.textContent = 'notte';
         } else {
             document.body.classList.remove('dark-mode');
             themeToggleBtn.textContent = '🌙';
+            if (themeTextLabel) themeTextLabel.textContent = 'giorno';
         }
     }
 
@@ -83,9 +86,11 @@ window.addEventListener('DOMContentLoaded', () => {
         document.body.classList.toggle('dark-mode');
         if (document.body.classList.contains('dark-mode')) {
             themeToggleBtn.textContent = '☀️';
+            if (themeTextLabel) themeTextLabel.textContent = 'notte';
             localStorage.setItem('theme', 'dark');
         } else {
             themeToggleBtn.textContent = '🌙';
+            if (themeTextLabel) themeTextLabel.textContent = 'giorno';
             localStorage.setItem('theme', 'light');
         }
     });
@@ -161,7 +166,7 @@ window.addEventListener('DOMContentLoaded', () => {
         modalMessaggio.textContent = messaggio;
         modalBtnConferma.style.display = "block"; 
         modalBtnAnnulla.textContent = traduzioni[selectInterfaccia.value].modalAnnulla;
-        actionDaConfermare = callback;
+        azioneDaConfermare = callback;
         modal.classList.add('show');
     }
 
@@ -301,8 +306,18 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     recognition.onerror = (event) => {
-        if (event.error !== 'no-speech') {
-            console.error("Errore riconoscimento vocale:", event.error);
+             console.error("Errore riconoscimento vocale:", event.error);
+             if (event.error === 'not-allowed') {
+            // Forziamo lo stop del loop e resettiamo l'interfaccia
+            bloccoForzato = true;
+            disattivaGraficaStato();
+            // Mostriamo l'avviso personalizzato usando la tua modale custom
+            const linguaAttuale = selectInterfaccia.value;
+            if (linguaAttuale === 'it') {
+                mostraModaleAvviso("Permesso Negato", "Impossibile accedere al microfono. Controlla i permessi del browser cliccando sul lucchetto in alto accanto all'URL!");
+            } else {
+                mostraModaleAvviso("Permission Denied", "Cannot access the microphone. Please check browser permissions by clicking the lock icon next to the URL!");
+            }
         }
     };
 
@@ -524,8 +539,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const accordionHeaders = document.querySelectorAll('.accordion-header');
 
     accordionHeaders.forEach(header => {
-        header.addEventListener('click', () => {
-            const itemCorrente = header.parentElement; // Corretto l'errore dello spazio
+        header.addEventListener('click', (e) => {
+            /* FIX: Usiamo e.currentTarget per intercettare stabilmente l'header a prescindere dallo span cliccato */
+            const currentHeader = e.currentTarget;
+            const itemCorrente = currentHeader.parentElement; 
             const eraAttivo = itemCorrente.classList.contains('active');
             
             document.querySelectorAll('.accordion-item').forEach(item => {
