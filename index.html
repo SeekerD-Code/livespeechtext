@@ -286,10 +286,57 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('PWA Service Worker Registrato con successo!', reg))
-        .catch(err => console.error('Errore nella registrazione del Service Worker:', err));
+        .then(reg => console.log('PWA Service Worker Attivo!'))
+        .catch(err => console.error('Errore SW:', err));
     });
   }
+  // 2. Logica per catturare l'installazione e mostrare il TUO popup
+  let deferredPrompt;
+  const installModal = document.getElementById('pwa-install-modal');
+  const btnInstalla = document.getElementById('btn-pwa-installa');
+  const btnCancella = document.getElementById('btn-pwa-cancella');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Impedisce a Chrome di mostrare il suo banner automatico brutto in basso
+    e.preventDefault();
+    // Salva l'evento così possiamo usarlo sul nostro pulsante personalizzato
+    deferredPrompt = e;
+    
+    // Mostra la tua finestra al centro dello schermo usando la tua classe CSS ".show"
+    installModal.classList.add('show');
+  });
+
+  // Se l'utente clicca su "Installa" nel tuo popup
+  btnInstalla.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      // Mostra il prompt di installazione nativo del sistema operativo
+      deferredPrompt.prompt();
+      // Attendi la risposta dell'utente
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`Scelta utente installazione: ${outcome}`);
+      // Resetta la variabile
+      deferredPrompt = null;
+    }
+    // Nascondi il tuo popup
+    installModal.classList.remove('show');
+  });
+
+  // Se l'utente clicca su "Più tardi" chiude semplicemente il popup
+  btnCancella.addEventListener('click', () => {
+    installModal.classList.remove('show');
+  });
 </script>
+
+<div id="pwa-install-modal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-icon">📲</div>
+        <h3>Installa Live Speech Text</h3>
+        <p>Aggiungi l'app alla tua schermata Home per usarla a tutto schermo come un'applicazione vera e propria!</p>
+        <div class="modal-buttons">
+            <button id="btn-pwa-cancella" class="btn-modal-secondary">Più tardi</button>
+            <button id="btn-pwa-installa" class="btn-primary" style="padding: 10px 18px; font-size: 0.9rem;">Installa</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
