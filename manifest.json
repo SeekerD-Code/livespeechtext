@@ -1,0 +1,21 @@
+{
+  "short_name": "LiveSpeech",
+  "name": "Live Speech Text - Seeker D. Code",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/livespeechtext/index.html",
+  "background_color": "#1e293b",
+  "theme_color": "#2563eb",
+  "display": "standalone",
+  "orientation": "portrait"
+}
