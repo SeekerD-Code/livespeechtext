@@ -989,29 +989,73 @@ body.dark-mode #theme-toggle {
 .dark-mode #pwa-mobile-badge span, .dark-mode #pwa-pc-badge span {
     color: #3b82f6; 
 }
+}
 
 /* --- 🖥️ POSIZIONAMENTO SU PC (Sopra i 768px) --- */
 @media (min-width: 769px) {
     #pwa-pc-badge {
+        position: absolute;
+        z-index: 9999;
         top: 20px;
         right: 180px; /* Lo posiziona in alto a destra, vicino ai tuoi controlli di cambio tema */
+        background: rgba(37, 99, 235, 0.15);
+        border: 1px solid rgba(37, 99, 235, 0.4);
+        padding: 6px 14px;
+        border-radius: 20px;
+        backdrop-filter: blur(4px);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    #pwa-pc-badge span {
+        font-size: 0.85rem;
+        font-weight: bold;
+        color: #2563eb;
+        white-space: nowrap;
+    }
+    body.dark-mode #pwa-pc-badge span {
+        color: #3b82f6; 
     }
     #pwa-mobile-badge {
         display: none !important; /* Su PC questo non deve mai vedersi */
     }
 }
 
+/* Classi di controllo per l'attivazione via Javascript */
+.pwa-hidden {
+    display: none !important;
+}
+.pwa-visible {
+    display: block !important;
+}
+
 /* --- 📱 POSIZIONAMENTO SU MOBILE (Sotto i 768px - Dentro la tua media query unificata) --- */
 @media (max-width: 768px) {
     #pwa-mobile-badge {
+        position: absolute !important;
+        z-index: 9999;
         top: 55px; 
         left: 50%;
         transform: translateX(-50%); /* Centrato nello spazio vuoto tra Menu e Seeker D. Code */
+        background: rgba(37, 99, 235, 0.15);
+        border: 1px solid rgba(37, 99, 235, 0.4);
+        padding: 6px 14px;
+        border-radius: 20px;
+        backdrop-filter: blur(4px);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    #pwa-mobile-badge span {
+        font-size: 0.85rem;
+        font-weight: bold;
+        color: #2563eb;
+        white-space: nowrap;
+    }
+    body.dark-mode #pwa-mobile-badge span {
+        color: #3b82f6; 
     }
     #pwa-pc-badge {
         display: none !important; /* Su mobile questo scompare */
     }
-}
 
 /* Classi di controllo per l'attivazione via Javascript */
 .pwa-hidden {

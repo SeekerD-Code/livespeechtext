@@ -321,14 +321,14 @@
     <script src="app.js"></script>
 
 <script>
-  // 1. Registrazione normale del Service Worker
+  // 1. Registrazione del Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(err => console.error(err));
     });
   }
 
-  // 2. Logica di attivazione differenziata PC / Mobile
+  // 2. Logica di attivazione differenziata reale PC / Mobile-Tablet
   let pwaPrompt;
   const mobileBadge = document.getElementById('pwa-mobile-badge');
   const pcBadge = document.getElementById('pwa-pc-badge');
@@ -337,32 +337,33 @@
     e.preventDefault();
     pwaPrompt = e;
     
-    // Controlliamo la larghezza dello schermo per capire se mostrare il tasto PC o Mobile
-    if (window.innerWidth > 768) {
-        pcBadge.classList.remove('pwa-hidden');
-        pcBadge.classList.add('pwa-visible');
-    } else {
+    // Rileva se è un vero dispositivo mobile o tablet (ha il touch ed è uno schermo sotto i 768px)
+const isMobileOrTablet = window.matchMedia("(max-width: 768px)").matches && 
+                             ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+    if (isMobileOrTablet) {
         mobileBadge.classList.remove('pwa-hidden');
         mobileBadge.classList.add('pwa-visible');
+    } else {
+        pcBadge.classList.remove('pwa-hidden');
+        pcBadge.classList.add('pwa-visible');
     }
   });
 
-  // Funzione unica per avviare l'installazione al click su uno dei due badge
-  const avviaInstallazione = async (elementoBadge) => {
+  // Funzione per avviare l'installazione al click
+  const avviaInstallazione = async () => {
     if (pwaPrompt) {
       pwaPrompt.prompt();
       const { outcome } = await pwaPrompt.userChoice;
       console.log(`Risultato installazione: ${outcome}`);
       pwaPrompt = null;
     }
-    // Nasconde entrambi per sicurezza dopo il click
     mobileBadge.classList.replace('pwa-visible', 'pwa-hidden');
     pcBadge.classList.replace('pwa-visible', 'pwa-hidden');
   };
 
-  // Colleghiamo l'azione a entrambi i pulsanti
-  mobileBadge.addEventListener('click', () => avviaInstallazione(mobileBadge));
-  pcBadge.addEventListener('click', () => avviaInstallazione(pcBadge));
+  mobileBadge.addEventListener('click', avviaInstallazione);
+  pcBadge.addEventListener('click', avviaInstallazione);
 </script>
 
 
