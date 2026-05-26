@@ -18,6 +18,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div id="pwa-mobile-badge" class="pwa-hidden">
+    <span>📲 Aggiungi alla Home</span>
+</div>
+
+<div id="pwa-pc-badge" class="pwa-hidden">
+    <span>💻 Installa l'App sul PC</span>
+</div>
     
     <main>
         <div class="banner-adv">Spazio Pubblicità</div>
@@ -282,50 +290,51 @@
 
     <script src="app.js"></script>
 
-    <script>
+<script>
+  // 1. Registrazione normale del Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('PWA Service Worker Attivo!'))
-        .catch(err => console.error('Errore SW:', err));
+      navigator.serviceWorker.register('sw.js').catch(err => console.error(err));
     });
   }
-  // 2. Logica per catturare l'installazione e mostrare il TUO popup
-  let deferredPrompt;
-  const installModal = document.getElementById('pwa-install-modal');
-  const btnInstalla = document.getElementById('btn-pwa-installa');
-  const btnCancella = document.getElementById('btn-pwa-cancella');
+
+  // 2. Logica di attivazione differenziata PC / Mobile
+  let pwaPrompt;
+  const mobileBadge = document.getElementById('pwa-mobile-badge');
+  const pcBadge = document.getElementById('pwa-pc-badge');
 
   window.addEventListener('beforeinstallprompt', (e) => {
-    // Impedisce a Chrome di mostrare il suo banner automatico brutto in basso
     e.preventDefault();
-    // Salva l'evento così possiamo usarlo sul nostro pulsante personalizzato
-    deferredPrompt = e;
+    pwaPrompt = e;
     
-    // Mostra la tua finestra al centro dello schermo usando la tua classe CSS ".show"
-    installModal.classList.add('show');
-  });
-
-  // Se l'utente clicca su "Installa" nel tuo popup
-  btnInstalla.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      // Mostra il prompt di installazione nativo del sistema operativo
-      deferredPrompt.prompt();
-      // Attendi la risposta dell'utente
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log(`Scelta utente installazione: ${outcome}`);
-      // Resetta la variabile
-      deferredPrompt = null;
+    // Controlliamo la larghezza dello schermo per capire se mostrare il tasto PC o Mobile
+    if (window.innerWidth > 768) {
+        pcBadge.classList.remove('pwa-hidden');
+        pcBadge.classList.add('pwa-visible');
+    } else {
+        mobileBadge.classList.remove('pwa-hidden');
+        mobileBadge.classList.add('pwa-visible');
     }
-    // Nascondi il tuo popup
-    installModal.classList.remove('show');
   });
 
-  // Se l'utente clicca su "Più tardi" chiude semplicemente il popup
-  btnCancella.addEventListener('click', () => {
-    installModal.classList.remove('show');
-  });
+  // Funzione unica per avviare l'installazione al click su uno dei due badge
+  const avviaInstallazione = async (elementoBadge) => {
+    if (pwaPrompt) {
+      pwaPrompt.prompt();
+      const { outcome } = await pwaPrompt.userChoice;
+      console.log(`Risultato installazione: ${outcome}`);
+      pwaPrompt = null;
+    }
+    // Nasconde entrambi per sicurezza dopo il click
+    mobileBadge.classList.replace('pwa-visible', 'pwa-hidden');
+    pcBadge.classList.replace('pwa-visible', 'pwa-hidden');
+  };
+
+  // Colleghiamo l'azione a entrambi i pulsanti
+  mobileBadge.addEventListener('click', () => avviaInstallazione(mobileBadge));
+  pcBadge.addEventListener('click', () => avviaInstallazione(pcBadge));
 </script>
+
 
 <div id="pwa-install-modal" class="modal-overlay">
     <div class="modal-box">
