@@ -1,0 +1,135 @@
+
+/* --- RESPONSIVITÀ COMPLETA --- */
+@media (max-width: 1024px) {
+    .main-layout-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    #banner-laterale-sinistro {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   ⚙️ STRUTTURA ADATTIVA NUOVO HEADER (ORDINATA E PULITA)
+   ========================================================================== */
+
+/* --- COMPORTAMENTO SU PC DESKTOP --- */
+.top-right-controls-inline {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 12px;
+    margin-bottom: 25px;
+    position: relative;
+    width: 100%;
+}
+
+
+
+.top-right-controls-inline .controls-cluster {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.top-right-controls-inline .lang-control-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Gestione Bottone Tema (Luna) */
+.app-container #theme-toggle,
+.top-right-controls-inline #theme-toggle {
+    position: static !important; 
+    background: #cbd5e1;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: none;
+    margin: 0;
+}
+
+/* Reset del Menu Principale su PC */
+.app-container .main-nav {
+    position: static !important; 
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    z-index: 10;
+}
+/* --- 🖥️ POSIZIONAMENTO SU PC (Sopra i 768px) --- */
+@media (min-width: 768px) {
+    #pwa-pc-badge {
+        position: absolute;
+        z-index: 9999;
+        top: 140px;
+        right: 1120px; /* Lo posiziona in alto a destra, vicino ai tuoi controlli di cambio tema */
+        background: rgba(37, 99, 235, 0.15);
+        border: 1px solid rgba(37, 99, 235, 0.4);
+        padding: 6px 14px;
+        border-radius: 20px;
+        backdrop-filter: blur(4px);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    #pwa-pc-badge span {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #2563eb;
+        white-space: nowrap;
+    }
+
+    #pwa-mobile-badge {
+        display: none !important; /* Su PC questo non deve mai vedersi */
+    }
+
+    /* ==========================================================================
+   🚨 PROTEZIONE INTERFACCIA FLUTTUANTE E FINESTRA COMPATTA (PC)
+   ========================================================================== */
+
+/* 1. Se l'app viene ridotta in modalità Picture-in-Picture nativa dal browser */
+:picture-in-picture .banner-adv,
+:picture-in-picture #banner-principale,
+:picture-in-picture .banner-verticale-sinistra {
+    display: none !important; /* Nasconde i banner per non coprire i controlli audio/testo */
+}
+
+/* 2. Se l'utente stringe la finestra del PC sotto i 1000px per usarla come pannello fluttuante */
+@media (max-width: 1024px) {
+    /* Il banner laterale sinistro da 160px non entra più di fianco, lo nascondiamo */
+    #banner-laterale-sinistro,
+    .banner-verticale-sinistra,
+    .advertising-space {
+        display: none !important;
+    }
+    
+    /* Il megabanner superiore da 970px si adatta per non strabordare */
+    .banner-adv {
+        max-width: 728px !important; /* Scaliamo al formato standard inferiore */
+        height: 90px !important;
+    }
+}
+
+/* 3. Se la finestra del PC viene stretta ancora di più (stile widget laterale) */
+@media (max-width: 850px) {
+    .banner-adv, 
+    #banner-principale {
+        max-width: 320px !important; /* Forza il formato mobile 320x50 anche su PC */
+        height: 50px !important;
+        line-height: 50px !important;
+        margin: 10px auto !important;
+    }
+}
+
+}

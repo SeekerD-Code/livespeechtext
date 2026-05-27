@@ -1,0 +1,17 @@
+/* ==========================================================================
+   🎛️ REGISTA GENERALE DEL LAYOUT (main.css)
+   ========================================================================== */
+
+/* 1. Reset, Font e Layout Base Generale */
+@import url('style-base.css');
+
+/* 2. Ottimizzazioni Desktop (Sopra i 769px) */
+@import url('style-desktop.css');
+
+/* 3. Estensioni e Utility (PWA, Lingue, Dark Mode) */
+@import url('style-pwa.css');
+@import url('style-lingua.css');
+@import url('style-dark.css');
+
+/* 4. Layout Mobile (Sotto i 768px) */
+@import url('style-mobile.css');
