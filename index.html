@@ -10,22 +10,22 @@
     <meta property="og:type" content="website">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link class="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Lexend:wght@100..900&family=Oregano:ital@0;1&family=Splash&display=swap" rel="stylesheet">
 
     <link rel="manifest" href="manifest.json">
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
     <div id="pwa-mobile-badge" class="pwa-hidden">
-    <span>📲 Aggiungi alla Home</span>
-</div>
+        <span>📲 Aggiungi alla Home</span>
+    </div>
 
-<div id="pwa-pc-badge" class="pwa-hidden">
-    <span>💻 Installa l'App sul PC</span>
-</div>
+    <div id="pwa-pc-badge" class="pwa-hidden">
+        <span>💻 Installa l'App sul PC</span>
+    </div>
     
     <main>
         <div class="banner-adv">Spazio Pubblicità</div>
@@ -144,7 +144,7 @@
                         </p>
 
                         <blockquote class="philosophy-quote">
-                            Se il codice è un oceano di infinite possibilità, noi abbiamo scelto di affrontarlo da ricercatori. Questo nome è il nostro piccolo manifesto silenzioso. Rappresenta la nostra volontà, la determinazione incrollabile di chi non si arrende davanti ai limiti tecnici e insegue una visione di totale libertà digitale. È il legame profondo tra la passione per la creatività e la força di tracciare la propria rotta, portando un sorriso e un tocco di colore (e magari un cappello di paglia ben saldo in testa) anche tra le righe di programmazione più complesse.
+                            Se il codice è un oceano di infinite possibilità, noi abbiamo scelto di affrontarlo da ricercatori. Questo nome è il nostro piccolo manifesto silenzioso. Rappresenta la nostra volontà, la determinazione incrollabile di chi non si arrende davanti ai limiti tecnici e insegue una visione di totale libertà digitale. È il legame profondo tra la passione per la creatività e la forza di tracciare la propria rotta, portando un sorriso e un tocco di colore (e magari un cappello di paglia ben saldo in testa) anche tra le righe di programmazione più complesse.
                         </blockquote>
 
                         <h3>Le Caratteristiche Principali</h3>
@@ -163,7 +163,7 @@
                     <hr class="about-divider">
                         
                     <div class="about-credits">
-                        <h3>Contatti & Credits</h3>
+                        <h3>Contatti &amp; Credits</h3>
                         <p>Hai riscontrato un problema, vuoi suggerire una funzionalità o semplicemente fare due chiacchiere sul codice?</p>
                         
                         <div class="credits-links">
@@ -175,7 +175,7 @@
                     </div>
                 </div>
 
-<div id="sezione-faq" class="page-section content-card" style="display: none;">
+                <div id="sezione-faq" class="page-section content-card" style="display: none;">
                     <h2>❓ Domande Frequenti (FAQ)</h2>
                     <div class="accordion">
 
@@ -185,7 +185,7 @@
                                 <span class="icon">▼</span>
                             </button>
                             <div class="accordion-content">
-                                <p>L'applicazione sfrutta la tecnologia nativa di riconoscimento vocale del browser. Quando parli o catturi l'audio, il motore analizza i suoni, isola la frequenza della voce e trasforma il parlato in testo definitivo all'interno dell'area di modifica non appena rileva una pausa naturale nel discorso. Al termine della sessione, puoi salvare e scaricare tutto sul tuo dispositivo.</p>
+                                <p>L'applicazione semiautomatica sfrutta la tecnologia nativa di riconoscimento vocale del browser. Quando parli o catturi l'audio, il motore analizza i suoni, isola la frequenza della voce e trasforma il parlato in testo definitivo all'interno dell'area di modifica non appena rileva una pausa naturale nel discorso. Al termine della sessione, puoi salvare e scaricare tutto sul tuo dispositivo.</p>
                             </div>
                         </div>
 
@@ -309,7 +309,7 @@
     <div id="custom-modal" class="modal-overlay">
         <div class="modal-box">
             <div class="modal-icon">⚠️</div>
-            <h3 id="modal-titolo">Sei sicura?</h3>
+            <h3 id="modal-titolo">Sei sicuro?</h3>
             <p id="modal-messaggio">Questa azione non può essere annullata.</p>
             <div class="modal-buttons">
                 <button id="modal-btn-annulla" class="btn-modal-secondary">Annulla</button>
@@ -318,65 +318,79 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
-
-<script>
-  // 1. Registrazione del Service Worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js').catch(err => console.error(err));
-    });
-  }
-
-  // 2. Logica di attivazione differenziata reale PC / Mobile-Tablet
-  let pwaPrompt;
-  const mobileBadge = document.getElementById('pwa-mobile-badge');
-  const pcBadge = document.getElementById('pwa-pc-badge');
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    pwaPrompt = e;
-    
-    // Rileva se è un vero dispositivo mobile o tablet (ha il touch ed è uno schermo sotto i 768px)
-const isMobileOrTablet = window.matchMedia("(max-width: 768px)").matches && 
-                             ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-
-    if (isMobileOrTablet) {
-        mobileBadge.classList.remove('pwa-hidden');
-        mobileBadge.classList.add('pwa-visible');
-    } else {
-        pcBadge.classList.remove('pwa-hidden');
-        pcBadge.classList.add('pwa-visible');
-    }
-  });
-
-  // Funzione per avviare l'installazione al click
-  const avviaInstallazione = async () => {
-    if (pwaPrompt) {
-      pwaPrompt.prompt();
-      const { outcome } = await pwaPrompt.userChoice;
-      console.log(`Risultato installazione: ${outcome}`);
-      pwaPrompt = null;
-    }
-    mobileBadge.classList.replace('pwa-visible', 'pwa-hidden');
-    pcBadge.classList.replace('pwa-visible', 'pwa-hidden');
-  };
-
-  mobileBadge.addEventListener('click', avviaInstallazione);
-  pcBadge.addEventListener('click', avviaInstallazione);
-</script>
-
-
-<div id="pwa-install-modal" class="modal-overlay">
-    <div class="modal-box">
-        <div class="modal-icon">📲</div>
-        <h3>Installa Live Speech Text</h3>
-        <p>Aggiungi l'app alla tua schermata Home per usarla a tutto schermo come un'applicazione vera e propria!</p>
-        <div class="modal-buttons">
-            <button id="btn-pwa-cancella" class="btn-modal-secondary">Più tardi</button>
-            <button id="btn-pwa-installa" class="btn-primary" style="padding: 10px 18px; font-size: 0.9rem;">Installa</button>
+    <div id="pwa-install-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon">📲</div>
+            <h3>Installa Live Speech Text</h3>
+            <p>Aggiungi l'app alla tua schermata Home per usarla a tutto schermo come un'applicazione vera e propria!</p>
+            <div class="modal-buttons">
+                <button id="btn-pwa-cancella" class="btn-modal-secondary">Più tardi</button>
+                <button id="btn-pwa-installa" class="btn-primary" style="padding: 10px 18px; font-size: 0.9rem;">Installa</button>
+            </div>
         </div>
     </div>
-</div>
+
+    <script src="app.js"></script>
+
+    <script>
+      // 1. Registrazione del Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js').catch(err => console.error(err));
+        });
+      }
+
+      // 2. Logica di attivazione differenziata reale PC / Mobile-Tablet
+      let pwaPrompt;
+      const mobileBadge = document.getElementById('pwa-mobile-badge');
+      const pcBadge = document.getElementById('pwa-pc-badge');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        pwaPrompt = e;
+        
+        // Rileva se è un vero dispositivo mobile o tablet (ha il touch ed è uno schermo sotto i 768px)
+        const isMobileOrTablet = window.matchMedia("(max-width: 768px)").matches && 
+                                 ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+        if (isMobileOrTablet) {
+            mobileBadge.classList.remove('pwa-hidden');
+            mobileBadge.classList.add('pwa-visible');
+        } else {
+            pcBadge.classList.remove('pwa-hidden');
+            pcBadge.classList.add('pwa-visible');
+        }
+      });
+
+      // Funzione per avviare l'installazione al click
+      const avviaInstallazione = async () => {
+        if (pwaPrompt) {
+          pwaPrompt.prompt();
+          const { outcome } = await pwaPrompt.userChoice;
+          console.log(`Risultato installazione: ${outcome}`);
+          pwaPrompt = null;
+        }
+        mobileBadge.classList.replace('pwa-visible', 'pwa-hidden');
+        pcBadge.classList.replace('pwa-visible', 'pwa-hidden');
+      };
+
+      mobileBadge.addEventListener('click', avviaInstallazione);
+      pcBadge.addEventListener('click', avviaInstallazione);
+    </script>
+
+    <div id="google_translate_element" style="display:none;"></div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'it', // La lingua originale in cui è scritta la tua app
+        layout: google.translate.TranslateElement.InlineMethod.SIMPLE,
+        autoDisplay: true // Dice a Google di attivarsi da solo se rileva una lingua diversa
+    }, 'google_translate_element');
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>

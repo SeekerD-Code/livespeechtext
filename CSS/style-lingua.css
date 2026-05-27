@@ -1,0 +1,38 @@
+/* ==========================================================================
+    🌐 GESTIONE LINGUA AUTOMATICA DEL DISPOSITIVO
+   ========================================================================== */
+
+/* Nasconde definitivamente il vecchio selettore manuale su QUALSIASI dispositivo (Mobile e PC) */
+.lang-control-box, 
+#lingua-app-select,
+.top-right-controls-inline .lang-control-box,
+[id*="lingua"] { 
+    display: none !important;
+}
+
+/* ==========================================================================
+   🌐 TRADUZIONE AUTOMATICA UNIVERSALE (GOOGLE TRANSLATE)
+   ========================================================================== */
+
+/* Nasconde il selettore visivo di Google (la magia lavora in background) */
+#google_translate_element, 
+.skiptranslate {
+    display: none !important;
+}
+
+/* Impedisce al browser di spostare l'app verso il basso quando Google si attiva */
+body {
+    top: 0 !important;
+    position: static !important;
+}
+
+/* Nasconde l'eventuale tooltip o banner di Google sugli smartphone */
+.goog-te-banner-frame, 
+.goog-te-balloon-frame,
+#goog-gt-tt {
+    display: none !important;
+}
+.goog-text-highlight {
+    background: transparent !important;
+    box-shadow: none !important;
+}

@@ -1,0 +1,304 @@
+
+/* --- UNICA MEDIA QUERY COMPATTA PER SMARTPHONE E TABLET (Sotto i 768px) --- */
+@media (max-width: 768px) {
+
+    /* --- STILE BASE COMUNE PER I BADGE PWA --- */
+#pwa-mobile-badge, #pwa-pc-badge {
+    position: absolute;
+    z-index: 9999;
+    background: rgba(37, 99, 235, 0.15); /* Sfondo blu sfumato effetto vetro */
+    border: 0,7px solid rgba(37, 99, 235, 0.4);
+    padding: 6px 14px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#pwa-mobile-badge span, #pwa-pc-badge span {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #2563eb;
+    white-space: nowrap;
+}
+
+.dark-mode #pwa-mobile-badge span, .dark-mode #pwa-pc-badge span {
+    color: #3b82f6; 
+}
+}
+/* --- 📱 POSIZIONAMENTO SU MOBILE (Sotto i 768px - Dentro la tua media query unificata) --- */
+@media (max-width: 768px) {
+    #pwa-mobile-badge {
+        position: absolute !important;
+        z-index: 9999;
+        top: 160px; 
+        left: 90%;
+        transform: translateX(-50%); /* Centrato nello spazio vuoto tra Menu e Seeker D. Code */
+        background: rgba(37, 99, 235, 0.15);
+        border: 1px solid rgba(37, 99, 235, 0.4);
+        padding: 6px 10px;
+        border-radius: 20px;
+        backdrop-filter: blur(4px);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    #pwa-mobile-badge span {
+        font-size: 0.6rem;
+        font-weight: bold;
+        color: #2563eb;
+        white-space: normal;
+
+        text-align: center;         /* Centra le linee di testo una sotto l'altra */
+        display: inline-block;      /* Permette al testo di comportarsi come un blocchetto */
+        max-width: 90px;            /* Stringe la larghezza massima costringendo "alla Home" ad andare sotto */
+    }
+    #pwa-pc-badge {
+        display: none !important; /* Su mobile questo scompare */
+    }
+
+
+    .top-right-controls-inline {
+        flex-direction: row !important; 
+        justify-content: space-between; 
+        align-items: center;
+        padding: 8px 12px;              
+        margin-bottom: 20px;
+        gap: 10px;
+    }
+    
+    /* Configurazione menu di navigazione su mobile */
+    .app-container .main-nav {
+        position: static !important;
+        display: flex !important;
+        flex-direction: row !important; /* Forza categoricamente la disposizione orizzontale */
+        flex-wrap: nowrap !important;   /* Impedisce ai tasti di spezzarsi su più righe */
+        gap: 4px;                       /* Riduce lo spazio tra i tasti per farli entrare */
+        margin: 0 !important;
+        justify-content: flex-start;
+    }
+
+    .nav-link {
+        font-size: 0.75rem;             /* Rimpicciolisce leggermente il testo per sicurezza */
+        padding: 4px 6px;               /* Stringe i bottoncini */
+        white-space: nowrap !important; /* Impedisce al testo del singolo bottone (es. "About Us") di andare a capo */
+    }
+
+    /* Configurazione blocco controlli (Lingua + Luna) su mobile */
+    .top-right-controls-inline .controls-cluster {
+        width: auto;                    
+        display: flex;
+        align-items: center;
+        gap: 8px;                       
+    }
+
+    /* 👇 AGGIORNAMENTO: Mette la scritta sopra e la tendina sotto */
+    .top-right-controls-inline .lang-control-box {
+        display: flex;
+        flex-direction: column; /* Forza l'incolonnamento di testo e select */
+        align-items: flex-start; /* Allinea entrambi a sinistra del loro quadratino */
+        gap: 4px; /* Spazio minimo tra la scritta e la tendina */
+    }
+
+    .top-right-controls-inline .theme-label {
+        font-size: 0.75rem;             
+        margin-right: 0; /* Resetta il margine destro che usavamo su PC */
+        white-space: nowrap;
+    }
+    
+    .top-right-controls-inline .theme-select {
+        padding: 4px 6px !important;    
+        font-size: 0.75rem !important;
+        width: 100%; /* Fa sì che la tendina si adatti bene sotto il testo */
+    }
+
+    .top-right-controls-inline #theme-toggle {
+        width: 32px;                    
+        height: 32px;
+        font-size: 0.9rem;
+    }
+    
+    .brand-header {
+        padding-top: 0px !important;
+    }
+
+    /* Rende i banner ancora più sottili su smartphone per non rubare schermo */
+    .banner-adv, #banner-principale {
+        height: 40px !important;
+        line-height: 40px !important;
+        font-size: 0.75rem !important;
+    }
+
+    /* Ripristina la disposizione verticale su mobile quando il banner si nasconde */
+    .page-body-wrapper {
+        display: block !important; /* Disattiva il flex orizzontale su mobile */
+        margin: 10px auto;
+    }
+    
+    .advertising-space {
+        margin-top: 15px !important; /* Riduce lo spazio vuoto intorno su mobile */
+    }
+
+    /* --- SPOSTAMENTO E RIDUZIONE TEMA SU MOBILE --- */
+    #theme-bubble-container {
+        position: absolute !important; /* Mantiene l'indipendenza anche su mobile */
+        
+        /* Coordinate ottimizzate per lo smartphone */
+        top: 17px;           /* Lo abbassa un pochino rispetto al PC per farlo stare comodo */
+        right: -10px;          /* Lo allinea a destra nella scheda */
+        
+        bottom: auto !important;
+        left: auto !important;
+        gap: 1px;
+    }
+
+    #theme-toggle {
+        width: 30px !important;     /* Più piccolo su mobile */
+        height: 30px !important;
+        font-size: 0.85rem !important;
+        border: 0.5px solid #000000 !important;
+    }
+
+    #theme-text-label {
+        font-size: 0.55rem; /* Scritta microscopica sopra il bottone */
+    }
+
+    /* 👇 AGISCE SOLO ED ESCLUSIVAMENTE SU "Assistente Appunti Vocali" SEGUENDO "Live Speech Text" */
+    .brand-header h1 + h2.main-title {
+        margin-top: 2px !important;  /* Riduce lo spazio SOLO tra queste due scritte, avvicinandole */
+     }
+     /* 👇 RIGENERI LO STILE ORIGINALE DI LIVE SPEECH TEXT (H1) SE NECESSARIO */
+    .brand-header h1 {
+        /* Se avevi un font-family specifico per il titolo principale, rimettilo qui */
+        font-size: 1.7rem !important; 
+    }
+
+    /* 👇 FORZA IL FONT CORRETTO SOLO SU ASSISTENTE APPUNTI VOCALI (H2) */
+    .brand-header h2.main-title {
+        font-size: 1rem !important; /* Riduce la dimensione per il mobile */
+        font-weight: bold !important; /* Se era in grassetto */
+        font-family: "Oregano", cursive; /* <--- Scommenta e metti il font giusto se ne usavi uno personalizzato */
+    }
+
+
+    /* 👇 AGISCE ESCLUSIVAMENTE SULLA SCRITTA "Avvia l'ascolto..." SU MOBILE */
+    #sezione-app > p:first-of-type {
+        margin-top: -10px !important;   /* Tira la scritta verso l'alto, avvicinandola al titolo */
+        margin-bottom: 15px !important; /* Gestisce lo spazio tra la scritta e i bottoni sotto */
+        font-size: 0.6rem !important;   /* Rimpicciolisce il font solo su mobile (imposta a 0.85rem se lo vuoi ancora più piccolo) */
+        text-align: center;             /* Opzionale: assicura che rimanga ben centrato su schermi piccoli */
+    }
+        /* 1. Gestione controlli generali e bottoni che avevi già */
+    .controls-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .controls-section button {
+        width: 100%;
+        margin: 0;
+    }
+    
+    #btn-pip {
+        width: 100%;
+    }
+
+    /* 2. Ottimizzazione proporzioni dell'app su mobile */
+    .app-container {
+        padding: 20px 15px; /* Sfrutta al massimo lo spazio dello schermo */
+    }
+
+    /* 3. Blocco Titolo e Insegna (Evita che vada a capo o si sovrapponga) */
+    .brand-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 25px;
+        padding-top: 45px; /* Lascia spazio in alto per i menu fluttuanti del tema/lingua */
+    }
+
+    /* Costringe Seeker D. Code a rimanere unito e proporzionato */
+    .seeker-text {
+        font-size: 1.40rem !important; /* Ridotto per stare perfettamente su una riga sola */
+        white-space: nowrap;          /* Impedisce categoricamente di spezzarsi in due */
+        display: inline-block;
+    }
+
+    /* Riposizionamento millimetrico del Cappello di Paglia sulla S ridotta */
+    .luffy-hat {
+        width: 22px;        /* Scala il cappello proporzionalmente alla scritta */
+        height: 22px;
+        top: -6px;          /* Lo riallinea verticalmente */
+        left: 95px;         /* Spostato a sinistra per ancorarsi alla 'S' del testo più piccolo */
+    }
+
+    /* Rimpicciolisce l'enorme titolo principale per non rompere il layout */
+    .main-title {
+        font-size: 2rem !important;
+    }
+
+    /* Rimpicciolisce il sottotitolo dell'assistente vocale */
+    .sub-text-bold {
+        font-size: 1.2rem !important;
+        margin-top: 10px;
+    }
+
+    /* Sgancia il posizionamento assoluto del menu per evitare collisioni col testo */
+    .main-nav {
+        position: static !important;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; /* Se non entrano, i tasti del menu vanno sotto tra loro in modo ordinato */
+        gap: 8px;
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .nav-link {
+        font-size: 0.85rem;
+        padding: 5px 10px;
+    }
+
+    .banner-adv, 
+     #banner-principale {
+        width: 100% !important;
+        max-width: 320px !important; /* Blinda la larghezza standard dello smartphone */
+        height: 50px !important;     /* Altezza perfetta per i banner mobili di Google */
+        line-height: 50px !important;/* Centra perfettamente la scritta interna */
+        font-size: 0.75rem !important;
+        margin: 15px auto !important;/* Centra lo spazio pubblicitario nella pagina mobile */
+        display: block !important;
+    }
+
+
+    /* 4. Ridimensionamento area di testo */
+    textarea {
+        height: 200px; /* Riduce l'altezza per evitare che l'utente debba scrollare all'infinito sul telefono */
+        font-size: 1rem;
+    }
+    /* NASCONDE IL TASTO CALL/VIDEO SU MOBILE */
+    #btn-cattura-sistema {
+        display: none !important;
+    }
+
+    /* 6. RIDUZIONE E RIALLINEAMENTO DELLE SCINTILLE SU MOBILE */
+    .magic-sparkles {
+        width: 260px !important;  /* Ridotte da 400px a 260px per non strabordare */
+        height: 180px !important; /* Ridotte proporzionalmente da 300px a 180px */
+        top: -50px !important;    /* Avvicinate al testo (prima era -50px) visto che è tutto più compatto */
+        transform: rotate(60deg) !important; /* Opzionale: riduce la rotazione se noti che taglia i bordi, altrimenti rimetti 60deg */
+        transform-origin: center center !important;
+        
+        /* Rende esplicito il display per i browser mobile */
+        display: block !important;
+    }
+
+    /* 🚨 PROTEZIONE FINESTRA FLUTTUANTE (Evita ban da Google Ads) */
+    :picture-in-picture .banner-adv,
+    :picture-in-picture #banner-principale,
+    .pip-mode .banner-adv,
+    .pip-mode #banner-principale {
+        display: none !important; /* Nasconde totalmente la pubblicità se l'app è fluttuante e minuscola */
+    }
+}
