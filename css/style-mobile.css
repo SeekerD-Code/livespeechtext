@@ -31,26 +31,26 @@
     #pwa-mobile-badge {
         position: absolute !important;
         z-index: 9999;
-        top: 160px; 
-        left: 90%;
+        top: 155px; 
+        left: 74%;
         transform: translateX(-50%); /* Centrato nello spazio vuoto tra Menu e Seeker D. Code */
         background: rgba(37, 99, 235, 0.15);
         border: 1px solid rgba(37, 99, 235, 0.4);
-        padding: 6px 10px;
-        border-radius: 20px;
+        padding: 3px 6px;
+        border-radius: 12px;
         backdrop-filter: blur(4px);
         cursor: pointer;
         transition: all 0.3s ease;
     }
     #pwa-mobile-badge span {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         font-weight: bold;
         color: #2563eb;
         white-space: normal;
 
         text-align: center;         /* Centra le linee di testo una sotto l'altra */
         display: inline-block;      /* Permette al testo di comportarsi come un blocchetto */
-        max-width: 90px;            /* Stringe la larghezza massima costringendo "alla Home" ad andare sotto */
+        max-width: 65px;            /* Stringe la larghezza massima costringendo "alla Home" ad andare sotto */
     }
     #pwa-pc-badge {
         display: none !important; /* Su mobile questo scompare */
@@ -72,14 +72,14 @@
         display: flex !important;
         flex-direction: row !important; /* Forza categoricamente la disposizione orizzontale */
         flex-wrap: nowrap !important;   /* Impedisce ai tasti di spezzarsi su più righe */
-        gap: 4px;                       /* Riduce lo spazio tra i tasti per farli entrare */
-        margin: 0 !important;
+        gap: 2px;                       /* Riduce lo spazio tra i tasti per farli entrare */
+        margin: 0 0 0 -20px !important; /* Il -10px finale tira il menu verso il bordo sinistro */
         justify-content: flex-start;
     }
 
     .nav-link {
         font-size: 0.75rem;             /* Rimpicciolisce leggermente il testo per sicurezza */
-        padding: 4px 6px;               /* Stringe i bottoncini */
+        padding: 4px 4px;               /* Stringe i bottoncini */
         white-space: nowrap !important; /* Impedisce al testo del singolo bottone (es. "About Us") di andare a capo */
     }
 
@@ -143,7 +143,7 @@
         position: absolute !important; /* Mantiene l'indipendenza anche su mobile */
         
         /* Coordinate ottimizzate per lo smartphone */
-        top: 17px;           /* Lo abbassa un pochino rispetto al PC per farlo stare comodo */
+        top: 15px;           /* Lo abbassa un pochino rispetto al PC per farlo stare comodo */
         right: -10px;          /* Lo allinea a destra nella scheda */
         
         bottom: auto !important;

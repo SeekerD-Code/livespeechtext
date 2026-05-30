@@ -600,8 +600,8 @@ body.dark-mode .sub-text-bold {
 position: absolute !important; /* Si aggancia alla scheda dell'app, non allo schermo! */
     
     /* Regola questi due valori per muoverlo millimetricamente dove vuoi */
-    top: -15px;          /* Numero negativo = sale verso il banner superiore */
-    right: -10px;         /* Distanza dall'angolo destro della scheda */
+    top: -10px;          /* Numero negativo = sale verso il banner superiore */
+    right: 20px;         /* Distanza dall'angolo destro della scheda */
     
     display: flex;
     flex-direction: column;

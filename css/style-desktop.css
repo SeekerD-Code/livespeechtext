@@ -73,8 +73,8 @@
     #pwa-pc-badge {
         position: absolute;
         z-index: 9999;
-        top: 140px;
-        right: 1120px; /* Lo posiziona in alto a destra, vicino ai tuoi controlli di cambio tema */
+        top: 183px;
+        right: 950px; /* Lo posiziona in alto a destra, vicino ai tuoi controlli di cambio tema */
         background: rgba(37, 99, 235, 0.15);
         border: 1px solid rgba(37, 99, 235, 0.4);
         padding: 6px 14px;
@@ -133,3 +133,4 @@
 }
 
 }
+ 
