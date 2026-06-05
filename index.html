@@ -16,6 +16,23 @@
     <link rel="manifest" href="manifest.json">
     
     <link rel="stylesheet" href="css/main.css">
+
+    <script>
+    if (window.location.protocol !== 'file:') {
+        // La PWA controlla se la Home Page ha rilasciato il pass per lo sviluppatore
+        const hasCookieBlock = document.cookie.split('; ').some(row => row.startsWith('block_ads='));
+        
+        if (localStorage.getItem('block_ads') === 'true' || hasCookieBlock) {
+            console.log("Modalità Sviluppatore Attiva nella PWA: AdSense inibito.");
+        } else {
+            const adsenseScript = document.createElement('script');
+            adsenseScript.async = true;
+            adsenseScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9544811471414500";
+            adsenseScript.crossOrigin = "anonymous";
+            document.head.appendChild(adsenseScript);
+        }
+    }
+</script>
 </head>
 <body>
 
