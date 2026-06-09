@@ -452,8 +452,9 @@ body.dark-mode .sub-text-bold {
 }
 .accordion-content {
     max-height: 0;
+    padding: 0 20px; /* Azzeriamo il padding verticale (alto/basso) quando è chiuso */
     overflow: hidden;
-    transition: max-height 0.3s ease-out, padding 0.3s ease;
+    transition: max-height 0.3s ease-out, padding 0.3s ease, border 0.1s ease;
     background: #ffffff;
 }
 
