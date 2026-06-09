@@ -14,6 +14,11 @@ window.addEventListener('DOMContentLoaded', () => {
         const themeToggleBtn = document.getElementById('theme-toggle');
         const themeTextLabel = document.getElementById('theme-text-label');
 
+        // --- VARIABILI DI RIFERIMENTO PER IL PICTURE-IN-PICTURE ---
+        let pipWindow = null;
+        let areaAppuntiMini = null;
+        let boxAnteprimaMini = null;
+
         // --- ELEMENTI MODALE CUSTOM ---
         const modal = document.getElementById('custom-modal');
         const modalTitolo = document.getElementById('modal-titolo');
@@ -93,6 +98,14 @@ window.addEventListener('DOMContentLoaded', () => {
                     themeToggleBtn.textContent = '🌙';
                     if (themeTextLabel) themeTextLabel.textContent = 'giorno';
                     localStorage.setItem('theme', 'light');
+                }
+                // Se la finestra PiP è aperta, giriamole lo stato del tema scuro
+                if (pipWindow) {
+                    if (document.body.classList.contains('dark-mode')) {
+                        pipWindow.document.body.classList.add('dark-mode');
+                    } else {
+                        pipWindow.document.body.classList.remove('dark-mode');
+                    }
                 }
             });
         }
@@ -195,7 +208,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (modalBtnAnnulla) modalBtnAnnulla.addEventListener('click', () => { modal.classList.remove('show'); });
         if (modalBtnConferma) modalBtnConferma.addEventListener('click', () => { if (azioneDaConfermare) azioneDaConfermare(); modal.classList.remove('show'); });
 
-        // --- FUNZIONI GRAFICHE ---
+        // --- FUNZIONAMENTO DELLO STATO GRAFICO ---
         function attivaGraficaStato(messaggio) {
             ascoltoAttivo = true;
             if (btnAscolto) btnAscolto.disabled = true;
@@ -266,7 +279,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     try {
                         bloccoForzato = false;
                         
-                        // AGGIORNAMENTO MODULO CATTURA AUDIO (Filtri hardware attivi ed aggressivi)
                         streamSistema = await navigator.mediaDevices.getDisplayMedia({
                             video: true,
                             audio: { 
@@ -303,8 +315,7 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-// --- LOGICA DI RICEZIONE E DICTATION ---
-// Variabili di controllo fuori o all'inizio del blocco di inizializzazione
+        // --- LOGICA DI RICEZIONE E DICTATION ---
         if (typeof paroleInviateDalloStart === 'undefined') {
             var paroleInviateDalloStart = 0;
         }
@@ -313,7 +324,6 @@ window.addEventListener('DOMContentLoaded', () => {
             let testoProvvisorio = '';
             let testoDefinitivo = '';
 
-            // 1. Separazione nativa del motore vocale
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     testoDefinitivo += event.results[i][0].transcript + ' ';
@@ -322,14 +332,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // FUNZIONE INTERNA: Pulisce via TUTTA la punteggiatura
             const immettiNuovoBlocco = (testoBlocco) => {
                 if (!testoBlocco) return;
 
-                // Rimuove la punteggiatura
                 let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-                
-                // Rimuove eventuali doppi spazi rimasti
                 let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
                 if (!pulito) return;
 
@@ -338,9 +344,15 @@ window.addEventListener('DOMContentLoaded', () => {
                 const fineSelezione = areaAppunti.selectionEnd;
                 const scrollAltezza = areaAppunti.scrollTop;
 
-                // Inserisce il testo puro e va a capo due volte
-                areaAppunti.value += pulito + "\n";
+                // Scrittura nell'area principale
+                areaAppunti.value += pulito + "\n\n";
                 if (btnDownload) btnDownload.style.display = "inline-block";
+
+                // 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico della minicompattata
+                if (areaAppuntiMini) {
+                    areaAppuntiMini.value = areaAppunti.value;
+                    areaAppuntiMini.scrollTop = areaAppuntiMini.scrollHeight;
+                }
 
                 if (haIlFocus) {
                     areaAppunti.setSelectionRange(inizioSelezione, fineSelezione);
@@ -350,7 +362,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // 2. LOGICA DI TAGLIO FLUIDO A BLOCCHI DI 20 PAROLE
             if (testoProvvisorio) {
                 const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
                 const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
@@ -358,20 +369,27 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (paroleNuove.length >= 20) {
                     const bloccoDaInviare = paroleNuove.join(" ");
                     immettiNuovoBlocco(bloccoDaInviare);
-                    
                     paroleInviateDalloStart += paroleNuove.length;
                 }
 
-                // L'anteprima in basso mostra le parole correnti pulite
                 const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
                 let anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
                 
+                const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
+
                 if (boxAnteprima) {
-                    boxAnteprima.innerHTML = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
+                    boxAnteprima.innerHTML = testoInAscoltoCompleto;
                 }
+
+                // 🌟 AGGIORNAMENTO PiP: Mostra in tempo reale l'anteprima vocale azzurra
+                if (boxAnteprimaMini) {
+                    boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
+                }
+            } else {
+                if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
+                if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
 
-            // 3. LOGICA DI CHIUSURA (Sistemata la variabile con il refuso)
             if (testoDefinitivo) {
                 const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
                 const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
@@ -379,31 +397,20 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (rimanentiDef.trim().length > 0) {
                     immettiNuovoBlocco(rimanentiDef);
                 }
-                
                 paroleInviateDalloStart = 0;
             }
         };
 
-        // 🌟 RESET DI SICUREZZA SEMPLIFICATO (Evita blocchi sui pulsanti)
+        // --- RESET DI SICUREZZA VOCALE ---
         recognition.onend = () => {
             paroleInviateDalloStart = 0;
-            if (boxAnteprima && !riconoscimentoAttivo) {
+            if (boxAnteprima && !ascoltoAttivo) {
                 boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
-        };
+            if (boxAnteprimaMini && !ascoltoAttivo) {
+                boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
+            }
 
-        // RESET DI SICUREZZA: All'interruzione manuale o fine della sessione vocale
-        if (typeof recognition.onend_original === 'undefined') {
-            recognition.onend = () => {
-                paroleInviateDalloStart = 0;
-                if (boxAnteprima && !riconoscimentoAttivo) {
-                    boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
-                }
-            };
-        }
-        
-
-        recognition.onend = () => {
             if (!bloccoForzato) {
                 try { recognition.start(); } catch (err) { console.error(err); }
             } else {
@@ -431,6 +438,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 const t = traduzioni[selectInterfaccia.value];
                 mostraModaleConferma(t.modalCancellaTitolo, t.modalCancellaMessaggio, () => {
                     if (areaAppunti) areaAppunti.value = '';
+                    if (areaAppuntiMini) areaAppuntiMini.value = ''; // Svuota anche la miniapp se aperta
                     if (btnDownload) btnDownload.style.display = "none";
                 });
             });
@@ -452,168 +460,114 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // --- FUNZIONALITÀ DOCUMENT PICTURE-IN-PICTURE ---
+        // --- GESTIONE NUOVA APERTURA COMPATTA PICTURE-IN-PICTURE (pip.html) ---
         if (btnPip) {
             btnPip.addEventListener('click', async () => {
                 if (!('documentPictureInPicture' in window)) {
-                    alert("Il tuo browser non supporta il Document Picture-in-Picture. Usa Google Chrome o Edge!");
+                    alert("Il tuo browser non supporta il Document Picture-in-Picture. Usa Google Chrome o Microsoft Edge!");
                     return;
                 }
 
-                if (window.pipWindow) {
-                    window.pipWindow.close();
+                if (pipWindow) {
+                    pipWindow.close();
                     return;
                 }
 
                 try {
-                    const pipWindow = await window.documentPictureInPicture.requestWindow({
-                        width: 450,
-                        height: 480,
+                    pipWindow = await window.documentPictureInPicture.requestWindow({
+                        width: 400,
+                        height: 500,
                     });
 
-                    window.pipWindow = pipWindow;
+                    // Carica il file html esterno
+                    const risposta = await fetch('pip.html');
+                    const htmlPip = await risposta.text();
+                    pipWindow.document.body.innerHTML = htmlPip;
 
-                    Array.from(document.styleSheets).forEach((styleSheet) => {
+                    // Gestione del tema iniziale sulla finestra fluttuante
+                    if (document.body.classList.contains('dark-mode')) {
+                        pipWindow.document.body.classList.add('dark-mode');
+                    }
+
+                    // Clona stili CSS nell'head del PiP
+                    [...document.styleSheets].forEach((styleSheet) => {
                         try {
-                            const cssRules = Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('');
-                            const style = document.createElement('style');
+                            const cssRules = [...styleSheet.cssRules].map((rule) => rule.cssText).join('');
+                            const style = pipWindow.document.createElement('style');
                             style.textContent = cssRules;
                             pipWindow.document.head.appendChild(style);
                         } catch (e) {
-                            const link = document.createElement('link');
+                            const link = pipWindow.document.createElement('link');
                             link.rel = 'stylesheet';
                             link.href = styleSheet.href;
                             pipWindow.document.head.appendChild(link);
                         }
                     });
 
-                    if (document.body.classList.contains('dark-mode')) {
-                        pipWindow.document.body.classList.add('dark-mode');
+                    // Riferimenti interni alla finestra PiP
+                    areaAppuntiMini = pipWindow.document.getElementById('area-appunti-mini');
+                    boxAnteprimaMini = pipWindow.document.getElementById('box-anteprima-mini');
+                    const btnLinguaMini = pipWindow.document.getElementById('btn-lingua-mini');
+                    const listaLingueMini = pipWindow.document.getElementById('lista-lingue-mini');
+
+                    // Allineamento immediato dei testi correnti
+                    if (areaAppuntiMini && areaAppunti) areaAppuntiMini.value = areaAppunti.value;
+                    if (boxAnteprimaMini && boxAnteprima) {
+                        boxAnteprimaMini.innerHTML = boxAnteprima.style.display !== "none" ? boxAnteprima.innerHTML : traduzioni[selectInterfaccia.value].attesaVoce;
                     }
 
-                    const pipContainer = document.createElement('div');
-                    pipContainer.style.padding = '15px';
-                    pipContainer.style.height = '100vh';
-                    pipContainer.style.display = 'flex';
-                    pipContainer.style.flexDirection = 'column';
-                    pipContainer.style.gap = '10px';
-                    pipContainer.style.boxSizing = 'border-box';
-                    pipContainer.style.justifyContent = 'space-between';
+                    // Imposta la sigla della lingua iniziale sul bottone mini
+                    if (btnLinguaMini && selectLingua) {
+                        const langBreve = selectLingua.value.substring(0, 2).toUpperCase();
+                        btnLinguaMini.innerHTML = `🌐 ${langBreve}`;
+                    }
 
-                    const topBox = document.createElement('div');
-                    topBox.style.display = 'flex';
-                    topBox.style.flexDirection = 'column';
-                    topBox.style.gap = '10px';
-                    topBox.style.flexGrow = '1';
+                    // Sincronizzazione dell'editing manuale Bidirezionale
+                    if (areaAppuntiMini && areaAppunti) {
+                        areaAppuntiMini.addEventListener('input', () => {
+                            areaAppunti.value = areaAppuntiMini.value;
+                        });
+                        areaAppunti.addEventListener('input', () => {
+                            areaAppuntiMini.value = areaAppunti.value;
+                        });
+                    }
 
-                    const pipStato = document.createElement('div');
-                    pipStato.className = 'status-badge';
-                    pipStato.style.margin = '0';
-                    pipStato.style.width = '100%';
-                    pipStato.style.textAlign = 'center';
-                    pipStato.textContent = statoApp ? statoApp.textContent : '';
-                    if (statoApp && statoApp.classList.contains('active')) pipStato.classList.add('active');
+                    // Gestione Menu a tendina della lingua nella finestra PiP
+                    if (btnLinguaMini && listaLingueMini) {
+                        btnLinguaMini.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            listaLingueMini.classList.toggle('menu-lingue-mostra');
+                        });
 
-                    const pipTextarea = document.createElement('textarea');
-                    pipTextarea.value = areaAppunti ? areaAppunti.value : '';
-                    pipTextarea.style.flexGrow = '1';
-                    pipTextarea.style.height = '160px';
-                    pipTextarea.style.width = '100%';
-                    pipTextarea.disabled = true;
+                        listaLingueMini.querySelectorAll('span').forEach(opzione => {
+                            opzione.addEventListener('click', (e) => {
+                                const linguaSelezionata = e.currentTarget.getAttribute('data-lang');
+                                const testoBreve = e.currentTarget.textContent.split(' ')[1].substring(0, 2).toUpperCase();
+                                
+                                btnLinguaMini.innerHTML = `🌐 ${testoBreve}`;
+                                
+                                if (selectLingua) {
+                                    selectLingua.value = linguaSelezionata;
+                                    selectLingua.dispatchEvent(new Event('change'));
+                                }
+                                listaLingueMini.classList.remove('menu-lingue-mostra');
+                            });
+                        });
 
-                    const pipButtonsRow = document.createElement('div');
-                    pipButtonsRow.className = 'pip-buttons-row';
+                        pipWindow.document.addEventListener('click', () => {
+                            listaLingueMini.classList.remove('menu-lingue-mostra');
+                        });
+                    }
 
-                    const t = traduzioni[selectInterfaccia.value];
+                    // Reset puntatori alla chiusura della finestra fluttuante
+                    pipWindow.addEventListener('pagehide', () => {
+                        pipWindow = null;
+                        areaAppuntiMini = null;
+                        boxAnteprimaMini = null;
+                    });
 
-                    const miniBtnMicrofono = document.createElement('button');
-                    miniBtnMicrofono.className = btnAscolto.className + ' pip-btn-mini';
-                    miniBtnMicrofono.textContent = '🎤';
-                    miniBtnMicrofono.title = t.btnMicrofono; 
-                    miniBtnMicrofono.addEventListener('click', () => btnAscolto.click());
-
-                    const miniBtnCall = document.createElement('button');
-                    miniBtnCall.className = btnCatturaSistema.className + ' pip-btn-mini';
-                    miniBtnCall.textContent = '💻';
-                    miniBtnCall.title = t.btnCall;
-                    miniBtnCall.style.backgroundColor = btnCatturaSistema.style.backgroundColor;
-                    miniBtnCall.addEventListener('click', () => btnCatturaSistema.click());
-
-                    const miniBtnCancella = document.createElement('button');
-                    miniBtnCancella.className = btnCancella.className + ' pip-btn-mini';
-                    miniBtnCancella.textContent = '🗑️';
-                    miniBtnCancella.title = t.btnCancella;
-                    miniBtnCancella.addEventListener('click', () => btnCancella.click());
-
-                    pipButtonsRow.appendChild(miniBtnMicrofono);
-                    pipButtonsRow.appendChild(miniBtnCall);
-                    pipButtonsRow.appendChild(miniBtnCancella);
-
-                    topBox.appendChild(pipStato);
-                    topBox.appendChild(pipButtonsRow);
-                    topBox.appendChild(pipTextarea);
-
-                    const pipAdvSpace = document.createElement('div');
-                    pipAdvSpace.className = 'advertising-space';
-                    pipAdvSpace.style.marginTop = '10px';
-
-                    const pipBanner = document.createElement('div');
-                    pipBanner.id = 'banner-principale';
-                    pipBanner.style.lineHeight = '50px'; 
-                    pipBanner.style.height = '50px';
-                    pipBanner.textContent = 'Space Advertising';
-
-                    pipAdvSpace.appendChild(pipBanner);
-
-                    pipContainer.appendChild(topBox);
-                    pipContainer.appendChild(pipAdvSpace);
-                    pipWindow.document.body.appendChild(pipContainer);
-
-                    const intervalloSincro = setInterval(() => {
-                        if (pipWindow.closed) {
-                            clearInterval(intervalloSincro);
-                            window.pipWindow = null;
-                            return;
-                        }
-                        
-                        if (areaAppunti) pipTextarea.value = areaAppunti.value;
-                        if (statoApp) pipStato.textContent = statoApp.textContent;
-                        
-                        const currentLang = traduzioni[selectInterfaccia.value];
-
-                        if (statoApp && statoApp.classList.contains('active')) {
-                            pipStato.classList.add('active');
-                        } else {
-                            pipStato.classList.remove('active');
-                        }
-
-                        if (btnAscolto && btnAscolto.classList.contains('listening')) {
-                            miniBtnMicrofono.classList.add('listening');
-                            miniBtnMicrofono.textContent = '🛑';
-                            miniBtnMicrofono.title = currentLang.btnStop;
-                        } else {
-                            miniBtnMicrofono.classList.remove('listening');
-                            miniBtnMicrofono.textContent = '🎤';
-                            miniBtnMicrofono.title = currentLang.btnMicrofono;
-                        }
-
-                        if (ascoltoAttivo && btnAscolto && !btnAscolto.classList.contains('listening')) {
-                            miniBtnCall.textContent = '🛑';
-                            miniBtnCall.style.backgroundColor = "#ef4444";
-                            miniBtnCall.title = currentLang.btnStop;
-                        } else {
-                            miniBtnCall.style.backgroundColor = "";
-                            miniBtnCall.textContent = '💻';
-                            miniBtnCall.title = currentLang.btnCall;
-                        }
-
-                        miniBtnMicrofono.disabled = btnAscolto && btnAscolto.disabled && !btnAscolto.classList.contains('listening');
-                        miniBtnCall.disabled = btnCatturaSistema && btnCatturaSistema.disabled && miniBtnCall.textContent !== '🛑';
-
-                    }, 100);
-
-                } catch (err) {
-                    console.error("Impossibile aprire il Document PiP:", err);
+                } catch (errore) {
+                    console.error("Errore nell'apertura del Document PiP API:", errore);
                 }
             });
         }
