@@ -381,7 +381,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
                 
                 if (rimanentiDef.trim().length > 0) {
-                    immettiNuovaRiga(rimanentsDef);
+                    immettiNuovaRiga(rimanentiDef);
                 }
                 
                 // Resettiamo il contatore progressivo per il prossimo ciclo di frasi
