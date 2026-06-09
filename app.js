@@ -115,7 +115,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         // --- ABILITAZIONE SELETTORE MANUAL LINGUA ACQUISIZIONE ---
         function rilevaEImpostaLinguaIniziale() {
-            // Rileva la lingua del browser per l'interfaccia grafica
             const linguaBrowser = navigator.language || navigator.userLanguage;
             const codiceCorto = linguaBrowser.substring(0, 2);
 
@@ -125,13 +124,12 @@ window.addEventListener('DOMContentLoaded', () => {
                 selectInterfaccia.value = "en";
             }
             
-            // Imposta il menù a tendina della lingua di acquisizione (se presente)
             if (selectLingua) {
                 const opzioneMicrofono = Array.from(selectLingua.options).find(opt => opt.value.startsWith(codiceCorto));
                 if (opzioneMicrofono) {
                     selectLingua.value = opzioneMicrofono.value;
                 } else {
-                    selectLingua.value = "it-IT"; // Default stabile
+                    selectLingua.value = "it-IT";
                 }
             }
             applicaLinguaInterfaccia(selectInterfaccia ? selectInterfaccia.value : "it");
@@ -152,7 +150,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         const recognition = new SpeechRecognition();
         
-        // CORREZIONE 1: continuous impostato su true evita frammentazioni e perdite di frasi
         recognition.continuous = true;         
         recognition.interimResults = true;     
 
@@ -181,7 +178,7 @@ window.addEventListener('DOMContentLoaded', () => {
             modalMessaggio.textContent = messaggio;
             modalBtnConferma.style.display = "block"; 
             modalBtnAnnulla.textContent = traduzioni[selectInterfaccia.value].modalAnnulla;
-            azioneDaConfermare = callback;
+            actionDaConfermare = callback;
             modal.classList.add('show');
         }
 
@@ -246,7 +243,6 @@ window.addEventListener('DOMContentLoaded', () => {
             btnAscolto.addEventListener('click', async () => {
                 if (!ascoltoAttivo) {
                     bloccoForzato = false;
-                    // CORREZIONE 2: Assicura l'uso della lingua selezionata nel menù a tendina
                     recognition.lang = selectLingua ? selectLingua.value : "it-IT"; 
                     
                     const t = traduzioni[selectInterfaccia.value];
@@ -269,9 +265,15 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (!ascoltoAttivo) {
                     try {
                         bloccoForzato = false;
+                        
+                        // AGGIORNAMENTO MODULO CATTURA AUDIO (Filtri hardware attivi ed aggressivi)
                         streamSistema = await navigator.mediaDevices.getDisplayMedia({
                             video: true,
-                            audio: { autoGainControl: true, echoCancellation: true, noiseSuppression: true }
+                            audio: { 
+                                autoGainControl: true, 
+                                echoCancellation: true, 
+                                noiseSuppression: true 
+                            }
                         });
                         
                         const tracceAudio = streamSistema.getAudioTracks();
@@ -282,7 +284,6 @@ window.addEventListener('DOMContentLoaded', () => {
                             return;
                         }
 
-                        // CORREZIONE 3: Forza la lingua scelta dall'utente anche per l'audio di sistema
                         recognition.lang = selectLingua ? selectLingua.value : "it-IT";
                         attivaGraficaStato(traduzioni[selectInterfaccia.value].statoAttivoCall);
                         btnCatturaSistema.disabled = false;
@@ -303,6 +304,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         // --- LOGICA DI RICEZIONE E DICTATION ---
+        // AGGIORNATO: Protezione del cursore dell'area di testo e gestione dell'anteprima fluida
         recognition.onresult = (event) => {
             let testoProvvisorio = '';
             let testoDefinitivo = '';
@@ -315,11 +317,29 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // 1. Iniezione del testo stabile nell'area principale salvaguardando l'attività dello studente
             if (testoDefinitivo && areaAppunti) {
+                // Rileva se lo studente sta interagendo con la textarea sul momento
+                const haIlFocus = (document.activeElement === areaAppunti);
+                const inizioSelezione = areaAppunti.selectionStart;
+                const fineSelezione = areaAppunti.selectionEnd;
+                const scrollAltezza = areaAppunti.scrollTop;
+
+                // Accoda il testo definitivo
                 areaAppunti.value += testoDefinitivo;
                 if (btnDownload) btnDownload.style.display = "inline-block";
+
+                // Se lo studente stava modificando/scrivendo qualcosa prima dell'arrivo del testo, blocca il cursore
+                if (haIlFocus) {
+                    areaAppunti.setSelectionRange(inizioSelezione, fineSelezione);
+                    areaAppunti.scrollTop = scrollAltezza; // Blocca i micro-sbalzi di scorrimento verticale
+                } else {
+                    // Se non lo sta usando, fa scorrere dolcemente la textarea verso il fondo
+                    areaAppunti.scrollTop = areaAppunti.scrollHeight;
+                }
             }
 
+            // 2. Aggiornamento in tempo reale del Box Anteprima Invisibile
             if (boxAnteprima) {
                 if (testoProvvisorio) {
                     boxAnteprima.textContent = traduzioni[selectInterfaccia.value].inAscolto + testoProvvisorio;
@@ -528,8 +548,8 @@ window.addEventListener('DOMContentLoaded', () => {
                             miniBtnCall.style.backgroundColor = "#ef4444";
                             miniBtnCall.title = currentLang.btnStop;
                         } else {
-                            miniBtnCall.textContent = '💻';
                             miniBtnCall.style.backgroundColor = "";
+                            miniBtnCall.textContent = '💻';
                             miniBtnCall.title = currentLang.btnCall;
                         }
 
