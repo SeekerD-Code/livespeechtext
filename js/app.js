@@ -178,7 +178,7 @@ window.addEventListener('DOMContentLoaded', () => {
             modalMessaggio.textContent = messaggio;
             modalBtnConferma.style.display = "block"; 
             modalBtnAnnulla.textContent = traduzioni[selectInterfaccia.value].modalAnnulla;
-            actionDaConfermare = callback;
+            azioneDaConfermare = callback; 
             modal.classList.add('show');
         }
 
@@ -316,7 +316,20 @@ window.addEventListener('DOMContentLoaded', () => {
                     testoProvvisorio += event.results[i][0].transcript;
                 }
             }
-
+                
+        // 🚀 MODIFICATO: Logica di controllo parole massime prima dell'acquisizione
+            // Conta le parole presenti nel blocco di testo provvisorio
+            const paroleProvvisorie = testoProvvisorio.trim().split(/\s+/);
+            
+            // Impostiamo un margine massimo di 18 parole per evitare accumuli infiniti dei professori
+            if (testoProvvisorio && paroleProvvisorie.length > 18) {
+                testoDefinitivo += testoProvvisorio + ' ';
+                testoProvvisorio = ''; // Reset dell'anteprima provvisoria
+                
+                // Forza un riavvio rapido del riconoscimento per ripulire la memoria interna del browser
+                recognition.stop(); 
+            }
+                
             // 1. Iniezione del testo stabile nell'area principale salvaguardando l'attività dello studente
             if (testoDefinitivo && areaAppunti) {
                 // Rileva se lo studente sta interagendo con la textarea sul momento
