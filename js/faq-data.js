@@ -74,35 +74,43 @@ function caricaFAQ() {
         accordionContainer.appendChild(accordionItem);
     });
 
-    // Riattacca gli eventi di apertura/chiusura (i click sull'accordion)
+    // Inizializza l'ascoltatore centralizzato sul contenitore
     inizializzaEventiAccordion();
 }
 
-// Funzione interna per gestire l'apertura e chiusura delle FAQ
+// Gestione dell'apertura tramite Delegazione degli Eventi (A prova di Tab Navigation!)
 function inizializzaEventiAccordion() {
-    const headers = document.querySelectorAll('#sezione-faq .accordion-header');
-    headers.forEach(header => {
-        header.addEventListener('click', function() {
-            const item = this.parentElement;
-            
-            // Controlla se l'elemento cliccato è già attivo
-            const isActive = item.classList.contains('active');
+    const accordionContainer = document.querySelector('#sezione-faq .accordion');
+    if (!accordionContainer) return;
 
-            // OPZIONALE: Chiude tutti gli altri accordion aperti prima di aprire questo (effetto pulito)
-            document.querySelectorAll('#sezione-faq .accordion-item').forEach(el => {
-                el.classList.remove('active');
-            });
+    // Rimuoviamo eventuali vecchi ascoltatori per evitare doppie attivazioni
+    accordionContainer.removeAttribute('data-has-listener');
 
-            // Se l'elemento non era attivo, aggiungi la classe 'active' per aprirlo
-            if (!isActive) {
-                item.classList.add('active');
-            }
+    accordionContainer.addEventListener('click', function(event) {
+        // Cerchiamo se l'elemento cliccato è l'header (o dentro l'header)
+        const header = event.target.closest('.accordion-header');
+        if (!header) return; // Se il click non è sull'header, ignora
+
+        const currentItem = header.parentElement;
+        const isActive = currentItem.classList.contains('active');
+
+        // Chiude tutti gli altri accordion aperti per mantenere l'ordine
+        const allItems = accordionContainer.querySelectorAll('.accordion-item');
+        allItems.forEach(item => {
+            item.classList.remove('active');
         });
+
+        // Se l'elemento non era attivo, aggiunge la classe 'active' per espanderlo con il CSS
+        if (!isActive) {
+            currentItem.classList.add('active');
+        }
     });
+    
+    // Segnamo che il listener è agganciato
+    accordionContainer.setAttribute('data-has-listener', 'true');
 }
 
-// Avvia il caricamento quando il DOM è pronto
-// SOSTITUISCI L'ULTIMA RIGA CON QUESTO CONTROLLO:
+// Avvio sicuro a prova di ciclo di vita della pagina
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', caricaFAQ);
 } else {
