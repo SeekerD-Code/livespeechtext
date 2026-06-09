@@ -6,8 +6,12 @@
 .lang-control-box, 
 #lingua-app-select,
 .top-right-controls-inline .lang-control-box,
-[id*="lingua"] { 
+#select-interfaccia { 
     display: none !important;
+}
+/* Rende visibile e pulita la tendina di acquisizione della lezione */
+#select-lingua {
+    display: inline-block !important;
 }
 
 /* ==========================================================================
