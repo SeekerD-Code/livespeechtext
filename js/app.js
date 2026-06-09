@@ -303,31 +303,19 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // --- LOGICA DI RICEZIONE E DICTATION ---
-        // AGGIORNATO: Protezione del cursore dell'area di testo e gestione dell'anteprima fluida
+// --- LOGICA DI RICEZIONE E DICTATION ---
+        // OTTIMIZZATO: Inserimento continuo "append-only" senza stop forzati per scenari a connessione lenta
         recognition.onresult = (event) => {
             let testoProvvisorio = '';
             let testoDefinitivo = '';
 
+            // Scorriamo i risultati a partire dall'ultimo indice modificato
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     testoDefinitivo += event.results[i][0].transcript + ' ';
                 } else {
                     testoProvvisorio += event.results[i][0].transcript;
                 }
-            }
-                
-        // 🚀 MODIFICATO: Logica di controllo parole massime prima dell'acquisizione
-            // Conta le parole presenti nel blocco di testo provvisorio
-            const paroleProvvisorie = testoProvvisorio.trim().split(/\s+/);
-            
-            // Impostiamo un margine massimo di 18 parole per evitare accumuli infiniti dei professori
-            if (testoProvvisorio && paroleProvvisorie.length > 18) {
-                testoDefinitivo += testoProvvisorio + ' ';
-                testoProvvisorio = ''; // Reset dell'anteprima provvisoria
-                
-                // Forza un riavvio rapido del riconoscimento per ripulire la memoria interna del browser
-                recognition.stop(); 
             }
                 
             // 1. Iniezione del testo stabile nell'area principale salvaguardando l'attività dello studente
@@ -338,7 +326,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 const fineSelezione = areaAppunti.selectionEnd;
                 const scrollAltezza = areaAppunti.scrollTop;
 
-                // Accoda il testo definitivo
+                // Accoda semplicemente il testo definitivo (modalità Append puro)
                 areaAppunti.value += testoDefinitivo;
                 if (btnDownload) btnDownload.style.display = "inline-block";
 
@@ -352,7 +340,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // 2. Aggiornamento in tempo reale del Box Anteprima Invisibile
+            // 2. Aggiornamento in tempo reale del Box Anteprima
             if (boxAnteprima) {
                 if (testoProvvisorio) {
                     boxAnteprima.textContent = traduzioni[selectInterfaccia.value].inAscolto + testoProvvisorio;
@@ -361,6 +349,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
         };
+        
 
         recognition.onend = () => {
             if (!bloccoForzato) {
