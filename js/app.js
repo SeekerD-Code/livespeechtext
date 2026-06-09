@@ -304,14 +304,16 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
 // --- LOGICA DI RICEZIONE E DICTATION ---
-// Variabile globale (o inserita appena fuori da onresult) per ricordare l'ultimo testo inviato
-        let ultimoTestoInviato = "";
+// 🌟 Variabili di controllo fuori o all'inizio del blocco di inizializzazione per tracciare il flusso continuo
+        if (typeof paroleInviateDalloStart === 'undefined') {
+            var paroleInviateDalloStart = 0;
+        }
 
         recognition.onresult = (event) => {
             let testoProvvisorio = '';
             let testoDefinitivo = '';
 
-            // Separazione nativa tra definitivo e provvisorio
+            // 1. Separazione nativa del motore vocale
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     testoDefinitivo += event.results[i][0].transcript + ' ';
@@ -320,21 +322,20 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Funzione interna per inserire il testo nella textarea con punto e a-capo
-            const inserisciInAreaAppunti = (testo) => {
-                let pulito = testo.trim();
+            // 🌟 FUNZIONE INTERNA: Inserisce una riga pulita e va a capo
+            const immettiNuovaRiga = (testoRiga) => {
+                let pulito = testoRiga.trim();
                 if (!pulito) return;
 
-                // Evita duplicati immediati causati dal passaggio da provvisorio a definitivo
-                if (pulito === ultimoTestoInviato) return; 
-                ultimoTestoInviato = pulito;
+                // Mette la prima lettera maiuscola alla riga per estetica, se non c'è già
+                pulito = pulito.charAt(0).toUpperCase() + pulito.slice(1);
 
                 const haIlFocus = (document.activeElement === areaAppunti);
                 const inizioSelezione = areaAppunti.selectionStart;
                 const fineSelezione = areaAppunti.selectionEnd;
                 const scrollAltezza = areaAppunti.scrollTop;
 
-                // Forza il punto finale e il doppio a-capo per creare il paragrafo
+                // Aggiunge la riga singola andando a capo (singolo o doppio a seconda di come preferisci i tuoi appunti)
                 areaAppunti.value += pulito + ".\n\n";
                 if (btnDownload) btnDownload.style.display = "inline-block";
 
@@ -346,52 +347,49 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // 1. GESTIONE DEL TESTO PROVVISORIO CON AUTO-COMMIT SULLA MAIUSCOLA
+            // 2. 🌟 LOGICA DI TAGLIO FLUIDO A RIGHE CORTE (Ogni ~10 parole)
             if (testoProvvisorio) {
-                // Dividiamo il testo provvisorio in parole mantenendo gli spazi
-                const parole = testoProvvisorio.split(/(\s+)/);
+                // Trasformiamo l'intero blocco provvisorio in un array di parole
+                const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
                 
-                let indiceTaglio = -1;
+                // Calcoliamo quante parole nuove ci sono rispetto a quelle che abbiamo già spinto sopra
+                const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
 
-                // Scorriamo le parole partendo dalla seconda (saltiamo l'indice 0 che è l'inizio assoluto)
-                for (let j = 1; j < parole.length; j++) {
-                    // Controlliamo se è una parola reale (non uno spazio vuoto)
-                    if (parole[j].trim().length > 0) {
-                        const primaLettera = parole[j].trim().charAt(0);
-                        
-                        // REGEX: Controlla se la prima lettera è maiuscola (e non è un numero)
-                        if (primaLettera === primaLettera.toUpperCase() && primaLettera !== primaLettera.toLowerCase()) {
-                            indiceTaglio = j;
-                            break; // Ci fermiamo alla prima maiuscola che incontriamo
-                        }
-                    }
+                // LIMITE RIGA: 10 parole equivalgono a circa una riga di testo/frase breve.
+                if (paroleNuove.length >= 10) {
+                    // Estraiamo la riga corrente, la mandiamo sopra e aggiorniamo il contatore
+                    const rigaDaInviare = paroleNuove.join(" ");
+                    immettiNuovaRiga(rigaDaInviare);
+                    
+                    paroleInviateDalloStart += paroleNuove.length;
                 }
 
-                // Se abbiamo trovato una maiuscola nel mezzo del discorso provvisorio...
-                if (indiceTaglio !== -1) {
-                    // Prendiamo tutto ciò che c'era prima della maiuscola e lo mandiamo sopra
-                    const partePrecedente = parole.slice(0, indiceTaglio).join("");
-                    inserisciInAreaAppunti(partePrecedente);
-
-                    // Aggiorniamo l'anteprima in basso mostrando solo dalla maiuscola in poi
-                    const parteRimanente = parole.slice(indiceTaglio).join("");
-                    if (boxAnteprima) {
-                        boxAnteprima.innerHTML = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${parteRimanente}`;
-                    }
-                } else {
-                    // Se non ci sono maiuscole, mostriamo il testo provvisorio normalmente nell'anteprima
-                    if (boxAnteprima) {
-                        boxAnteprima.innerHTML = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${testoProvvisorio}`;
-                    }
+                // L'anteprima in basso mostrerà solo le ultimissime parole che si stanno accumulando per la riga successiva
+                const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
+                if (boxAnteprima) {
+                    boxAnteprima.innerHTML = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${paroleRimanentiAnteprima}`;
                 }
-            } else if (boxAnteprima) {
-                boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
 
-            // 2. GESTIONE DEL TESTO DEFINITIVO (STRUTTURA DI BACKUP)
-            // Se il browser decide di chiudere la frase da solo, svuotiamo il provvisorio e mandiamo tutto sopra
+            // 3. LOGICA DI CHIUSURA (Se il browser genera un evento definitivo o l'oratore si ferma)
             if (testoDefinitivo) {
-                inserisciInAreaAppunti(testoDefinitivo);
+                const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
+                const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
+                
+                if (rimanentiDef.trim().length > 0) {
+                    immettiNuovaRiga(rimanentsDef);
+                }
+                
+                // Resettiamo il contatore progressivo per il prossimo ciclo di frasi
+                paroleInviateDalloStart = 0;
+            }
+        };
+
+        // 🌟 RESET DI SICUREZZA: Quando si clicca su "Ferma" o "Cancella", azzeriamo il contatore delle righe
+        recognition.onend = () => {
+            paroleInviateDalloStart = 0;
+            if (boxAnteprima && !riconoscimentoAttivo) {
+                boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
         };
         
