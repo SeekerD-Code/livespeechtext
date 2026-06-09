@@ -98,4 +98,9 @@ function inizializzaEventiAccordion() {
 }
 
 // Avvia il caricamento quando il DOM è pronto
-document.addEventListener('DOMContentLoaded', caricaFAQ);
+// SOSTITUISCI L'ULTIMA RIGA CON QUESTO CONTROLLO:
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', caricaFAQ);
+} else {
+    caricaFAQ();
+}
