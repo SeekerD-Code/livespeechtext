@@ -2,149 +2,47 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>LiveSpeech Mini</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css">
-    <style>
-        /* Stili specifici ottimizzati per la finestra fluttuante compatta */
-        body {
-            margin: 0;
-            padding: 10px;
-            font-family: 'Lexend', sans-serif;
-            background-color: var(--bg-color, #f8fafc);
-            color: var(--text-color, #1e293b);
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 20px);
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-
-        .mini-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            flex-shrink: 0;
-        }
-
-        /* Pulsante Lingua Custom */
-        .dropdown-lingua-custom {
-            position: relative;
-            display: inline-block;
-        }
-
-        #btn-lingua-mini {
-            background-color: #0ea5e9;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: background 0.2s;
-        }
-
-        #btn-lingua-mini:hover {
-            background-color: #0284c7;
-        }
-
-        .menu-lingue-nascondi {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #ffffff;
-            min-width: 140px;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
-            z-index: 999;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-            padding: 4px 0;
-            margin-top: 4px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .menu-lingue-mostra {
-            display: block;
-        }
-
-        .menu-lingue-nascondi span {
-            color: #334155;
-            padding: 8px 12px;
-            display: block;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: background 0.2s;
-        }
-
-        .menu-lingue-nascondi span:hover {
-            background-color: #f1f5f9;
-            color: #0ea5e9;
-        }
-
-        /* Area di testo principale modificabile (Blocchi da 20 parole) */
-        #area-appunti-mini {
-            flex-grow: 1;
-            width: 100%;
-            resize: none;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            font-family: inherit;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            outline: none;
-            box-sizing: border-box;
-            background-color: #ffffff;
-            color: #1e293b;
-        }
-
-        /* Box Azzurro di Anteprima (Flusso Continuo) in BASSO */
-        #box-anteprima-mini {
-            background-color: #eff6ff;
-            color: #1e40af;
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin-top: 8px;
-            font-style: italic;
-            font-size: 0.85rem;
-            border: 1px dashed #bfdbfe;
-            text-align: left;
-            flex-shrink: 0;
-            white-space: normal;
-            word-wrap: break-word;
-        }
-    </style>
+    <title>LiveSpeech Fluttuante</title>
 </head>
 <body>
+    <div class="pip-container" style="padding: 15px; height: 100vh; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; justify-content: space-between;">
+        
+        <div class="top-box" style="display: flex; flex-direction: column; gap: 10px; flex-grow: 1; height: 100%;">
+            
+            <div id="stato-app-mini" class="status-badge" style="margin: 0; width: 100%; text-align: center; flex-shrink: 0;">
+                Pronto ad ascoltare
+            </div>
+            
+            <div class="pip-buttons-row" style="display: flex; gap: 8px; flex-shrink: 0; position: relative;">
+                <button id="btn-lingua-mini" class="btn-primary" style="flex: 1; padding: 6px; font-size: 0.9rem; border-radius: 6px; cursor: pointer;">🌐 IT</button>
+                
+                <div id="lista-lingue-mini" class="menu-lingue-mini" style="display: none; position: absolute; top: 100%; left: 0; background: var(--bg-card, #fff); border: 1px solid var(--border-color, #ccc); padding: 5px; border-radius: 6px; z-index: 100; min-width: 120px;">
+                    <span data-lang="it-IT" style="display: block; padding: 5px; cursor: pointer;">🇮🇹 Italiano</span>
+                    <span data-lang="en-US" style="display: block; padding: 5px; cursor: pointer;">🇺🇸 English</span>
+                    <span data-lang="es-ES" style="display: block; padding: 5px; cursor: pointer;">🇪🇸 Español</span>
+                    <span data-lang="fr-FR" style="display: block; padding: 5px; cursor: pointer;">🇫🇷 Français</span>
+                    <span data-lang="de-DE" style="display: block; padding: 5px; cursor: pointer;">🇩🇪 Deutsch</span>
+                </div>
 
-    <div class="mini-header">
-        <div class="dropdown-lingua-custom">
-            <button id="btn-lingua-mini">🌐 IT</button>
-            <div id="lista-lingue-mini" class="menu-lingue-nascondi">
-                <span data-lang="it-IT">🇮🇹 Italiano</span>
-                <span data-lang="en-US">🇺🇸 English (US)</span>
-                <span data-lang="en-GB">🇬🇧 English (UK)</span>
-                <span data-lang="es-ES">🇪🇸 Español</span>
-                <span data-lang="fr-FR">🇫🇷 Français</span>
-                <span data-lang="de-DE">🇩🇪 Deutsch</span>
+                <button id="btn-ascolto-mini" style="flex: 1; padding: 6px; font-size: 0.9rem; border-radius: 6px; cursor: pointer;">🎤</button>
+                <button id="btn-call-mini" style="flex: 1; padding: 6px; font-size: 0.9rem; border-radius: 6px; cursor: pointer;">💻</button>
+                <button id="btn-cancella-mini" style="flex: 1; padding: 6px; font-size: 0.9rem; border-radius: 6px; cursor: pointer;">🗑️</button>
+            </div>
+            
+            <textarea id="area-appunti-mini" style="flex-grow: 1; width: 100%; font-family: inherit; padding: 10px; box-sizing: border-box; border-radius: 8px; resize: none;" placeholder="Il testo definitivo apparirà qui e puoi modificarlo..."></textarea>
+            
+            <div id="box-anteprima-mini" class="anteprima-azzurra" style="background-color: #eff6ff; color: #1e40af; padding: 8px 12px; border-radius: 6px; font-style: italic; font-size: 0.85rem; border: 1px dashed #bfdbfe; text-align: left; flex-shrink: 0; min-height: 40px; box-sizing: border-box;">
+                In attesa della voce...
+            </div>
+            
+        </div>
+
+        <div class="advertising-space" style="margin-top: 5px; flex-shrink: 0;">
+            <div id="banner-principale" style="line-height: 40px; height: 40px; text-align: center; border: 1px dashed #ccc; border-radius: 6px; font-size: 0.8rem;">
+                Space Advertising
             </div>
         </div>
-        
-        <div id="mini-actions-container"></div>
+
     </div>
-
-    <textarea id="area-appunti-mini" placeholder="Il testo definitivo apparirà qui... puoi modificarlo liberamente."></textarea>
-
-    <div id="box-anteprima-mini">
-        In attesa della voce...
-    </div>
-
 </body>
 </html>
