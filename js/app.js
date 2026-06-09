@@ -39,7 +39,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 btnPip: "🔲 Riduci in Primo Piano",
                 statoPronto: "Pronto ad ascoltare",
                 statoAttivoMicrofono: "🎙️ Microfono Attivo (Schermo Protetto)...",
-                statoAttivoCall: "💻 Trascrizione Call attiva...",
+                statoAttivoCall: "💻 Traccrizione Call attiva...",
                 statoTerminato: "Ascolto terminato",
                 attesaVoce: "In attesa della voce...",
                 inAscolto: "✍️ In ascolto: ",
@@ -509,6 +509,23 @@ window.addEventListener('DOMContentLoaded', () => {
                     boxAnteprimaMini = pipWindow.document.getElementById('box-anteprima-mini');
                     const btnLinguaMini = pipWindow.document.getElementById('btn-lingua-mini');
                     const listaLingueMini = pipWindow.document.getElementById('lista-lingue-mini');
+                    const statoAppMini = pipWindow.document.getElementById('stato-app-mini');
+                        
+                    // Riferimenti ai tre bottoni mini appena aggiunti nel file HTML
+                    const miniBtnMicrofono = pipWindow.document.getElementById('btn-ascolto-mini');
+                    const miniBtnCall = pipWindow.document.getElementById('btn-call-mini');
+                    const miniBtnCancella = pipWindow.document.getElementById('btn-cancella-mini');
+
+                    // Se esistono nell'HTML, copiamo le classi CSS originali per mantenere lo stile grafico coerente
+                    if (miniBtnMicrofono && btnAscolto) miniBtnMicrofono.className = btnAscolto.className + ' pip-btn-mini';
+                    if (miniBtnCall && btnCatturaSistema) miniBtnCall.className = btnCatturaSistema.className + ' pip-btn-mini';
+                    if (miniBtnCancella && btnCancella) miniBtnCancella.className = btnCancella.className + ' pip-btn-mini';
+
+                    // Impostiamo i titoli descrittivi (tooltip) basati sulla lingua attiva
+                    const tAttuale = traduzioni[selectInterfaccia.value];
+                    if (miniBtnMicrofono) { miniBtnMicrofono.title = tAttuale.btnMicrofono; miniBtnMicrofono.addEventListener('click', () => btnAscolto.click()); }
+                    if (miniBtnCall) { miniBtnCall.title = tAttuale.btnCall; miniBtnCall.addEventListener('click', () => btnCatturaSistema.click()); }
+                    if (miniBtnCancella) { miniBtnCancella.title = tAttuale.btnCancella; miniBtnCancella.addEventListener('click', () => btnCancella.click()); }
 
                     // Allineamento immediato dei testi correnti
                     if (areaAppuntiMini && areaAppunti) areaAppuntiMini.value = areaAppunti.value;
@@ -559,8 +576,58 @@ window.addEventListener('DOMContentLoaded', () => {
                         });
                     }
 
-                    // Reset puntatori alla chiusura della finestra fluttuante
+                    // 🌟 NUOVO INTERVAL DI SINCRONIZZAZIONE STATI E ICONE BOTTONI MINI 🌟
+                    const intervalSincronizzazione = setInterval(() => {
+                        if (!pipWindow) return;
+
+                        // Sincronizza lo stato della barra superiore fluttuante con quella principale
+                        if (statoAppMini && statoApp) {
+                            statoAppMini.textContent = statoApp.textContent;
+                            if (statoApp.classList.contains('active')) {
+                                statoAppMini.classList.add('active');
+                            } else {
+                                statoAppMini.classList.remove('active');
+                            }
+                        }
+
+                        // Sincronizza lo stato grafico del pulsante MICROFONO Mini (se la principale ha classe .listening)
+                        if (btnAscolto && btnAscolto.classList.contains('listening')) {
+                            if (miniBtnMicrofono) {
+                                miniBtnMicrofono.classList.add('listening');
+                                miniBtnMicrofono.textContent = '🛑';
+                            }
+                        } else {
+                            if (miniBtnMicrofono) {
+                                miniBtnMicrofono.classList.remove('listening');
+                                miniBtnMicrofono.textContent = '🎤';
+                            }
+                        }
+
+                        // Sincronizza lo stato grafico del pulsante CALL Mini
+                        if (ascoltoAttivo && btnCatturaSistema && btnCatturaSistema.textContent === traduzioni[selectInterfaccia.value].btnStop) {
+                            if (miniBtnCall) {
+                                miniBtnCall.textContent = '🛑';
+                                miniBtnCall.style.backgroundColor = "#ef4444";
+                            }
+                        } else {
+                            if (miniBtnCall) {
+                                miniBtnCall.style.backgroundColor = "";
+                                miniBtnCall.textContent = '💻';
+                            }
+                        }
+
+                        // Disabilita o abilita i pulsanti mini a specchio della pagina principale
+                        if (miniBtnMicrofono && btnAscolto) {
+                            miniBtnMicrofono.disabled = btnAscolto.disabled && !btnAscolto.classList.contains('listening');
+                        }
+                        if (miniBtnCall && btnCatturaSistema) {
+                            miniBtnCall.disabled = btnCatturaSistema.disabled && miniBtnCall.textContent !== '🛑';
+                        }
+                    }, 250);
+
+                    // Reset puntatori e clearInterval alla chiusura della finestra fluttuante
                     pipWindow.addEventListener('pagehide', () => {
+                        clearInterval(intervalSincronizzazione);
                         pipWindow = null;
                         areaAppuntiMini = null;
                         boxAnteprimaMini = null;
