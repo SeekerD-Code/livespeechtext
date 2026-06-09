@@ -46,8 +46,8 @@ const faqData = [
     }
 ];
 
-// Funzione principale che genera dinamicamente l'HTML
-function inizializzaFaqApplicazione() {
+// Funzione globale che verrà chiamata da app.js quando serve
+window.caricaFaqDinamiche = function() {
     const contenitoreAccordion = document.querySelector('#sezione-faq .accordion');
     if (!contenitoreAccordion) return;
 
@@ -69,34 +69,23 @@ function inizializzaFaqApplicazione() {
     
     contenitoreAccordion.innerHTML = htmlGenerato;
 
-    // Attiva la gestione dei click tramite delegazione sicura
-    attivaAscoltoClickAccordion(contenitoreAccordion);
-}
+    // Attiva la gestione dei click sui singoli header appena creati
+    const headers = contenitoreAccordion.querySelectorAll('.accordion-header');
+    headers.forEach(header => {
+        header.addEventListener('click', function(e) {
+            e.preventDefault();
+            const elementoSelezionato = this.parentElement;
+            const giaAttivo = elementoSelezionato.classList.contains('active');
 
-// Gestore dei click centralizzato (Indistruttibile dai cambi di Tab)
-function attivaAscoltoClickAccordion(contenitore) {
-    contenitore.addEventListener('click', function(e) {
-        // Intercetta il click sull'header o su elementi interni (es. gli emoji o la freccia)
-        const headerCliccato = e.target.closest('.accordion-header');
-        if (!headerCliccato) return;
+            // Chiude tutti gli altri accordion per ordine visivo
+            contenitoreAccordion.querySelectorAll('.accordion-item').forEach(item => {
+                item.classList.remove('active');
+            });
 
-        const elementoSelezionato = headerCliccato.parentElement;
-        const giaAttivo = elementoSelezionato.classList.contains('active');
-
-        // Chiude tutti gli elementi aperti per un effetto pulito
-        const tuttiGliItem = contenitore.querySelectorAll('.accordion-item');
-        tuttiGliItem.forEach(item => item.classList.remove('active'));
-
-        // Se l'elemento non era attivo, aggiunge la classe .active per aprirlo via CSS
-        if (!giaAttivo) {
-            elementoSelezionato.classList.add('active');
-        }
+            // Se non era attivo, lo apre
+            if (!giaAttivo) {
+                elementoSelezionato.classList.add('active');
+            }
+        });
     });
-}
-
-// Avvio della compilazione al caricamento del DOM
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', inizializzaFaqApplicazione);
-} else {
-    inizializzaFaqApplicazione();
-}
+};
