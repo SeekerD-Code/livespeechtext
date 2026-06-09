@@ -322,13 +322,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // 🌟 FUNZIONE INTERNA: Inserisce una riga pulita e va a capo
-            const immettiNuovaRiga = (testoRiga) => {
-                let pulito = testoRiga.trim();
+            // 🌟 FUNZIONE INTERNA: Inserisce il blocco di testo puro e va a capo (SENZA PUNTEGGIATURA)
+            const immettiNuovoBlocco = (testoBlocco) => {
+                let pulito = testoBlocco.trim();
                 if (!pulito) return;
 
-                // Mette la prima lettera maiuscola alla riga per estetica, se non c'è già
-                pulito = pulito.charAt(0).toUpperCase() + pulito.slice(1);
 
                 const haIlFocus = (document.activeElement === areaAppunti);
                 const inizioSelezione = areaAppunti.selectionStart;
@@ -355,16 +353,15 @@ window.addEventListener('DOMContentLoaded', () => {
                 // Calcoliamo quante parole nuove ci sono rispetto a quelle che abbiamo già spinto sopra
                 const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
 
-                // LIMITE RIGA: 10 parole equivalgono a circa una riga di testo/frase breve.
-                if (paroleNuove.length >= 10) {
-                    // Estraiamo la riga corrente, la mandiamo sopra e aggiorniamo il contatore
-                    const rigaDaInviare = paroleNuove.join(" ");
-                    immettiNuovaRiga(rigaDaInviare);
+                // 🌟 MODIFICATO: Taglia ed invia sopra non appena si accumulano 20 parole nuove
+                if (paroleNuove.length >= 20) {
+                const bloccoDaInviare = paroleNuove.join(" ");
+                    immettiNuovoBlocco(bloccoDaInviare);
                     
                     paroleInviateDalloStart += paroleNuove.length;
                 }
 
-                // L'anteprima in basso mostrerà solo le ultimissime parole che si stanno accumulando per la riga successiva
+                // L'anteprima in basso mostra solo le parole rimanenti che si stanno accumulando
                 const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
                 if (boxAnteprima) {
                     boxAnteprima.innerHTML = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${paroleRimanentiAnteprima}`;
@@ -385,13 +382,15 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // 🌟 RESET DI SICUREZZA: Quando si clicca su "Ferma" o "Cancella", azzeriamo il contatore delle righe
-        recognition.onend = () => {
-            paroleInviateDalloStart = 0;
-            if (boxAnteprima && !riconoscimentoAttivo) {
-                boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
-            }
-        };
+        // RESET DI SICUREZZA: All'interruzione manuale o fine della sessione vocale
+        if (typeof recognition.onend_original === 'undefined') {
+            recognition.onend = () => {
+                paroleInviateDalloStart = 0;
+                if (boxAnteprima && !riconoscimentoAttivo) {
+                    boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
+                }
+            };
+        }
         
 
         recognition.onend = () => {
