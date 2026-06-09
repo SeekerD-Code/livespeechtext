@@ -1,15 +1,12 @@
+// Array contenente tutte le domande e risposte estratte dal vecchio HTML
 const faqData = [
     {
-        question: "🚀 Come funziona il riconoscimento vocale in tempo reale?",
+        question: "🚀 Come funziona il recognition vocale in tempo reale?",
         answer: "L'applicazione semiautomatica sfrutta la tecnologia nativa di riconoscimento vocale del browser. Quando parli o catturi l'audio, il motore analizza i suoni, isola la frequenza della voce e trasforma il parlato in testo definitivo all'interno dell'area di modifica non appena rileva una pausa naturale nel discorso. Al termine della sessione, puoi salvare e scaricare tutto sul tuo dispositivo."
     },
     {
-        question: "🌍 Come fa l'app ad adattarsi alla mia lingua e cosa serve la tendina \"Lingua Lezione\"?",
-        answer: "L'interfaccia dell'applicazione rileva automaticamente la lingua del tuo dispositivo (PC o smartphone) all'avvio per mostrarti i menu nella tua lingua nativa. La tendina <strong>\"🎤 Lingua Lezione / Input\"</strong> serve invece a indicare al motore vocale quale lingua deve ascoltare e trascrivere. Se l'interfaccia dell'app è in inglese ma stai ascoltando una lezione in italiano, imposta manualmente la tendina su \"Italiano\" prima di avviare la registrazione."
-    },
-    {
         question: "💻 Cos'è la funzione \"Trascrivi da Call / Video\" e perché non la vedo su smartphone?",
-        answer: "Questa funzione permette di catturare l'audio interno del computer (ad esempio da una scheda del browser, un video o una chiamata su Zoom/Meet) e trascriverlo automaticamente. È disponibile <strong>esclusivamente su PC/Laptop</strong> perché i sistemi operativi mobile (iOS e Android) bloccano la cattura dell'audio di sistema per rigidi motivi di sicurezza e privacy. Per evitare confusione, l'app la nasconde automaticamente quando ti colleghi da uno smartphone."
+        answer: "Questa funzione permette di catturar l'audio interno del computer (ad esempio da una scheda del browser, un video o una chiamata su Zoom/Meet) e trascriverlo automaticamente. È disponibile <strong>esclusivamente su PC/Laptop</strong> perché i sistemi operativi mobile (iOS e Android) bloccano la cattura dell'audio di sistema per rigidi motivi di sicurezza e privacy. Per evitare confusione, l'app la nasconde automaticamente quando ti colleghi da uno smartphone."
     },
     {
         question: "🎵 Posso trascrivere una canzone da YouTube o Spotify?",
@@ -21,7 +18,7 @@ const faqData = [
     },
     {
         question: "🎤 Il microfono risulta attivo ma l'app non scrive nulla. Cosa faccio?",
-        answer: "Se il badge indica che l'app è in ascolto ma il testo non appare nell'area appunti, verifica questi due dettagli:<br>1. <strong>Permessi del browser:</strong> Controlla l'icona del lucchetto nella barra degli indirizzi in alto e assicurati di aver concesso l'uso del microfono a questo sito.<br>2. <strong>Rumore ambientale:</strong> Un ambiente eccessivamente rumoroso o la voce troppo lontana possono confondere l'algoritmo. Prova ad avvicinarti al microfono o a utilizzare un auricolare con microfono integrato."
+        answer: "Se le badge indica che l'app è in ascolto ma il testo non appare nell'area appunti, verifica questi due dettagli:<br>1. <strong>Permessi del browser:</strong> Controlla l'icona del lucchetto nella barra degli indirizzi in alto e assicurati di aver concesso l'uso del microfono a questo sito.<br>2. <strong>Rumore ambientale:</strong> Un ambiente eccessivamente rumoroso o la voce troppo lontana possono confondere l'algoritmo. Prova ad avvicinarti al microfono o a utilizzare un auricolare con microfono integrato."
     },
     {
         question: "⏱️ La trascrizione si interrompe da sola dopo qualche minuto. È normale?",
@@ -29,7 +26,7 @@ const faqData = [
     },
     {
         question: "📲 Come posso installare questa applicazione su smartphone o PC?",
-        answer: "Live Speech Text è una <strong>PWA (Progressive Web App)</strong>. Se accedi da un browser supportato (como Chrome o Edge), vedrai apparire una comoda indicazione fluttuante per l'installazione rapida. Una volta aggiunta alla schermata Home del telefono o al desktop del PC, potrai avviarla a tutto schermo perdendo la barra del browser, comportandosi a tutti gli effetti come un'applicazione reale."
+        answer: "Live Speech Text è una <strong>PWA (Progressive Web App)</strong>. Se accedi da un browser supportato (come Chrome o Edge), vedrai apparire una comoda indicazione fluttuante per l'installazione rapida. Una volta aggiunta alla schermata Home del telefono o al desktop del PC, potrai avviarla a tutto schermo perdendo la barra del browser, comportandosi a tutti gli effetti come un'applicazione reale."
     },
     {
         question: "🔄 L'applicazione si aggiorna da sola dopo che l'ho aggiunta alla Home?",
@@ -49,70 +46,57 @@ const faqData = [
     }
 ];
 
-// Funzione per generare l'HTML delle FAQ dinamicamente
-function caricaFAQ() {
-    const accordionContainer = document.querySelector('#sezione-faq .accordion');
-    if (!accordionContainer) return;
+// Funzione principale che genera dinamicamente l'HTML
+function inizializzaFaqApplicazione() {
+    const contenitoreAccordion = document.querySelector('#sezione-faq .accordion');
+    if (!contenitoreAccordion) return;
 
-    // Svuota l'accordion statico esistente
-    accordionContainer.innerHTML = '';
-
-    // Genera gli elementi prendendoli dall'array
+    // Genera la struttura HTML iniettando i testi dell'array
+    let htmlGenerato = "";
     faqData.forEach(item => {
-        const accordionItem = document.createElement('div');
-        accordionItem.className = 'accordion-item';
-
-        accordionItem.innerHTML = `
-            <button class="accordion-header">
-                <span>${item.question}</span>
-                <span class="icon">▼</span>
-            </button>
-            <div class="accordion-content">
-                <p>${item.answer}</p>
+        htmlGenerato += `
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    <span>${item.question}</span>
+                    <span class="icon">▼</span>
+                </button>
+                <div class="accordion-content">
+                    <p>${item.answer}</p>
+                </div>
             </div>
         `;
-        accordionContainer.appendChild(accordionItem);
-    });
-
-    // Inizializza l'ascoltatore centralizzato sul contenitore
-    inizializzaEventiAccordion();
-}
-
-// Gestione dell'apertura tramite Delegazione degli Eventi (A prova di Tab Navigation!)
-function inizializzaEventiAccordion() {
-    const accordionContainer = document.querySelector('#sezione-faq .accordion');
-    if (!accordionContainer) return;
-
-    // Rimuoviamo eventuali vecchi ascoltatori per evitare doppie attivazioni
-    accordionContainer.removeAttribute('data-has-listener');
-
-    accordionContainer.addEventListener('click', function(event) {
-        // Cerchiamo se l'elemento cliccato è l'header (o dentro l'header)
-        const header = event.target.closest('.accordion-header');
-        if (!header) return; // Se il click non è sull'header, ignora
-
-        const currentItem = header.parentElement;
-        const isActive = currentItem.classList.contains('active');
-
-        // Chiude tutti gli altri accordion aperti per mantenere l'ordine
-        const allItems = accordionContainer.querySelectorAll('.accordion-item');
-        allItems.forEach(item => {
-            item.classList.remove('active');
-        });
-
-        // Se l'elemento non era attivo, aggiunge la classe 'active' per espanderlo con il CSS
-        if (!isActive) {
-            currentItem.classList.add('active');
-        }
     });
     
-    // Segnamo che il listener è agganciato
-    accordionContainer.setAttribute('data-has-listener', 'true');
+    contenitoreAccordion.innerHTML = htmlGenerato;
+
+    // Attiva la gestione dei click tramite delegazione sicura
+    attivaAscoltoClickAccordion(contenitoreAccordion);
 }
 
-// Avvio sicuro a prova di ciclo di vita della pagina
+// Gestore dei click centralizzato (Indistruttibile dai cambi di Tab)
+function attivaAscoltoClickAccordion(contenitore) {
+    contenitore.addEventListener('click', function(e) {
+        // Intercetta il click sull'header o su elementi interni (es. gli emoji o la freccia)
+        const headerCliccato = e.target.closest('.accordion-header');
+        if (!headerCliccato) return;
+
+        const elementoSelezionato = headerCliccato.parentElement;
+        const giaAttivo = elementoSelezionato.classList.contains('active');
+
+        // Chiude tutti gli elementi aperti per un effetto pulito
+        const tuttiGliItem = contenitore.querySelectorAll('.accordion-item');
+        tuttiGliItem.forEach(item => item.classList.remove('active'));
+
+        // Se l'elemento non era attivo, aggiunge la classe .active per aprirlo via CSS
+        if (!giaAttivo) {
+            elementoSelezionato.classList.add('active');
+        }
+    });
+}
+
+// Avvio della compilazione al caricamento del DOM
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', caricaFAQ);
+    document.addEventListener('DOMContentLoaded', inizializzaFaqApplicazione);
 } else {
-    caricaFAQ();
+    inizializzaFaqApplicazione();
 }
