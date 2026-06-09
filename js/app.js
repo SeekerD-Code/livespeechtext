@@ -525,7 +525,15 @@ window.addEventListener('DOMContentLoaded', () => {
                     const tAttuale = traduzioni[selectInterfaccia.value];
                     if (miniBtnMicrofono) { miniBtnMicrofono.title = tAttuale.btnMicrofono; miniBtnMicrofono.addEventListener('click', () => btnAscolto.click()); }
                     if (miniBtnCall) { miniBtnCall.title = tAttuale.btnCall; miniBtnCall.addEventListener('click', () => btnCatturaSistema.click()); }
-                    if (miniBtnCancella) { miniBtnCancella.title = tAttuale.btnCancella; miniBtnCancella.addEventListener('click', () => btnCancella.click()); }
+                    if (miniBtnCancella) { miniBtnCancella.title = tAttuale.btnCancella; 
+                        miniBtnCancella.addEventListener('click', () => {
+                // 1. Riporta l'applicazione principale in primo piano
+                        window.focus(); 
+        
+                // 2. Attiva il pulsante cancella grande (che aprirà il tuo modale)
+                        btnCancella.click();
+                            });
+                     }
 
                     // Allineamento immediato dei testi correnti
                     if (areaAppuntiMini && areaAppunti) areaAppuntiMini.value = areaAppunti.value;
