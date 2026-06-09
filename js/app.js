@@ -325,6 +325,13 @@ window.addEventListener('DOMContentLoaded', () => {
             // 🌟 FUNZIONE INTERNA: Inserisce il blocco di testo puro e va a capo (SENZA PUNTEGGIATURA)
             const immettiNuovoBlocco = (testoBlocco) => {
                 let pulito = testoBlocco.trim();
+
+                    // 🌟 REGEX: Rimuove punti, virgole, punti interrogativi/esclamativi, due punti, punti e virgola
+                let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+                
+                // Rimuove eventuali doppi spazi rimasti dopo la cancellazione dei segni
+                let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
+                    
                 if (!pulito) return;
 
 
