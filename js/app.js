@@ -304,7 +304,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
 // --- LOGICA DI RICEZIONE E DICTATION ---
-// 🌟 Variabili di controllo fuori o all'inizio del blocco di inizializzazione per tracciare il flusso continuo
+// Variabili di controllo fuori o all'inizio del blocco di inizializzazione
         if (typeof paroleInviateDalloStart === 'undefined') {
             var paroleInviateDalloStart = 0;
         }
@@ -322,26 +322,24 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // 🌟 FUNZIONE INTERNA: Inserisce il blocco di testo puro e va a capo (SENZA PUNTEGGIATURA)
+            // FUNZIONE INTERNA: Pulisce via TUTTA la punteggiatura
             const immettiNuovoBlocco = (testoBlocco) => {
-                let pulito = testoBlocco.trim();
+                if (!testoBlocco) return;
 
-                    // 🌟 REGEX: Rimuove punti, virgole, punti interrogativi/esclamativi, due punti, punti e virgola
+                // Rimuove la punteggiatura
                 let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
                 
-                // Rimuove eventuali doppi spazi rimasti dopo la cancellazione dei segni
+                // Rimuove eventuali doppi spazi rimasti
                 let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
-                    
                 if (!pulito) return;
-
 
                 const haIlFocus = (document.activeElement === areaAppunti);
                 const inizioSelezione = areaAppunti.selectionStart;
                 const fineSelezione = areaAppunti.selectionEnd;
                 const scrollAltezza = areaAppunti.scrollTop;
 
-                // Aggiunge la riga singola andando a capo (singolo o doppio a seconda di come preferisci i tuoi appunti)
-                areaAppunti.value += pulito + ".\n\n";
+                // Inserisce il testo puro e va a capo due volte
+                areaAppunti.value += pulito + "\n\n";
                 if (btnDownload) btnDownload.style.display = "inline-block";
 
                 if (haIlFocus) {
@@ -352,40 +350,45 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // 2. 🌟 LOGICA DI TAGLIO FLUIDO A RIGHE CORTE (Ogni ~10 parole)
+            // 2. LOGICA DI TAGLIO FLUIDO A BLOCCHI DI 20 PAROLE
             if (testoProvvisorio) {
-                // Trasformiamo l'intero blocco provvisorio in un array di parole
                 const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
-                
-                // Calcoliamo quante parole nuove ci sono rispetto a quelle che abbiamo già spinto sopra
                 const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
 
-                // 🌟 MODIFICATO: Taglia ed invia sopra non appena si accumulano 20 parole nuove
                 if (paroleNuove.length >= 20) {
-                const bloccoDaInviare = paroleNuove.join(" ");
+                    const bloccoDaInviare = paroleNuove.join(" ");
                     immettiNuovoBlocco(bloccoDaInviare);
                     
                     paroleInviateDalloStart += paroleNuove.length;
                 }
 
-                // L'anteprima in basso mostra solo le parole rimanenti che si stanno accumulando
+                // L'anteprima in basso mostra le parole correnti pulite
                 const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
+                let anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
+                
                 if (boxAnteprima) {
-                    boxAnteprima.innerHTML = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${paroleRimanentiAnteprima}`;
+                    boxAnteprima.innerHTML = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
                 }
             }
 
-            // 3. LOGICA DI CHIUSURA (Se il browser genera un evento definitivo o l'oratore si ferma)
+            // 3. LOGICA DI CHIUSURA (Sistemata la variabile con il refuso)
             if (testoDefinitivo) {
                 const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
                 const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
                 
                 if (rimanentiDef.trim().length > 0) {
-                    immettiNuovaRiga(rimanentiDef);
+                    immettiNuovoBlocco(rimanentiDef);
                 }
                 
-                // Resettiamo il contatore progressivo per il prossimo ciclo di frasi
                 paroleInviateDalloStart = 0;
+            }
+        };
+
+        // 🌟 RESET DI SICUREZZA SEMPLIFICATO (Evita blocchi sui pulsanti)
+        recognition.onend = () => {
+            paroleInviateDalloStart = 0;
+            if (boxAnteprima && !riconoscimentoAttivo) {
+                boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
         };
 
