@@ -19,7 +19,6 @@
 
     <script>
     if (window.location.protocol !== 'file:') {
-        // La PWA controlla se la Home Page ha rilasciato il pass per lo sviluppatore
         const hasCookieBlock = document.cookie.split('; ').some(row => row.startsWith('block_ads='));
         
         if (localStorage.getItem('block_ads') === 'true' || hasCookieBlock) {
@@ -32,7 +31,7 @@
             document.head.appendChild(adsenseScript);
         }
     }
-</script>
+    </script>
 </head>
 <body>
 
@@ -133,11 +132,10 @@
                     </div>
 
                     <div class="notes-container">
+                        <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left;">
+                            In attesa della voce...
+                        </div>
                         <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente anche mentre l'app ascolta!"></textarea>
-                    </div>
-
-                    <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-top: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left; display: none;">
-                        L'IA sta ascoltando...
                     </div>
 
                     <div class="download-section">
@@ -147,31 +145,21 @@
 
                 <div id="sezione-about" class="page-section content-card" style="display: none;">
                     <h2 class="section-title">About Us</h2>
-                    
                     <div class="about-content">
                         <h3>La storia dietro Seeker D. Code</h3>
                         <p>
-                            <strong>Live Speech Text</strong> non nasce semplicemente come l'ennesimo software di dettatura, ma da una reale esigenza di libertà ed efficienza nel flusso di lavoro quotidiano. Troppo spesso gli strumenti di trascrizione tradizionali sono rigidi, vincolati a singole finestre o incapaci di modificare in tempo reale ciò che l'app ha catturato in modo errato.
+                            <strong>Live Speech Text</strong> non nasce semplicemente come l'ennesimo software di dettatura, ma da una reale esigenza di libertà ed efficienza nel flusso di lavoro quotidiano...
                         </p>
-                        <p>
-                            Da questa sfida è nata l'idea: creare uno spazio minimale, reattivo e accessibile, capace di adattarsi istantaneamente sia alla voce dal vivo che all'audio di sistema. Ma la vera spinta è stata il desiderio di rompere gli schemi dell'interfaccia classica, introducendo funzionalità avanzate come il <em>Document Picture-in-Picture</em> — una finestra fluttuante che permette di mantenere il controllo totale delle trascrizioni mentre si naviga, si scrive o si lavora su altri software.
-                        </p>
-                        <p>
-                            Dietro lo sviluppo di questa applicazione c'è la filosofia racchiusa nel nostro brand: <strong>Seeker D. Code</strong>.
-                        </p>
-
                         <blockquote class="philosophy-quote">
-                            Se il codice è un oceano di infinite possibilità, noi abbiamo scelto di affrontarlo da ricercatori. Questo nome è il nostro piccolo manifesto silenzioso. Rappresenta la nostra volontà, la determinazione incrollabile di chi non si arrende davanti ai limiti tecnici e insegue una visione di totale libertà digitale. È il legame profondo tra la passione per la creatività e la forza di tracciare la propria rotta, portando un sorriso e un tocco di colore (e magari un cappello di paglia ben saldo in testa) anche tra le righe di programmazione più complesse.
+                            Se il codice è un oceano di infinite possibilità, noi abbiamo scelto di affrontarlo da ricercatori...
                         </blockquote>
-
                         <h3>Le Caratteristiche Principali</h3>
                         <ul class="features-list">
-                            <li><strong>Doppia Modalità di Acquisizione:</strong> Passa istantaneamente dalla trascrizione ambientale tramite microfono alla cattura diretta ed esclusiva dei flussi audio di call, video e riunioni online.</li>
-                            <li><strong>Focus Multilingue:</strong> Supporto nativo per l'internazionalizzazione, ottimizzato per comprendere i dettagli e le sfumature della voce in contesti dinamici.</li>
-                            <li><strong>Area di Lavoro Mobile:</strong> Sfrutta la potenza del Document PiP per ridurre l'applicazione in un angolo dello schermo, continuando a monitorare lo stato e i testi in tempo reale senza interrompere i tuoi compiti principali.</li>
-                            <li><strong>Privacy &amp; Controllo:</strong> Nessun dato viene trattenuto. Tutto ciò che viene trascritto rimane locale, pronto per essere scaricato con il pulsante "💾 Scarica Testo" o selezionato e copiato, ed infine ripulito istantaneamente.</li>
+                            <li><strong>Doppia Modalità di Acquisizione:</strong> Passa istantaneamente dalla trascrizione ambientale...</li>
+                            <li><strong>Focus Multilingue:</strong> Supporto nativo per l'internazionalizzazione...</li>
+                            <li><strong>Area di Lavoro Mobile:</strong> Sfrutta la potenza del Document PiP...</li>
+                            <li><strong>Privacy &amp; Controllo:</strong> Nessun dato viene trattenuto...</li>
                         </ul>
-
                         <p class="about-footer">
                             Siamo qui per esplorare, innovare e rendere la tecnologia uno strumento al servizio della tua produttività. <em>La ricerca del codice definitivo non finisce mai!</em>
                         </p>
@@ -182,20 +170,17 @@
                     <div class="about-credits">
                         <h3>Contatti &amp; Credits</h3>
                         <p>Hai riscontrato un problema, vuoi suggerire una funzionalità o semplicemente fare due chiacchiere sul codice?</p>
-                        
                         <div class="credits-links">
                             <a href="mailto:seekerdcode@gmail.com" class="credit-link">📧 Email</a>
                             <a href="https://www.linkedin.com/in/code-seeker-d-194633411/" target="_blank" class="credit-link">💼 LinkedIn</a>
                         </div>
-                        
                         <p class="copyright">© 2026 Seeker D. Code. Made with 💜 and Determination.</p>
                     </div>
                 </div>
 
                 <div id="sezione-faq" class="page-section content-card" style="display: none;">
                     <h2>❓ Domande Frequenti (FAQ)</h2>
-                    <div class="accordion">
-                        </div>
+                    <div class="accordion"></div>
                 </div>
 
                 <div class="advertising-space">
@@ -229,18 +214,17 @@
             </div>
         </div>
     </div>
+
     <script src="js/faq-data.js"></script>
     <script src="js/app.js"></script>
 
     <script>
-      // 1. Registrazione del Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('sw.js').catch(err => console.error(err));
         });
       }
 
-      // 2. Logica di attivazione differenziata reale PC / Mobile-Tablet
       let pwaPrompt;
       const mobileBadge = document.getElementById('pwa-mobile-badge');
       const pcBadge = document.getElementById('pwa-pc-badge');
@@ -248,8 +232,6 @@
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         pwaPrompt = e;
-        
-        // Rileva se è un vero dispositivo mobile o tablet (ha il touch ed è uno schermo sotto i 768px)
         const isMobileOrTablet = window.matchMedia("(max-width: 768px)").matches && 
                                  ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
@@ -262,7 +244,6 @@
         }
       });
 
-      // Funzione per avviare l'installazione al click
       const avviaInstallazione = async () => {
         if (pwaPrompt) {
           pwaPrompt.prompt();
@@ -279,21 +260,17 @@
     </script>
 
     <div id="google_translate_element" style="display:none;"></div>
-
-<script type="text/javascript">
-function googleTranslateElementInit() {
-// Aggiungiamo un controllo per verificare che l'oggetto google sia effettivamente pronto
-    if (typeof google !== 'undefined' && google.translate && google.translate.TranslateElement) {
-        new google.translate.TranslateElement({
-            pageLanguage: 'it', 
-            layout: google.translate.TranslateElement.InlineMethod ? google.translate.TranslateElement.InlineMethod.SIMPLE : 0,
-            autoDisplay: true
-        }, 'google_translate_element');
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+        if (typeof google !== 'undefined' && google.translate && google.translate.TranslateElement) {
+            new google.translate.TranslateElement({
+                pageLanguage: 'it', 
+                layout: google.translate.TranslateElement.InlineMethod ? google.translate.TranslateElement.InlineMethod.SIMPLE : 0,
+                autoDisplay: true
+            }, 'google_translate_element');
+        }
     }
-}
-</script>
-
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
