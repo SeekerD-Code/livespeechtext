@@ -304,12 +304,14 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
 // --- LOGICA DI RICEZIONE E DICTATION ---
-        // OTTIMIZZATO: Inserimento continuo "append-only" senza stop forzati per scenari a connessione lenta
+// Variabile globale (o inserita appena fuori da onresult) per ricordare l'ultimo testo inviato
+        let ultimoTestoInviato = "";
+
         recognition.onresult = (event) => {
             let testoProvvisorio = '';
             let testoDefinitivo = '';
 
-            // Scorriamo i risultati a partire dall'ultimo indice modificato
+            // Separazione nativa tra definitivo e provvisorio
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     testoDefinitivo += event.results[i][0].transcript + ' ';
@@ -317,39 +319,79 @@ window.addEventListener('DOMContentLoaded', () => {
                     testoProvvisorio += event.results[i][0].transcript;
                 }
             }
-                
-            // 1. Iniezione del testo stabile nell'area principale salvaguardando l'attività dello studente
-            if (testoDefinitivo && areaAppunti) {
-                // Rileva se lo studente sta interagendo con la textarea sul momento
+
+            // Funzione interna per inserire il testo nella textarea con punto e a-capo
+            const inserisciInAreaAppunti = (testo) => {
+                let pulito = testo.trim();
+                if (!pulito) return;
+
+                // Evita duplicati immediati causati dal passaggio da provvisorio a definitivo
+                if (pulito === ultimoTestoInviato) return; 
+                ultimoTestoInviato = pulito;
+
                 const haIlFocus = (document.activeElement === areaAppunti);
                 const inizioSelezione = areaAppunti.selectionStart;
                 const fineSelezione = areaAppunti.selectionEnd;
                 const scrollAltezza = areaAppunti.scrollTop;
-                    
-                // 🌟 MODIFICATO: Pulisce il testo da spazi extra e aggiunge punto e ritorno a capo
-                const testoFormattato = testoDefinitivo.trim() + ".\n\n";
 
-                // Accoda il paragrafo formattato
-                areaAppunti.value += testoFormattato;
+                // Forza il punto finale e il doppio a-capo per creare il paragrafo
+                areaAppunti.value += pulito + ".\n\n";
                 if (btnDownload) btnDownload.style.display = "inline-block";
 
-                // Se lo studente stava modificando/scrivendo qualcosa prima dell'arrivo del testo, blocca il cursore
                 if (haIlFocus) {
                     areaAppunti.setSelectionRange(inizioSelezione, fineSelezione);
-                    areaAppunti.scrollTop = scrollAltezza; // Blocca i micro-sbalzi di scorrimento verticale
+                    areaAppunti.scrollTop = scrollAltezza;
                 } else {
-                    // Se non lo sta usando, fa scorrere dolcemente la textarea verso il fondo
                     areaAppunti.scrollTop = areaAppunti.scrollHeight;
                 }
+            };
+
+            // 1. GESTIONE DEL TESTO PROVVISORIO CON AUTO-COMMIT SULLA MAIUSCOLA
+            if (testoProvvisorio) {
+                // Dividiamo il testo provvisorio in parole mantenendo gli spazi
+                const parole = testoProvvisorio.split(/(\s+)/);
+                
+                let indiceTaglio = -1;
+
+                // Scorriamo le parole partendo dalla seconda (saltiamo l'indice 0 che è l'inizio assoluto)
+                for (let j = 1; j < parole.length; j++) {
+                    // Controlliamo se è una parola reale (non uno spazio vuoto)
+                    if (parole[j].trim().length > 0) {
+                        const primaLettera = parole[j].trim().charAt(0);
+                        
+                        // REGEX: Controlla se la prima lettera è maiuscola (e non è un numero)
+                        if (primaLettera === primaLettera.toUpperCase() && primaLettera !== primaLettera.toLowerCase()) {
+                            indiceTaglio = j;
+                            break; // Ci fermiamo alla prima maiuscola che incontriamo
+                        }
+                    }
+                }
+
+                // Se abbiamo trovato una maiuscola nel mezzo del discorso provvisorio...
+                if (indiceTaglio !== -1) {
+                    // Prendiamo tutto ciò che c'era prima della maiuscola e lo mandiamo sopra
+                    const partePrecedente = parole.slice(0, indiceTaglio).join("");
+                    inserisciInAreaAppunti(partePrecedente);
+
+                    // Aggiorniamo l'anteprima in basso mostrando solo dalla maiuscola in poi
+                    const parteRimanente = parole.slice(indiceTaglio).join("");
+                    if (boxAnteprima) {
+                        boxAnteprima.innerHTML = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${parteRimanente}`;
+                    }
+                } else {
+                    // Se non ci sono maiuscole, mostriamo il testo provvisorio normalmente nell'anteprima
+                    if (boxAnteprima) {
+                        boxAnteprima.innerHTML = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${testoProvvisorio}`;
+                    }
+                }
+            } else if (boxAnteprima) {
+                boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
 
-            // 2. Aggiornamento in tempo reale del Box Anteprima
-            if (boxAnteprima) {
-                if (testoProvvisorio) {
-                    boxAnteprima.textContent = traduzioni[selectInterfaccia.value].inAscolto + testoProvvisorio;
-                } else {
-                    boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
-                }
+            // 2. GESTIONE DEL TESTO DEFINITIVO (STRUTTURA DI BACKUP)
+            // Se il browser decide di chiudere la frase da solo, svuotiamo il provvisorio e mandiamo tutto sopra
+            if (testoDefinitivo) {
+                inserisciInAreaAppunti(testoDefinitivo);
             }
         };
         
