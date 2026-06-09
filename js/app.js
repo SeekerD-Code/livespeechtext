@@ -325,9 +325,12 @@ window.addEventListener('DOMContentLoaded', () => {
                 const inizioSelezione = areaAppunti.selectionStart;
                 const fineSelezione = areaAppunti.selectionEnd;
                 const scrollAltezza = areaAppunti.scrollTop;
+                    
+                // 🌟 MODIFICATO: Pulisce il testo da spazi extra e aggiunge punto e ritorno a capo
+                const testoFormattato = testoDefinitivo.trim() + ".\n\n";
 
-                // Accoda semplicemente il testo definitivo (modalità Append puro)
-                areaAppunti.value += testoDefinitivo;
+                // Accoda il paragrafo formattato
+                areaAppunti.value += testoFormattato;
                 if (btnDownload) btnDownload.style.display = "inline-block";
 
                 // Se lo studente stava modificando/scrivendo qualcosa prima dell'arrivo del testo, blocca il cursore
