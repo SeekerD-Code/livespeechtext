@@ -339,7 +339,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 const scrollAltezza = areaAppunti.scrollTop;
 
                 // Inserisce il testo puro e va a capo due volte
-                areaAppunti.value += pulito + "\n\n";
+                areaAppunti.value += pulito + "\n";
                 if (btnDownload) btnDownload.style.display = "inline-block";
 
                 if (haIlFocus) {
