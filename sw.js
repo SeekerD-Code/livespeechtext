@@ -1,21 +1,25 @@
-const CACHE_NAME = 'livespeech-cache-v2'; // <--- Aggiornato a v2 per forzare il browser a caricare le novità
+const CACHE_NAME = 'livespeech-cache-v2'; // 🌟 Aggiornato a v2 per forzare il browser a ricaricare tutto
 const assetsToCache = [
-'/livespeechtext/',
-  '/livespeechtext/index.html',
-  '/livespeechtext/manifest.json',
-  
-  /* --- 🎨 TUTTI I FILE CSS --- */
-  '/livespeechtext/CSS/main.css',
-  '/livespeechtext/CSS/style-base.css',
-  '/livespeechtext/CSS/style-dark.css',
-  '/livespeechtext/CSS/style-desktop.css',
-  '/livespeechtext/CSS/style-lingua.css',
-  '/livespeechtext/CSS/style-mobile.css',
-  '/livespeechtext/CSS/style-pwa.css',
-
-  /* --- ⚙️ FILE JAVASCRIPT --- */
-  '/livespeechtext/js/faq-data.js',
-  '/livespeechtext/js/app.js'
+    '/livespeechtext/',
+    '/livespeechtext/index.html',
+    '/livespeechtext/manifest.json',
+    // Fogli di stile (CSS)
+    '/livespeechtext/CSS/main.css',
+    '/livespeechtext/CSS/style-base.css',
+    '/livespeechtext/CSS/style-dark.css',
+    '/livespeechtext/CSS/style-desktop.css',
+    '/livespeechtext/CSS/style-lingua.css',
+    '/livespeechtext/CSS/style-mobile.css',
+    '/livespeechtext/CSS/style-pwa.css',
+    // File JavaScript (JS)
+    '/livespeechtext/js/app.js',
+    '/livespeechtext/js/faq-data.js',
+    // Immagini e Icone
+    '/livespeechtext/assets/Logo.png',
+    '/livespeechtext/assets/icon-192.png',
+    '/livespeechtext/assets/icon-512.png',
+    '/livespeechtext/assets/luffy-hat.png',
+    '/livespeechtext/assets/sparkles.png'
 ];
 
 // 1. Installa il Service Worker e memorizza i file base
