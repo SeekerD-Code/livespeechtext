@@ -84,14 +84,18 @@ function inizializzaEventiAccordion() {
     headers.forEach(header => {
         header.addEventListener('click', function() {
             const item = this.parentElement;
-            item.classList.toggle('active');
             
-            // Logica opzionale per animare o gestire l'icona se usate classi CSS dedicate
-            const content = this.nextElementSibling;
-            if (item.classList.contains('active')) {
-                content.style.display = 'block';
-            } else {
-                content.style.display = 'none';
+            // Controlla se l'elemento cliccato è già attivo
+            const isActive = item.classList.contains('active');
+
+            // OPZIONALE: Chiude tutti gli altri accordion aperti prima di aprire questo (effetto pulito)
+            document.querySelectorAll('#sezione-faq .accordion-item').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Se l'elemento non era attivo, aggiungi la classe 'active' per aprirlo
+            if (!isActive) {
+                item.classList.add('active');
             }
         });
     });
