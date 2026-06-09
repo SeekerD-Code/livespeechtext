@@ -105,7 +105,7 @@
 
                     <div class="international-section" style="margin-bottom: 15px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
                         <div>
-                            <label for="select-lingua" class="theme-label">🎤 Microphone Input:</label>
+                            <label for="select-lingua" class="theme-label">🎤 Lingua Lezione / Input:</label>
                             <select id="select-lingua" class="theme-select">
                                 <option value="it-IT">Italiano (Italia)</option>
                                 <option value="en-US">English (US)</option>
@@ -399,11 +399,14 @@
 
 <script type="text/javascript">
 function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-        pageLanguage: 'it', // La lingua originale in cui è scritta la tua app
-        layout: google.translate.TranslateElement.InlineMethod.SIMPLE,
-        autoDisplay: true // Dice a Google di attivarsi da solo se rileva una lingua diversa
-    }, 'google_translate_element');
+// Aggiungiamo un controllo per verificare che l'oggetto google sia effettivamente pronto
+    if (typeof google !== 'undefined' && google.translate && google.translate.TranslateElement) {
+        new google.translate.TranslateElement({
+            pageLanguage: 'it', 
+            layout: google.translate.TranslateElement.InlineMethod ? google.translate.TranslateElement.InlineMethod.SIMPLE : 0,
+            autoDisplay: true
+        }, 'google_translate_element');
+    }
 }
 </script>
 
