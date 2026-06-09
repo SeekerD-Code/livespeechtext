@@ -695,30 +695,3 @@ window.addEventListener('DOMContentLoaded', () => {
         // --- INIZIALIZZAZIONE AUTOMATICA LINGUA ---
         rilevaEImpostaLinguaIniziale();
 });
-
-// --- GESTIONE APERTURA/CHIUSURA FAQ (ACCORDION) ---
-document.addEventListener('DOMContentLoaded', () => {
-    const faqContainer = document.querySelector('#sezione-faq .accordion');
-    
-    if (faqContainer) {
-        faqContainer.addEventListener('click', function(e) {
-            // Intercetta il click sull'header (o sulle icone/testi al suo interno)
-            const header = e.target.closest('.accordion-header');
-            if (!header) return;
-
-            const currentItem = header.parentElement;
-            const isActive = currentItem.classList.contains('active');
-
-            // Chiude tutti gli altri accordion aperti per mantenere l'ordine
-            const allItems = faqContainer.querySelectorAll('.accordion-item');
-            allItems.forEach(item => {
-                item.classList.remove('active');
-            });
-
-            // Se l'elemento non era attivo, aggiunge la classe 'active' per espanderlo con il CSS
-            if (!isActive) {
-                currentItem.classList.add('active');
-            }
-        });
-    }
-});
