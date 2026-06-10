@@ -15,6 +15,7 @@ const assetsToCache = [
     '/livespeechtext/js/app.js',
     '/livespeechtext/js/faq-data.js',
     // Immagini e Icone
+    '/livespeechtext/assets/favicon.ico',
     '/livespeechtext/assets/Logo.png',
     '/livespeechtext/assets/icon-192.png',
     '/livespeechtext/assets/icon-512.png',
