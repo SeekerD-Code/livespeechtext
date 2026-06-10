@@ -3,18 +3,18 @@ const assetsToCache = [
     '/livespeechtext/',
     '/livespeechtext/index.html',
     '/livespeechtext/manifest.json',
-    // Fogli di stile (CSS)
-    '/livespeechtext/CSS/main.css',
-    '/livespeechtext/CSS/style-base.css',
-    '/livespeechtext/CSS/style-dark.css',
-    '/livespeechtext/CSS/style-desktop.css',
-    '/livespeechtext/CSS/style-lingua.css',
-    '/livespeechtext/CSS/style-mobile.css',
-    '/livespeechtext/CSS/style-pwa.css',
+    // Fogli di stile (CSS) - Corretto in minuscolo 'css'
+    '/livespeechtext/css/main.css',
+    '/livespeechtext/css/style-base.css',
+    '/livespeechtext/css/style-dark.css',
+    '/livespeechtext/css/style-desktop.css',
+    '/livespeechtext/css/style-lingua.css',
+    '/livespeechtext/css/style-mobile.css',
+    '/livespeechtext/css/style-pwa.css',
     // File JavaScript (JS)
     '/livespeechtext/js/app.js',
     '/livespeechtext/js/faq-data.js',
-    // Immagini e Icone
+    // Immagini e Icone - Verifica che esistano tutte in questa cartella su GitHub
     '/livespeechtext/assets/favicon.ico',
     '/livespeechtext/assets/Logo.png',
     '/livespeechtext/assets/icon-192.png',
@@ -22,7 +22,6 @@ const assetsToCache = [
     '/livespeechtext/assets/luffy-hat.png',
     '/livespeechtext/assets/sparkles.png'
 ];
-
 // 1. Installa il Service Worker e memorizza i file base
 self.addEventListener('install', event => {
   event.waitUntil(
