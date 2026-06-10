@@ -286,7 +286,7 @@
     .magic-sparkles {
         width: 200px !important;  /* Ridotte da 400px a 260px per non strabordare */
         height: 120px !important; /* Ridotte proporzionalmente da 300px a 180px */
-        top: -10px !important;    /* Avvicinate al testo (prima era -50px) visto che è tutto più compatto */
+        top: -30px !important;    /* Avvicinate al testo (prima era -50px) visto che è tutto più compatto */
         transform: rotate(60deg) !important; /* Opzionale: riduce la rotazione se noti che taglia i bordi, altrimenti rimetti 60deg */
         transform-origin: center center !important;
         
