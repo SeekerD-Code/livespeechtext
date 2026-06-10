@@ -315,12 +315,11 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // --- LOGICA DI RICEZIONE E DICTATION BLINDATA ---
+// --- LOGICA DI RICEZIONE E DICTATION BLINDATA ---
         recognition.onresult = (event) => {
             let testoProvvisorio = '';
             let testoDefinitivo = '';
 
-            // Scorriamo i risultati del motore vocale
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     testoDefinitivo += event.results[i][0].transcript + ' ';
@@ -329,11 +328,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // FUNZIONE INTERNA PER SCRIVERE NELL'AREA APPUNTI
             const immettiNuovoBlocco = (testoBlocco) => {
                 if (!testoBlocco || !testoBlocco.trim()) return;
 
-                // Rimuove la punteggiatura grezza e pulisce gli spazi doppi
                 let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
                 let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
                 if (!pulito) return;
@@ -343,11 +340,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 const fineSelezione = areaAppunti.selectionEnd;
                 const scrollAltezza = areaAppunti.scrollTop;
 
-                // Inserisce il testo formattato (Aggiunge uno spazio o a capo a seconda delle preferenze)
+                // Scrittura nell'area principale (usa "\n\n" se preferisci i blocchi separati a ogni pausa)
                 areaAppunti.value += pulito + " "; 
                 if (btnDownload) btnDownload.style.display = "inline-block";
 
-                // 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico
+                // 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico della minicompattata
                 if (areaAppuntiMini) {
                     areaAppuntiMini.value = areaAppunti.value;
                     areaAppuntiMini.scrollTop = areaAppuntiMini.scrollHeight;
@@ -361,7 +358,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // 1. GESTIONE ANTEPRIMA (Testo provvisorio in tempo reale)
             if (testoProvvisorio) {
                 let anteprimaPulita = testoProvvisorio.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
                 const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
@@ -369,12 +365,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (boxAnteprima) boxAnteprima.innerHTML = testoInAscoltoCompleto;
                 if (boxAnteprimaMini) boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
             } else {
-                // Se non c'è testo provvisorio, rimetti la stringa di attesa
                 if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
                 if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
 
-            // 2. GESTIONE SCRITTURA DEFINITIVA (Scrive nell'area di testo solo a frase conclusa)
             if (testoDefinitivo) {
                 immettiNuovoBlocco(testoDefinitivo);
             }
@@ -382,7 +376,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         // --- RESET DI SICUREZZA VOCALE ---
         recognition.onend = () => {
-            // Rimosso l'azzeramento di paroleInviateDalloStart perché non più necessario
             if (boxAnteprima && !ascoltoAttivo) {
                 boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
@@ -394,6 +387,21 @@ window.addEventListener('DOMContentLoaded', () => {
                 try { recognition.start(); } catch (err) { console.error(err); }
             } else {
                 disattivaGraficaStato();
+            }
+        };
+
+        // --- GESTIONE ERRORE MICROFONO ---
+        recognition.onerror = (event) => {
+            console.error("Errore riconoscimento vocale:", event.error);
+            if (event.error === 'not-allowed') {
+                bloccoForzato = true;
+                disattivaGraficaStato();
+                const linguaAttuale = selectInterfaccia ? selectInterfaccia.value : "it";
+                if (linguaAttuale === 'it') {
+                    mostraModaleAvviso("Permesso Negato", "Impossibile accedere al microfono. Controlla i permessi del browser cliccando sul lucchetto in alto accanto all'URL!");
+                } else {
+                    mostraModaleAvviso("Permission Denied", "Cannot access the microphone. Please check browser permissions by clicking the lock icon next to the URL!");
+                }
             }
         };
 
