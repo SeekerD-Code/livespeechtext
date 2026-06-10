@@ -345,7 +345,7 @@ const fineSelezione = areaAppunti.selectionEnd;
 const scrollAltezza = areaAppunti.scrollTop;
 
 // Scrittura nell'area principale
-areaAppunti.value += pulito + "\n\n";
+areaAppunti.value += pulito + "\n";
 if (btnDownload) btnDownload.style.display = "inline-block";
 
 // 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico della minicompattata
