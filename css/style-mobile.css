@@ -284,8 +284,8 @@
 
     /* 6. RIDUZIONE E RIALLINEAMENTO DELLE SCINTILLE SU MOBILE */
     .magic-sparkles {
-        width: 260px !important;  /* Ridotte da 400px a 260px per non strabordare */
-        height: 180px !important; /* Ridotte proporzionalmente da 300px a 180px */
+        width: 200px !important;  /* Ridotte da 400px a 260px per non strabordare */
+        height: 120px !important; /* Ridotte proporzionalmente da 300px a 180px */
         top: -50px !important;    /* Avvicinate al testo (prima era -50px) visto che è tutto più compatto */
         transform: rotate(60deg) !important; /* Opzionale: riduce la rotazione se noti che taglia i bordi, altrimenti rimetti 60deg */
         transform-origin: center center !important;
