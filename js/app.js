@@ -315,7 +315,11 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-// --- LOGICA DI RICEZIONE E DICTATION BLINDATA ---
+        // --- LOGICA DI RICEZIONE E DICTATION ---
+        if (typeof paroleInviateDalloStart === 'undefined') {
+            var paroleInviateDalloStart = 0;
+        }
+
         recognition.onresult = (event) => {
             let testoProvvisorio = '';
             let testoDefinitivo = '';
@@ -329,7 +333,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
 
             const immettiNuovoBlocco = (testoBlocco) => {
-                if (!testoBlocco || !testoBlocco.trim()) return;
+                if (!testoBlocco) return;
 
                 let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
                 let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
@@ -340,8 +344,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 const fineSelezione = areaAppunti.selectionEnd;
                 const scrollAltezza = areaAppunti.scrollTop;
 
-                // Scrittura nell'area principale (usa "\n\n" se preferisci i blocchi separati a ogni pausa)
-                areaAppunti.value += pulito + " "; 
+                // Scrittura nell'area principale
+                areaAppunti.value += pulito + "\n\n";
                 if (btnDownload) btnDownload.style.display = "inline-block";
 
                 // 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico della minicompattata
@@ -359,23 +363,47 @@ window.addEventListener('DOMContentLoaded', () => {
             };
 
             if (testoProvvisorio) {
-                let anteprimaPulita = testoProvvisorio.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
+                const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
+                const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
+
+                if (paroleNuove.length >= 20) {
+                    const bloccoDaInviare = paroleNuove.join(" ");
+                    immettiNuovoBlocco(bloccoDaInviare);
+                    paroleInviateDalloStart += paroleNuove.length;
+                }
+
+                const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
+                let anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
+                
                 const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
 
-                if (boxAnteprima) boxAnteprima.innerHTML = testoInAscoltoCompleto;
-                if (boxAnteprimaMini) boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
+                if (boxAnteprima) {
+                    boxAnteprima.innerHTML = testoInAscoltoCompleto;
+                }
+
+                // 🌟 AGGIORNAMENTO PiP: Mostra in tempo reale l'anteprima vocale azzurra
+                if (boxAnteprimaMini) {
+                    boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
+                }
             } else {
                 if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
                 if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
 
             if (testoDefinitivo) {
-                immettiNuovoBlocco(testoDefinitivo);
+                const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
+                const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
+                
+                if (rimanentiDef.trim().length > 0) {
+                    immettiNuovoBlocco(rimanentiDef);
+                }
+                paroleInviateDalloStart = 0;
             }
         };
 
         // --- RESET DI SICUREZZA VOCALE ---
         recognition.onend = () => {
+            paroleInviateDalloStart = 0;
             if (boxAnteprima && !ascoltoAttivo) {
                 boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
@@ -390,7 +418,6 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // --- GESTIONE ERRORE MICROFONO ---
         recognition.onerror = (event) => {
             console.error("Errore riconoscimento vocale:", event.error);
             if (event.error === 'not-allowed') {
