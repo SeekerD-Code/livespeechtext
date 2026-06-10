@@ -51,12 +51,17 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// 3. Gestisce le richieste quando l'app è aperta (Strategia: Cache con fallback sulla rete)
+// 3. Gestisce le richieste quando l'app è aperta
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request).then(response => {
-      // Se il file è in cache lo restituisce subito, altrimenti lo chiede a internet
-      return response || fetch(event.request);
+      // Se il file è in cache lo restituisce subito, altrimenti lo chiede alla rete
+      return response || fetch(event.request).catch(err => {
+        // Intercetta l'errore di rete (es. AdBlock o offline) senza far crashare la console
+        console.log('Richiesta di rete fallita o bloccata dal client per:', event.request.url);
+        // Ritorna una risposta vuota o gestisci il fallimento in modo pulito
+        return new Response(''); 
+      });
     })
   );
 });
