@@ -315,15 +315,12 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // --- LOGICA DI RICEZIONE E DICTATION ---
-        if (typeof paroleInviateDalloStart === 'undefined') {
-            var paroleInviateDalloStart = 0;
-        }
-
+        // --- LOGICA DI RICEZIONE E DICTATION BLINDATA ---
         recognition.onresult = (event) => {
             let testoProvvisorio = '';
             let testoDefinitivo = '';
 
+            // Scorriamo i risultati del motore vocale
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     testoDefinitivo += event.results[i][0].transcript + ' ';
@@ -332,9 +329,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // FUNZIONE INTERNA PER SCRIVERE NELL'AREA APPUNTI
             const immettiNuovoBlocco = (testoBlocco) => {
-                if (!testoBlocco) return;
+                if (!testoBlocco || !testoBlocco.trim()) return;
 
+                // Rimuove la punteggiatura grezza e pulisce gli spazi doppi
                 let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
                 let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
                 if (!pulito) return;
@@ -344,11 +343,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 const fineSelezione = areaAppunti.selectionEnd;
                 const scrollAltezza = areaAppunti.scrollTop;
 
-                // Scrittura nell'area principale
-                areaAppunti.value += pulito + "\n\n";
+                // Inserisce il testo formattato (Aggiunge uno spazio o a capo a seconda delle preferenze)
+                areaAppunti.value += pulito + " "; 
                 if (btnDownload) btnDownload.style.display = "inline-block";
 
-                // 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico della minicompattata
+                // 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico
                 if (areaAppuntiMini) {
                     areaAppuntiMini.value = areaAppunti.value;
                     areaAppuntiMini.scrollTop = areaAppuntiMini.scrollHeight;
@@ -362,48 +361,28 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
+            // 1. GESTIONE ANTEPRIMA (Testo provvisorio in tempo reale)
             if (testoProvvisorio) {
-                const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
-                const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
-
-                if (paroleNuove.length >= 20) {
-                    const bloccoDaInviare = paroleNuove.join(" ");
-                    immettiNuovoBlocco(bloccoDaInviare);
-                    paroleInviateDalloStart += paroleNuove.length;
-                }
-
-                const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
-                let anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
-                
+                let anteprimaPulita = testoProvvisorio.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
                 const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
 
-                if (boxAnteprima) {
-                    boxAnteprima.innerHTML = testoInAscoltoCompleto;
-                }
-
-                // 🌟 AGGIORNAMENTO PiP: Mostra in tempo reale l'anteprima vocale azzurra
-                if (boxAnteprimaMini) {
-                    boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
-                }
+                if (boxAnteprima) boxAnteprima.innerHTML = testoInAscoltoCompleto;
+                if (boxAnteprimaMini) boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
             } else {
+                // Se non c'è testo provvisorio, rimetti la stringa di attesa
                 if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
                 if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
 
+            // 2. GESTIONE SCRITTURA DEFINITIVA (Scrive nell'area di testo solo a frase conclusa)
             if (testoDefinitivo) {
-                const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
-                const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
-                
-                if (rimanentiDef.trim().length > 0) {
-                    immettiNuovoBlocco(rimanentiDef);
-                }
-                paroleInviateDalloStart = 0;
+                immettiNuovoBlocco(testoDefinitivo);
             }
         };
 
         // --- RESET DI SICUREZZA VOCALE ---
         recognition.onend = () => {
-            paroleInviateDalloStart = 0;
+            // Rimosso l'azzeramento di paroleInviateDalloStart perché non più necessario
             if (boxAnteprima && !ascoltoAttivo) {
                 boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
@@ -415,20 +394,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 try { recognition.start(); } catch (err) { console.error(err); }
             } else {
                 disattivaGraficaStato();
-            }
-        };
-
-        recognition.onerror = (event) => {
-            console.error("Errore riconoscimento vocale:", event.error);
-            if (event.error === 'not-allowed') {
-                bloccoForzato = true;
-                disattivaGraficaStato();
-                const linguaAttuale = selectInterfaccia ? selectInterfaccia.value : "it";
-                if (linguaAttuale === 'it') {
-                    mostraModaleAvviso("Permesso Negato", "Impossibile accedere al microfono. Controlla i permessi del browser cliccando sul lucchetto in alto accanto all'URL!");
-                } else {
-                    mostraModaleAvviso("Permission Denied", "Cannot access the microphone. Please check browser permissions by clicking the lock icon next to the URL!");
-                }
             }
         };
 
