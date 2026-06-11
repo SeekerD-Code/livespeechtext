@@ -335,6 +335,21 @@ testoProvvisorio += event.results[i][0].transcript;
 const immettiNuovoBlocco = (testoBlocco) => {
 if (!testoBlocco) return;
 
+// 🌟 SE SEI SU MOBILE, USA LA LOGICA SEPARATA DI MOBILE-PATCH E ESCI
+                if (typeof MobilePatch !== 'undefined' && MobilePatch.isMobile()) {
+                    MobilePatch.processaInserimentoMobile(areaAppunti, testoBlocco);
+                    
+                    // Sincronizza il PiP se attivo
+                    if (areaAppuntiMini) {
+                        areaAppuntiMini.value = areaAppunti.value;
+                        areaAppuntiMini.scrollTop = areaAppuntiMini.scrollHeight;
+                    }
+                    if (btnDownload) btnDownload.style.display = "inline-block";
+                    areaAppunti.scrollTop = areaAppunti.scrollHeight;
+                    return; // Blocca il resto della funzione originale, così non duplica!
+                }
+                
+
 let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
 let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
 if (!pulito) return;

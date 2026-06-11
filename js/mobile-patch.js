@@ -1,53 +1,63 @@
 /**
  * LiveSpeech Text - Mobile Device Patch
- * Gestione separata per correggere le righe ripetute e i duplicati su Android/iOS
+ * Gestione TOTALMENTE SEPARATA per evitare i duplicati su Android/iOS
  */
 
 const MobilePatch = {
-    // Rileva se l'utente è su un dispositivo mobile
+    // Rileva se è un telefono o tablet
     isMobile: function() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
                (window.matchMedia("(max-width: 768px)").matches && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
     },
 
-    // Pulisce il testo definitivo eliminando i blocchi di parole che si ripetono consecutivamente
-    cleanDuplicates: function(currentText, newChunk) {
-        if (!this.isMobile()) return newChunk;
+    // Sostituisce completamente la logica di inserimento per evitare ripetizioni
+    processaInserimentoMobile: function(areaAppunti, testoNuovo) {
+        if (!testoNuovo || !testoNuovo.trim()) return;
 
-        let testoPulito = newChunk.trim();
-        
-        // Se il testo attuale finisce già con la frase che sta arrivando, la scartiamo per evitare doppioni
-        if (currentText.trim().endsWith(testoPulito)) {
-            return ""; 
+        // Pulizia base da punteggiatura del blocco in arrivo
+        let pulito = testoNuovo.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ").trim();
+        if (!pulito) return;
+
+        let testoAttuale = areaAppunti.value;
+
+        // Se il testo negli appunti è vuoto, inseriamo direttamente
+        if (!testoAttuale.trim()) {
+            areaAppunti.value = pulito + "\n\n";
+            return;
         }
 
-        // Algoritmo di controllo sulle ultime parole per evitare duplicazioni parziali
-        let paroleAttuali = currentText.trim().split(/\s+/);
-        let paroleNuove = testoPulito.split(/\s+/);
+        // --- ALGORITMO ANTI-DUPLICATO ADATTIVO ---
+        let paroleAttuali = testoAttuale.trim().split(/\s+/);
+        let paroleNuove = pulito.split(/\s+/);
         
-        // Prendiamo le ultime parole (fino a un massimo di 5) per fare un confronto
-        let checkLength = Math.min(parolesAttuali.length, 5);
-        if (checkLength > 0) {
-            let ultimeParoleAttuali = paroleAttuali.slice(-checkLength).join(" ").toLowerCase();
-            let primeParoleNuove = paroleNuove.slice(0, checkLength).join(" ").toLowerCase();
+        let sovrapposizioneMassima = 0;
+        let limiteControllo = Math.min(paroleAttuali.length, paroleNuove.length, 12); // Controlla fino a 12 parole indietro
+
+        // Cerchiamo se la fine del testo attuale coincide con l'inizio del testo nuovo
+        for (let i = 1; i <= limiteControllo; i++) {
+            let fineAttuale = paroleAttuali.slice(-i).join(" ").toLowerCase();
+            let inizioNuovo = paroleNuove.slice(0, i).join(" ").toLowerCase();
             
-            if (ultimeParoleAttuali === primeParoleNuove) {
-                // Se combaciano perfettamente, rimuoviamo la parte duplicata dall'inizio del nuovo blocco
-                paroleNuove = paroleNuove.slice(checkLength);
-                testoPulito = paroleNuove.join(" ");
+            if (fineAttuale === inizioNuovo) {
+                sovrapposizioneMassima = i; // Trovato un duplicato di 'i' parole!
             }
         }
 
-        return testoPulito;
-    },
+        // Se abbiamo trovato una sovrapposizione, tagliamo via i duplicati dall'inizio del nuovo testo
+        if (sovrapposizioneMassima > 0) {
+            paroleNuove = paroleNuove.slice(sovrapposizioneMassima);
+        }
 
-    // Ottimizza la visualizzazione dell'anteprima provvisoria su mobile
-    formatPreview: function(testoProvvisorio) {
-        if (!this.isMobile()) return testoProvvisorio;
+        let daAggiungere = paroleNuove.join(" ").trim();
         
-        // Su mobile filtriamo l'anteprima per evitare che "sfarfalli" ripetendo le parole digitate
-        let parole = testoProvvisorio.trim().split(/\s+/);
-        let paroleUniche = [...new Set(parole)]; // Rimuove i duplicati immediati nella stringa provvisoria
-        return paroleUniche.join(" ");
+        // Scriviamo solo se è rimasto qualcosa e non era un duplicato totale
+        if (daAggiungere.length > 0) {
+            // Controlla se l'ultimo carattere è già uno spazio o a capo per evitare formattazione errata
+            if (areaAppunti.value.endsWith("\n\n") || areaAppunti.value.endsWith(" ")) {
+                areaAppunti.value += daAggiungere + "\n\n";
+            } else {
+                areaAppunti.value += " " + daAggiungere + "\n\n";
+            }
+        }
     }
 };
