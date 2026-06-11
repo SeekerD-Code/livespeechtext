@@ -378,48 +378,54 @@ areaAppunti.scrollTop = areaAppunti.scrollHeight;
 };
 
 if (testoProvvisorio) {
-const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
-const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
+                let anteprimaPulita = "";
 
-if (paroleNuove.length >= 20) {
-const bloccoDaInviare = paroleNuove.join(" ");
-immettiNuovoBlocco(bloccoDaInviare);
-paroleInviateDalloStart += paroleNuove.length;
-}
+                // Controlliamo se siamo su mobile tramite la nostra patch
+                if (typeof MobilePatch !== 'undefined' && MobilePatch.isMobile()) {
+                    // Su mobile prendiamo il testo provvisorio in tempo reale bypassando i blocchi fissi
+                    anteprimaPulita = MobilePatch.formatPreview(testoProvvisorio);
+                } else {
+                    // Logica PC originale
+                    const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
+                    const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
 
-const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
-let anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
+                    if (paroleNuove.length >= 20) {
+                        const bloccoDaInviare = paroleNuove.join(" ");
+                        immettiNuovoBlocco(bloccoDaInviare);
+                        paroleInviateDalloStart += paroleNuove.length;
+                    }
 
-// 🌟 PATCH MOBILE INIETTATA QUI: Pulisce l'anteprima se siamo su smartphone
-                if (typeof MobilePatch !== 'undefined') {
-                    anteprimaPulita = MobilePatch.formatPreview(anteprimaPulita);
+                    const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
+                    anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
+                } // 🌟 QUESTA GRAFFA CHIUDE CORRETTAMENTE L'ELSE DEL PC
+
+                // Questa parte deve stare FUORI dagli IF/ELSE del dispositivo, 
+                // così funziona sia su PC che su Mobile!
+                const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
+
+                if (boxAnteprima) {
+                    boxAnteprima.innerHTML = testoInAscoltoCompleto;
                 }
-                
-const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
 
-if (boxAnteprima) {
-boxAnteprima.innerHTML = testoInAscoltoCompleto;
-}
+                // 🌟 AGGIORNAMENTO PiP: Mostra in tempo reale l'anteprima vocale azzurra
+                if (boxAnteprimaMini) {
+                    boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
+                }
+            } else {
+                if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
+                if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
+            }
 
-// 🌟 AGGIORNAMENTO PiP: Mostra in tempo reale l'anteprima vocale azzurra
-if (boxAnteprimaMini) {
-boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
-}
-} else {
-if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
-if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
-}
+            if (testoDefinitivo) {
+                const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
+                const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
 
-if (testoDefinitivo) {
-const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
-const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
-
-if (rimanentiDef.trim().length > 0) {
-immettiNuovoBlocco(rimanentiDef);
-}
-paroleInviateDalloStart = 0;
-}
-};
+                if (rimanentiDef.trim().length > 0) {
+                    immettiNuovoBlocco(rimanentiDef);
+                }
+                paroleInviateDalloStart = 0;
+            }
+        }
 
 // --- RESET DI SICUREZZA VOCALE ---
 recognition.onend = () => {
