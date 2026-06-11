@@ -381,9 +381,10 @@ areaAppunti.scrollTop = areaAppunti.scrollHeight;
 if (testoProvvisorio) {
                 let anteprimaPulita = "";
 
+                // Controlliamo se siamo su mobile tramite la nostra patch
                 if (typeof MobilePatch !== 'undefined' && MobilePatch.isMobile()) {
-                    // 🧪 TEST DEBUG MOBILE: Forziamo il testo grezzo per vedere se si sblocca
-                    anteprimaPulita = testoProvvisorio; 
+                    // Su mobile prendiamo il testo provvisorio in tempo reale bypassando i blocchi fissi
+                    anteprimaPulita = MobilePatch.formatPreview(testoProvvisorio);
                 } else {
                     // Logica PC originale
                     const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
@@ -397,12 +398,12 @@ if (testoProvvisorio) {
 
                     const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
                     anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
-                } // Chiude correttamente l'else del PC
+                } // 🌟 QUESTA GRAFFA CHIUDE CORRETTAMENTE L'ELSE DEL PC
 
-                // Generiamo il testo da mostrare
+                // Questa parte deve stare FUORI dagli IF/ELSE del dispositivo, 
+                // così funziona sia su PC che su Mobile!
                 const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
 
-                // Lo stampiamo nell'anteprima principale
                 if (boxAnteprima) {
                     boxAnteprima.innerHTML = testoInAscoltoCompleto;
                 }
@@ -411,8 +412,7 @@ if (testoProvvisorio) {
                 if (boxAnteprimaMini) {
                     boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
                 }
-
-            } else { // 🌟 ORA QUESTO ELSE È AGGANCIATO CORRETTAMENTE A: if (testoProvvisorio)
+            } else {
                 if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
                 if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
             }
@@ -426,7 +426,7 @@ if (testoProvvisorio) {
                 }
                 paroleInviateDalloStart = 0;
             }
-        }; // Questa è la chiusura reale di recognition.onresult = (event) => {
+        }
 
 // --- RESET DI SICUREZZA VOCALE ---
 recognition.onend = () => {
