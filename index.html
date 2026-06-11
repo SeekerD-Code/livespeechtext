@@ -89,7 +89,7 @@
                     <h2 class="main-title sub-text-bold">Assistente Appunti Vocali</h2>
                 </div>
 
-                <div id="sezione-app">
+<div id="sezione-app">
                     <p>Avvia l'ascolto e lascia che l'app scriva la lezione al posto tuo.</p>
                     
                     <div class="controls-section">
@@ -98,7 +98,7 @@
                         <button id="btn-cancella" class="btn-danger">🗑️ Cancella Tutto</button>
                     </div>
 
-                    <div style="margin-bottom: 15px;">
+                    <div id="container-btn-pip" style="margin-bottom: 15px;">
                         <button id="btn-pip" style="background-color: #0ea5e9; color: white; width: auto; font-size: 0.95rem; padding: 8px 16px;">🔲 Riduci in primo piano</button>
                     </div>
 
@@ -133,11 +133,10 @@
                         </div>
                     </div>
 
-                    <div class="notes-container">
-                        <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left;">
-                            In attesa della voce...
-                        </div>
-                        <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente anche mentre l'app ascolta!"></textarea>
+                    <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente anche mentre l'app ascolta!"></textarea>
+                    
+                    <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-top: 10px; margin-bottom: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left; width: 100%; box-sizing: border-box;">
+                        In attesa della voce...
                     </div>
 
                     <div class="download-section">
