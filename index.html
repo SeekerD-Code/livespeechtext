@@ -8,14 +8,15 @@
     <meta property="og:title" content="LiveSpeech Text - Free Live Audio Transcription">
     <meta property="og:description" content="Dictate and transcribe your voice in real time. Continuous web application optimized for mobile devices.">
     <meta property="og:type" content="website">
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link class="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Lexend:wght@100..900&family=Oregano:ital@0;1&family=Splash&display=swap" rel="stylesheet">
 
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-    
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+
     <link rel="manifest" href="manifest.json">
+    
     <link rel="stylesheet" href="css/main.css">
 
     <script>
@@ -133,14 +134,15 @@
                     </div>
 
                     <div class="notes-container">
+                        <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left;">
+                            In attesa della voce...
+                        </div>
                         <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente anche mentre l'app ascolta!"></textarea>
                     </div>
+
                     <div class="download-section">
                         <button id="btn-download" style="display: none;">💾 Scarica Appunti (.txt)</button>
                     </div>
-                        <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left;">
-                            In attesa della voce...
-                        </div>                 
                 </div>
 
                 <div id="sezione-about" class="page-section content-card" style="display: none;">
@@ -226,6 +228,7 @@
     </div>
 
     <script src="js/faq-data.js"></script>
+    <script src="js/mobile-patch.js"></script>
     <script src="js/app.js"></script>
 
     <script>
