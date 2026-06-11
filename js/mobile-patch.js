@@ -1,6 +1,6 @@
 /**
  * LiveSpeech Text - Mobile Device Patch
- * Gestione TOTALMENTE SEPARATA per evitare i duplicati su Android/iOS
+ * Gestione TOTALMENTE SEPARATA per evitare i duplicati e i troppi "a capo" su Android/iOS
  */
 
 const MobilePatch = {
@@ -10,7 +10,7 @@ const MobilePatch = {
                (window.matchMedia("(max-width: 768px)").matches && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
     },
 
-    // Sostituisce completamente la logica di inserimento per evitare ripetizioni
+    // Sostituisce la logica di inserimento gestendo la continuità del testo senza andare sempre a capo
     processaInserimentoMobile: function(areaAppunti, testoNuovo) {
         if (!testoNuovo || !testoNuovo.trim()) return;
 
@@ -20,9 +20,9 @@ const MobilePatch = {
 
         let testoAttuale = areaAppunti.value;
 
-        // Se il testo negli appunti è vuoto, inseriamo direttamente
+        // Se il testo negli appunti è vuoto, inseriamo direttamente la prima parola/frase
         if (!testoAttuale.trim()) {
-            areaAppunti.value = pulito + "\n\n";
+            areaAppunti.value = pulito;
             return;
         }
 
@@ -31,32 +31,32 @@ const MobilePatch = {
         let paroleNuove = pulito.split(/\s+/);
         
         let sovrapposizioneMassima = 0;
-        let limiteControllo = Math.min(paroleAttuali.length, paroleNuove.length, 12); // Controlla fino a 12 parole indietro
+        let limiteControllo = Math.min(paroleAttuali.length, paroleNuove.length, 12);
 
-        // Cerchiamo se la fine del testo attuale coincide con l'inizio del testo nuovo
         for (let i = 1; i <= limiteControllo; i++) {
             let fineAttuale = paroleAttuali.slice(-i).join(" ").toLowerCase();
             let inizioNuovo = paroleNuove.slice(0, i).join(" ").toLowerCase();
             
             if (fineAttuale === inizioNuovo) {
-                sovrapposizioneMassima = i; // Trovato un duplicato di 'i' parole!
+                sovrapposizioneMassima = i;
             }
         }
 
-        // Se abbiamo trovato una sovrapposizione, tagliamo via i duplicati dall'inizio del nuovo testo
+        // Tagliamo via i duplicati rilevati
         if (sovrapposizioneMassima > 0) {
             paroleNuove = paroleNuove.slice(sovrapposizioneMassima);
         }
 
         let daAggiungere = paroleNuove.join(" ").trim();
         
-        // Scriviamo solo se è rimasto qualcosa e non era un duplicato totale
+        // Scriviamo solo se è rimasto del testo reale e non era un duplicato totale
         if (daAggiungere.length > 0) {
-            // Controlla se l'ultimo carattere è già uno spazio o a capo per evitare formattazione errata
-            if (areaAppunti.value.endsWith("\n\n") || areaAppunti.value.endsWith(" ")) {
-                areaAppunti.value += daAggiungere + "\n\n";
+            // Se il testo attuale finisce già con un "a capo" o è l'inizio di una nuova sessione dopo una pausa lunga,
+            // manteniamo la spaziatura pulita, altrimenti aggiungiamo semplicemente uno spazio per far scorrere la frase.
+            if (testoAttuale.endsWith("\n\n") || testoAttuale.endsWith("\n")) {
+                areaAppunti.value += daAggiungere;
             } else {
-                areaAppunti.value += " " + daAggiungere + "\n\n";
+                areaAppunti.value += " " + daAggiungere;
             }
         }
     }

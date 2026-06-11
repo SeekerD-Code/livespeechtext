@@ -157,14 +157,15 @@ applicaLinguaInterfaccia(selectInterfaccia.value);
 // --- CONFIGURAZIONE MOTORE VOCALE ---
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (!SpeechRecognition) {
-alert("Ops! Browser non supportato. Usa Google Chrome!");
-return;
+var recognition = new SpeechRecognition();
+    recognition.continuous = true;         
+    recognition.interimResults = true;     
+} else {
+    // Se il browser non lo supporta (es. vecchissimi telefoni o Firefox senza flag),
+    // evitiamo il blocco con alert e stampiamo un avviso silenzioso in console.
+    console.warn("Il riconoscimento vocale non è supportato nativamente da questo browser.");
+    var recognition = null; 
 }
-
-const recognition = new SpeechRecognition();
-
-recognition.continuous = true;         
-recognition.interimResults = true;     
 
 let ascoltoAttivo = false;
 let streamSistema = null; 
@@ -348,7 +349,7 @@ if (!testoBlocco) return;
                     areaAppunti.scrollTop = areaAppunti.scrollHeight;
                     return; // Blocca il resto della funzione originale, così non duplica!
                 }
-                
+
 
 let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
 let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
@@ -378,51 +379,68 @@ areaAppunti.scrollTop = areaAppunti.scrollHeight;
 };
 
 if (testoProvvisorio) {
-const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
-const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
+                let anteprimaPulita = "";
 
-if (paroleNuove.length >= 20) {
-const bloccoDaInviare = paroleNuove.join(" ");
-immettiNuovoBlocco(bloccoDaInviare);
-paroleInviateDalloStart += paroleNuove.length;
-}
+                if (typeof MobilePatch !== 'undefined' && MobilePatch.isMobile()) {
+                    // 🧪 TEST DEBUG MOBILE: Forziamo il testo grezzo per vedere se si sblocca
+                    anteprimaPulita = testoProvvisorio; 
+                } else {
+                    // Logica PC originale
+                    const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
+                    const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
 
-const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
-let anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
+                    if (paroleNuove.length >= 20) {
+                        const bloccoDaInviare = paroleNuove.join(" ");
+                        immettiNuovoBlocco(bloccoDaInviare);
+                        paroleInviateDalloStart += paroleNuove.length;
+                    }
 
-// 🌟 PATCH MOBILE INIETTATA QUI: Pulisce l'anteprima se siamo su smartphone
-                if (typeof MobilePatch !== 'undefined') {
-                    anteprimaPulita = MobilePatch.formatPreview(anteprimaPulita);
+                    const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
+                    anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
+                } // Chiude correttamente l'else del PC
+
+                // Generiamo il testo da mostrare
+                const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
+
+                // Lo stampiamo nell'anteprima principale
+                if (boxAnteprima) {
+                    boxAnteprima.innerHTML = testoInAscoltoCompleto;
                 }
-                
-const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
 
-if (boxAnteprima) {
-boxAnteprima.innerHTML = testoInAscoltoCompleto;
-}
+                // 🌟 AGGIORNAMENTO PiP: Mostra in tempo reale l'anteprima vocale azzurra
+                if (boxAnteprimaMini) {
+                    boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
+                }
 
-// 🌟 AGGIORNAMENTO PiP: Mostra in tempo reale l'anteprima vocale azzurra
-if (boxAnteprimaMini) {
-boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
-}
-} else {
-if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
-if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
-}
+            } else { // 🌟 ORA QUESTO ELSE È AGGANCIATO CORRETTAMENTE A: if (testoProvvisorio)
+                if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
+                if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
+            }
 
-if (testoDefinitivo) {
-const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
-const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
+            if (testoDefinitivo) {
+                const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
+                const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
 
-if (rimanentiDef.trim().length > 0) {
-immettiNuovoBlocco(rimanentiDef);
-}
-paroleInviateDalloStart = 0;
-}
-};
+                if (rimanentiDef.trim().length > 0) {
+                    immettiNuovoBlocco(rimanentiDef);
+                }
+                paroleInviateDalloStart = 0;
+            }
+        }; // Questa è la chiusura reale di recognition.onresult = (event) => {
 
 // --- RESET DI SICUREZZA VOCALE ---
 recognition.onend = () => {
+    // 🌟 LOGICA SEPARATA MOBILE: Aggiunge il distacco del paragrafo (\n\n) solo alla fine del parlato reale
+            if (typeof MobilePatch !== 'undefined' && MobilePatch.isMobile() && areaAppunti.value.trim().length > 0) {
+                if (!areaAppunti.value.endsWith("\n\n")) {
+                    areaAppunti.value += "\n\n";
+                    
+                    // Sincronizza subito anche il mini-box PiP per evitare disallineamenti
+                    if (areaAppuntiMini) {
+                        areaAppuntiMini.value = areaAppunti.value;
+                    }
+                }
+            }
 paroleInviateDalloStart = 0;
 if (boxAnteprima && !ascoltoAttivo) {
 boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
