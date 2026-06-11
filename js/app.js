@@ -375,6 +375,11 @@ paroleInviateDalloStart += paroleNuove.length;
 const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
 let anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
 
+// 🌟 PATCH MOBILE INIETTATA QUI: Pulisce l'anteprima se siamo su smartphone
+                if (typeof MobilePatch !== 'undefined') {
+                    anteprimaPulita = MobilePatch.formatPreview(anteprimaPulita);
+                }
+                
 const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
 
 if (boxAnteprima) {
