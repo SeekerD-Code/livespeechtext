@@ -104,47 +104,41 @@ document.head.appendChild(adsenseScript);
 <div class="status-badge" id="stato-app">Pronto ad ascoltare</div>
 
 <div class="international-section" style="margin-bottom: 15px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-<div>
-<label for="select-lingua" class="theme-label">🎤 Lingua Lezione / Input:</label>
-<select id="select-lingua" class="theme-select">
-<option value="it-IT">Italiano (Italia)</option>
-<option value="en-US">English (US)</option>
-<option value="en-GB">English (UK)</option>
-<option value="es-ES">Español (España)</option>
-<option value="fr-FR">Français (France)</option>
-<option value="de-DE">Deutsch (Deutschland)</option>
-<option value="pt-PT">Português (Portugal)</option>
-<option value="nl-NL">Nederlands (Paesi Bassi)</option>
-<option value="pl-PL">Polski (Polonia)</option>
-<option value="el-GR">Ελληνικά (Grecia)</option>
-<option value="ro-RO">Română (Romania)</option>
-<option value="sv-SE">Svenska (Svezia)</option>
-<option value="zh-CN">中文 (Cina - Semplificato)</option>
-<option value="ja-JP">日本語 (Giappone)</option>
-<option value="ko-KR">한국어 (Corea del Sud)</option>
-<option value="hi-IN">हिन्दी (India)</option>
-<option value="th-TH">ไทย (Thailandia)</option>
-<option value="vi-VN">Tiếng Việt (Vietnam)</option>
-<option value="id-ID">Bahasa Indonesia (Indonesia)</option>
-<option value="tr-TR">Türkçe (Turchia)</option>
-<option value="ru-RU">Русский (Russia)</option>
-</select>
+  <div>
+    <label for="select-lingua" class="theme-label">🎤 Lingua Lezione / Input:</label>
+      <select id="select-lingua" class="theme-select">
+        <option value="it-IT">Italiano (Italia)</option>
+        <option value="en-US">English (US)</option>
+        <option value="en-GB">English (UK)</option>
+        <option value="es-ES">Español (España)</option>
+        <option value="fr-FR">Français (France)</option>
+        <option value="de-DE">Deutsch (Deutschland)</option>
+        <option value="pt-PT">Português (Portugal)</option>
+        <option value="nl-NL">Nederlands (Paesi Bassi)</option>
+        <option value="pl-PL">Polski (Polonia)</option>
+        <option value="el-GR">Ελληνικά (Grecia)</option>
+        <option value="ro-RO">Română (Romania)</option>
+        <option value="sv-SE">Svenska (Svezia)</option>
+        <option value="zh-CN">中文 (Cina - Semplificato)</option>
+        <option value="ja-JP">日本語 (Giappone)</option>
+        <option value="ko-KR">한국어 (Corea del Sud)</option>
+        <option value="hi-IN">हिन्दी (India)</option>
+        <option value="th-TH">ไทย (Thailandia)</option>
+        <option value="vi-VN">Tiếng Việt (Vietnam)</option>
+        <option value="id-ID">Bahasa Indonesia (Indonesia)</option>
+        <option value="tr-TR">Türkçe (Turchia)</option>
+        <option value="ru-RU">Русский (Russia)</option>
+      </select>
+  </div>
 </div>
-</div>
+  
+  <div class="download-section">
+    <button id="btn-download" style="display: none;">💾 Scarica Appunti (.txt)</button>
+  </div>
 
-<div class="notes-container">
-                        <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left;">
-                            In attesa della voce...
-                        </div>
-<textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente anche mentre l'app ascolta!"></textarea>
-</div>
-
-<div class="download-section">
-<button id="btn-download" style="display: none;">💾 Scarica Appunti (.txt)</button>
-</div>
-                        <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left;">
-                            In attesa della voce...
-                        </div>                 
+  <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left;">
+      In attesa della voce...
+  </div>                 
 </div>
 
 <div id="sezione-about" class="page-section content-card" style="display: none;">
