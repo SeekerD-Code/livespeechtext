@@ -334,36 +334,41 @@ testoProvvisorio += event.results[i][0].transcript;
 }
 
 const immettiNuovoBlocco = (testoBlocco) => {
-if (!testoBlocco) return;
+    if (!testoBlocco) return;
 
-let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
-let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
-if (!pulito) return;
+        let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+        let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
+        if (!pulito) return;
 
-const haIlFocus = (document.activeElement === areaAppunti);
-const inizioSelezione = areaAppunti.selectionStart;
-const fineSelezione = areaAppunti.selectionEnd;
-const scrollAltezza = areaAppunti.scrollTop;
+    const haIlFocus = (document.activeElement === areaAppunti);
+    // 🌟 SE STAI SCRIVENDO TU (HA IL FOCUS): Inseriamo il testo in fondo senza toccare il tuo cursore
+    if (haIlFocus) {
+        const lunghezzaAttuale = areaAppunti.value.length;
+        const inizioSelezioneSalvato = areaAppunti.selectionStart;
+        const fineSelezioneSalvato = areaAppunti.selectionEnd;
+        const scrollAltezzaSalvato = areaAppunti.scrollTop;
 
-// Scrittura nell'area principale
-areaAppunti.value += pulito + "\n";
-if (btnDownload) btnDownload.style.display = "inline-block";
-if (btnDownloadMini) btnDownloadMini.style.display = "block"; // 🌟 Mostra il tasto nel PiP
+// Inserisce il testo esattamente alla fine del documento senza azzerare la textarea
+            areaAppunti.setRangeText(pulito + "\n", lunghezzaAttuale, lunghezzaAttuale, 'end');
 
-// 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico della minicompattata
-if (areaAppuntiMini) {
-areaAppuntiMini.value = areaAppunti.value;
-areaAppuntiMini.scrollTop = areaAppuntiMini.scrollHeight;
-}
+            // Ripristina all'istante la tua esatta posizione di scrittura manuale
+            areaAppunti.setSelectionRange(inizioSelezioneSalvato, fineSelezioneSalvato);
+            areaAppunti.scrollTop = scrollAltezzaSalvato;
 
-if (haIlFocus) {
-areaAppunti.setSelectionRange(inizioSelezione, fineSelezione);
-areaAppunti.scrollTop = scrollAltezza;
-} else {
-areaAppunti.scrollTop = areaAppunti.scrollHeight;
-}
+        } else {
+            // 🌟 SE NON STAI TOCCANDO LA TASTIERA: Aggiorna normalmente e fai lo scroll automatico
+            areaAppunti.value += pulito + "\n";
+            areaAppunti.scrollTop = areaAppunti.scrollHeight;
+        }
+            if (btnDownload) btnDownload.style.display = "inline-block";
+            if (btnDownloadMini) btnDownloadMini.style.display = "block"; // 🌟 Mostra il tasto nel PiP
+
+        // 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico della minicompattata
+            if (areaAppuntiMini) {
+                areaAppuntiMini.value = areaAppunti.value;
+                areaAppuntiMini.scrollTop = areaAppuntiMini.scrollHeight;
+            }
 };
-
 if (testoProvvisorio) {
 const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
 const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
