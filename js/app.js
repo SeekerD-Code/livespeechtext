@@ -348,6 +348,7 @@ const scrollAltezza = areaAppunti.scrollTop;
 // Scrittura nell'area principale
 areaAppunti.value += pulito + "\n";
 if (btnDownload) btnDownload.style.display = "inline-block";
+if (btnDownloadMini) btnDownloadMini.style.display = "block"; // 🌟 Mostra il tasto nel PiP
 
 // 🌟 AGGIORNAMENTO PiP: Sincronizza ed esegue lo scroll automatico della minicompattata
 if (areaAppuntiMini) {
@@ -435,12 +436,13 @@ mostraModaleAvviso("Permission Denied", "Cannot access the microphone. Please ch
 
 // --- FUNZIONE CANCELLA TUTTO ---
 if (btnCancella) {
-btnCancella.addEventListener('click', () => {
-const t = traduzioni[selectInterfaccia.value];
-mostraModaleConferma(t.modalCancellaTitolo, t.modalCancellaMessaggio, () => {
-if (areaAppunti) areaAppunti.value = '';
-if (areaAppuntiMini) areaAppuntiMini.value = ''; // Svuota anche la miniapp se aperta
-if (btnDownload) btnDownload.style.display = "none";
+    btnCancella.addEventListener('click', () => {
+        const t = traduzioni[selectInterfaccia.value];
+        mostraModaleConferma(t.modalCancellaTitolo, t.modalCancellaMessaggio, () => {
+            if (areaAppunti) areaAppunti.value = '';
+            if (areaAppuntiMini) areaAppuntiMini.value = ''; // Svuota anche la miniapp se aperta
+            if (btnDownload) btnDownload.style.display = "none";
+            if (btnDownloadMini) btnDownloadMini.style.display = "none"; // 🌟 Nasconde il tasto nel PiP
 });
 });
 }
@@ -517,6 +519,13 @@ const miniBtnMicrofono = pipWindow.document.getElementById('btn-ascolto-mini');
 const miniBtnCall = pipWindow.document.getElementById('btn-call-mini');
 const miniBtnCancella = pipWindow.document.getElementById('btn-cancella-mini');
 
+btnDownloadMini = pipWindow.document.getElementById('btn-download-mini');
+
+// Se nella textarea principale c'è già del testo reale, mostriamo subito il bottone nel PiP all'apertura
+if (btnDownloadMini && areaAppunti && areaAppunti.value.trim().length > 0) {
+    btnDownloadMini.style.display = "block";
+}
+
 // Se esistono nell'HTML, copiamo le classi CSS originali per mantenere lo stile grafico coerente
 if (miniBtnMicrofono && btnAscolto) miniBtnMicrofono.className = btnAscolto.className + ' pip-btn-mini';
 if (miniBtnCall && btnCatturaSistema) miniBtnCall.className = btnCatturaSistema.className + ' pip-btn-mini';
@@ -534,6 +543,22 @@ window.focus();
 // 2. Attiva il pulsante cancella grande (che aprirà il tuo modale)
 btnCancella.click();
 });
+}
+
+// 🌟 INTEGRAZIONE PASSO B (Logica di scaricamento): Diamo la funzione al click del bottone mini
+if (btnDownloadMini) {
+    btnDownloadMini.addEventListener('click', () => {
+        if (!areaAppuntiMini) return;
+        const blob = new Blob([areaAppuntiMini.value], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = pipWindow.document.createElement('a'); 
+        a.href = url;
+        a.download = 'appunti_livespeech_pip.txt';
+        pipWindow.document.body.appendChild(a);
+        a.click();
+        pipWindow.document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
 }
 
 // Allineamento immediato dei testi correnti
