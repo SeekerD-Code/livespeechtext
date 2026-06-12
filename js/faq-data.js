@@ -4,6 +4,10 @@ const faqData = [
         answer: "L'applicazione semiautomatica sfrutta la tecnologia nativa di riconoscimento vocale del browser. Quando parli o catturi l'audio, il motore analizza i suoni, isola la frequenza della voce e trasforma il parlato in testo definitivo all'interno dell'area di modifica non appena rileva una pausa naturale nel discorso. Al termine della sessione, puoi salvare e scaricare tutto sul tuo dispositivo."
     },
     {
+        question: "💾 Dove salva il file l'app quando premo su 'Salva Testo'?",
+        answer: "L'applicazione salva in automatico il file nella cartella Download."
+    },
+    {
         question: "🌍 Come fa l'app ad adattarsi alla mia lingua e cosa serve la tendina \"Lingua Lezione\"?",
         answer: "L'interfaccia dell'applicazione rileva automaticamente la lingua del tuo dispositivo (PC o smartphone) all'avvio per mostrarti i menu nella tua lingua nativa. La tendina <strong>\"🎤 Lingua Lezione / Input\"</strong> serve invece a indicare al motore vocale quale lingua deve ascoltare e trascrivere. Se l'interfaccia dell'app è in inglese ma stai ascoltando una lezione in italiano, imposta manualmente la tendina su \"Italiano\" prima di avviare la registrazione."
     },
