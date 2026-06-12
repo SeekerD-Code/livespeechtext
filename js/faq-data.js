@@ -106,3 +106,10 @@ renderizzaLeFaq();
 
 // E per sicurezza, rieseguiamo se il DOM non era ancora totalmente pronto
 document.addEventListener('DOMContentLoaded', renderizzaLeFaq);
+
+// Forziamo l'esecuzione immediata non appena lo script viene letto
+renderizzaLeFaq();
+
+
+// E per sicurezza, rieseguiamo se il DOM non era ancora totalmente pronto
+document.addEventListener('DOMContentLoaded', renderizzaLeFaq);
