@@ -157,15 +157,14 @@ applicaLinguaInterfaccia(selectInterfaccia.value);
 // --- CONFIGURAZIONE MOTORE VOCALE ---
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (!SpeechRecognition) {
-var recognition = new SpeechRecognition();
-    recognition.continuous = true;         
-    recognition.interimResults = true;     
-} else {
-    // Se il browser non lo supporta (es. vecchissimi telefoni o Firefox senza flag),
-    // evitiamo il blocco con alert e stampiamo un avviso silenzioso in console.
-    console.warn("Il riconoscimento vocale non è supportato nativamente da questo browser.");
-    var recognition = null; 
+alert("Ops! Browser non supportato. Usa Google Chrome!");
+return;
 }
+
+const recognition = new SpeechRecognition();
+
+recognition.continuous = true;         
+recognition.interimResults = true;     
 
 let ascoltoAttivo = false;
 let streamSistema = null; 
@@ -336,21 +335,6 @@ testoProvvisorio += event.results[i][0].transcript;
 const immettiNuovoBlocco = (testoBlocco) => {
 if (!testoBlocco) return;
 
-// 🌟 SE SEI SU MOBILE, USA LA LOGICA SEPARATA DI MOBILE-PATCH E ESCI
-                if (typeof MobilePatch !== 'undefined' && MobilePatch.isMobile()) {
-                    MobilePatch.processaInserimentoMobile(areaAppunti, testoBlocco);
-                    
-                    // Sincronizza il PiP se attivo
-                    if (areaAppuntiMini) {
-                        areaAppuntiMini.value = areaAppunti.value;
-                        areaAppuntiMini.scrollTop = areaAppuntiMini.scrollHeight;
-                    }
-                    if (btnDownload) btnDownload.style.display = "inline-block";
-                    areaAppunti.scrollTop = areaAppunti.scrollHeight;
-                    return; // Blocca il resto della funzione originale, così non duplica!
-                }
-
-
 let testoSenzaPunteggiatura = testoBlocco.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
 let pulito = testoSenzaPunteggiatura.replace(/\s+/g, " ").trim();
 if (!pulito) return;
@@ -361,6 +345,7 @@ const fineSelezione = areaAppunti.selectionEnd;
 const scrollAltezza = areaAppunti.scrollTop;
 
 // Scrittura nell'area principale
+areaAppunti.value += pulito + "\n\n";
 areaAppunti.value += pulito + "\n";
 if (btnDownload) btnDownload.style.display = "inline-block";
 
@@ -379,68 +364,46 @@ areaAppunti.scrollTop = areaAppunti.scrollHeight;
 };
 
 if (testoProvvisorio) {
-                let anteprimaPulita = "";
+const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
+const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
 
-                // Controlliamo se siamo su mobile tramite la nostra patch
-                if (typeof MobilePatch !== 'undefined' && MobilePatch.isMobile()) {
-                    // Su mobile prendiamo il testo provvisorio in tempo reale bypassando i blocchi fissi
-                    anteprimaPulita = MobilePatch.formatPreview(testoProvvisorio);
-                } else {
-                    // Logica PC originale
-                    const tutteLeParole = testoProvvisorio.trim().split(/\s+/);
-                    const paroleNuove = tutteLeParole.slice(paroleInviateDalloStart);
+if (paroleNuove.length >= 20) {
+const bloccoDaInviare = paroleNuove.join(" ");
+immettiNuovoBlocco(bloccoDaInviare);
+paroleInviateDalloStart += paroleNuove.length;
+}
 
-                    if (paroleNuove.length >= 20) {
-                        const bloccoDaInviare = paroleNuove.join(" ");
-                        immettiNuovoBlocco(bloccoDaInviare);
-                        paroleInviateDalloStart += paroleNuove.length;
-                    }
+const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
+let anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
 
-                    const paroleRimanentiAnteprima = tutteLeParole.slice(paroleInviateDalloStart).join(" ");
-                    anteprimaPulita = paroleRimanentiAnteprima.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ");
-                } // 🌟 QUESTA GRAFFA CHIUDE CORRETTAMENTE L'ELSE DEL PC
+const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
 
-                // Questa parte deve stare FUORI dagli IF/ELSE del dispositivo, 
-                // così funziona sia su PC che su Mobile!
-                const testoInAscoltoCompleto = `<strong>${traduzioni[selectInterfaccia.value].inAscolto}</strong> ${anteprimaPulita}`;
+if (boxAnteprima) {
+boxAnteprima.innerHTML = testoInAscoltoCompleto;
+}
 
-                if (boxAnteprima) {
-                    boxAnteprima.innerHTML = testoInAscoltoCompleto;
-                }
+// 🌟 AGGIORNAMENTO PiP: Mostra in tempo reale l'anteprima vocale azzurra
+if (boxAnteprimaMini) {
+boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
+}
+} else {
+if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
+if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
+}
 
-                // 🌟 AGGIORNAMENTO PiP: Mostra in tempo reale l'anteprima vocale azzurra
-                if (boxAnteprimaMini) {
-                    boxAnteprimaMini.innerHTML = testoInAscoltoCompleto;
-                }
-            } else {
-                if (boxAnteprima) boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
-                if (boxAnteprimaMini) boxAnteprimaMini.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
-            }
+if (testoDefinitivo) {
+const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
+const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
 
-            if (testoDefinitivo) {
-                const tutteLeParoleDef = testoDefinitivo.trim().split(/\s+/);
-                const rimanentiDef = tutteLeParoleDef.slice(paroleInviateDalloStart).join(" ");
-
-                if (rimanentiDef.trim().length > 0) {
-                    immettiNuovoBlocco(rimanentiDef);
-                }
-                paroleInviateDalloStart = 0;
-            }
-        }
+if (rimanentiDef.trim().length > 0) {
+immettiNuovoBlocco(rimanentiDef);
+}
+paroleInviateDalloStart = 0;
+}
+};
 
 // --- RESET DI SICUREZZA VOCALE ---
 recognition.onend = () => {
-    // 🌟 LOGICA SEPARATA MOBILE: Aggiunge il distacco del paragrafo (\n\n) solo alla fine del parlato reale
-            if (typeof MobilePatch !== 'undefined' && MobilePatch.isMobile() && areaAppunti.value.trim().length > 0) {
-                if (!areaAppunti.value.endsWith("\n\n")) {
-                    areaAppunti.value += "\n\n";
-                    
-                    // Sincronizza subito anche il mini-box PiP per evitare disallineamenti
-                    if (areaAppuntiMini) {
-                        areaAppuntiMini.value = areaAppunti.value;
-                    }
-                }
-            }
 paroleInviateDalloStart = 0;
 if (boxAnteprima && !ascoltoAttivo) {
 boxAnteprima.textContent = traduzioni[selectInterfaccia.value].attesaVoce;
@@ -736,27 +699,27 @@ rilevaEImpostaLinguaIniziale();
 
 // --- GESTIONE APERTURA/CHIUSURA FAQ (ACCORDION) ---
 document.addEventListener('DOMContentLoaded', () => {
-    const faqContainer = document.querySelector('#sezione-faq .accordion');
-    
-    if (faqContainer) {
-        faqContainer.addEventListener('click', function(e) {
-            // Intercetta il click sull'header (o sulle icone/testi al suo interno)
-            const header = e.target.closest('.accordion-header');
-            if (!header) return;
+const faqContainer = document.querySelector('#sezione-faq .accordion');
 
-            const currentItem = header.parentElement;
-            const isActive = currentItem.classList.contains('active');
+if (faqContainer) {
+faqContainer.addEventListener('click', function(e) {
+// Intercetta il click sull'header (o sulle icone/testi al suo interno)
+const header = e.target.closest('.accordion-header');
+if (!header) return;
 
-            // Chiude tutti gli altri accordion aperti per mantenere l'ordine
-            const allItems = faqContainer.querySelectorAll('.accordion-item');
-            allItems.forEach(item => {
-                item.classList.remove('active');
-            });
+const currentItem = header.parentElement;
+const isActive = currentItem.classList.contains('active');
 
-            // Se l'elemento non era attivo, aggiunge la classe 'active' per espanderlo con il CSS
-            if (!isActive) {
-                currentItem.classList.add('active');
-            }
-        });
-    }
+// Chiude tutti gli altri accordion aperti per mantenere l'ordine
+const allItems = faqContainer.querySelectorAll('.accordion-item');
+allItems.forEach(item => {
+item.classList.remove('active');
+});
+
+// Se l'elemento non era attivo, aggiunge la classe 'active' per espanderlo con il CSS
+if (!isActive) {
+currentItem.classList.add('active');
+}
+});
+}
 });
