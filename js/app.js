@@ -18,6 +18,7 @@ const themeTextLabel = document.getElementById('theme-text-label');
 let pipWindow = null;
 let areaAppuntiMini = null;
 let boxAnteprimaMini = null;
+let btnDownloadMini = null;
 
 // --- ELEMENTI MODALE CUSTOM ---
 const modal = document.getElementById('custom-modal');
