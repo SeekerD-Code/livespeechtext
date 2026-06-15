@@ -1,41 +1,42 @@
 <!DOCTYPE html>
 <html lang="it">
-<header class="main-header" style="padding: 15px 10px; text-align: center;">
-        <div class="logo" style="margin-bottom: 12px; font-weight: bold;">🎙️ Live Speech Text <span style="font-size: 0.8rem; color: #3b82f6;">Mobile</span></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Speech Text - Mobile Edition</title>
+    
+    <link rel="stylesheet" href="css/main.css?v=1.0">
+    <link rel="stylesheet" href="css/style-base.css?v=1.0">
+    <link rel="stylesheet" href="css/style-lingua.css?v=1.0">
+    <link rel="stylesheet" href="css/style-pwa.css?v=1.0">
+    <link rel="stylesheet" href="css/style-mobile.css?v=1.0">
+</head>
+<body>
+<header class="main-header" style="padding: 15px 10px; text-align: center; background: var(--bg-card, #fff); border-bottom: 1px solid var(--border-color, #e2e8f0);">
+        <div class="logo" style="margin-bottom: 12px; font-weight: bold; font-size: 1.3rem;">🎙️ Live Speech Text <span style="font-size: 0.8rem; color: #3b82f6; vertical-align: super;">Mobile</span></div>
         
-        <nav class="main-nav" style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px;">
+        <nav class="main-nav" style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
             <a href="https://seekerdcode.it" class="nav-link" style="font-size: 0.95rem; white-space: nowrap;">Home Page</a>
             <a href="#" id="link-app" class="nav-link active" style="font-size: 0.95rem; white-space: nowrap;">App</a>
             <a href="#" id="link-about" class="nav-link" style="font-size: 0.95rem; white-space: nowrap;">About Us</a>
             <a href="#" id="link-faq" class="nav-link" style="font-size: 0.95rem; white-space: nowrap;">FAQ</a>
         </nav>
     </header>
-<body>
 
-    <header class="main-header">
-        <div class="logo">🎙️ Live Speech Text <span style="font-size: 0.8rem; color: #3b82f6;">Mobile</span></div>
-        <nav class="main-nav">
-            <a href="https://seekerdcode.it" class="nav-link">Home Page</a>
-            <a href="#" id="link-app" class="nav-link active">App</a>
-            <a href="#" id="link-about" class="nav-link">About Us</a>
-            <a href="#" id="link-faq" class="nav-link">FAQ</a>
-        </nav>
-    </header>
-
-    <main class="container">
+    <main class="container" style="padding: 15px; max-width: 100%; box-sizing: border-box;">
         <section id="sezione-app" class="tab-content active">
-            <p>Trascrizione vocale ottimizzata per il tuo smartphone. Parla liberamente.</p>
+            <p style="text-align: center; margin-bottom: 15px; color: #64748b; font-size: 0.9rem;">Trascrizione vocale ottimizzata per il tuo smartphone. Parla liberamente.</p>
             
-            <div class="controls-section" style="display: flex; gap: 10px;">
-                <button id="btn-ascolto" class="btn-primary" style="flex: 2;">🎤 Trascrivi da Microfono</button>
-                <button id="btn-cancella" class="btn-danger" style="flex: 1;">🗑️ Cancella</button>
+            <div class="controls-section" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button id="btn-ascolto" class="btn-primary" style="flex: 2; padding: 12px; font-weight: bold; border-radius: 8px; cursor: pointer;">🎤 Trascrivi da Microfono</button>
+                <button id="btn-cancella" class="btn-danger" style="flex: 1; padding: 12px; font-weight: bold; border-radius: 8px; cursor: pointer;">🗑️ Cancella</button>
             </div>
 
-            <div class="status-badge" id="stato-app">Pronto ad ascoltare</div>
+            <div class="status-badge" id="stato-app" style="margin-bottom: 15px; text-align: center; padding: 6px; border-radius: 6px; font-weight: 500;">Pronto ad ascoltare</div>
 
-            <div class="international-section" style="margin-bottom: 15px;">
-                <label for="select-lingua" class="theme-label">🎤 Lingua Lezione / Input:</label>
-                <select id="select-lingua" class="theme-select" style="width: 100%;">
+            <div class="international-section" style="margin-bottom: 20px;">
+                <label for="select-lingua" class="theme-label" style="display: block; margin-bottom: 8px; font-weight: 500;">🎤 Lingua Lezione / Input:</label>
+                <select id="select-lingua" class="theme-select" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color, #ccc);">
                     <option value="it-IT">Italiano (Italia)</option>
                     <option value="en-US">English (US)</option>
                     <option value="es-ES">Español (España)</option>
@@ -44,7 +45,7 @@
                 </select>
             </div>
 
-            <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente mentre l'app ascolta!"></textarea>
+           <textarea id="area-appunti" style="width: 100%; min-height: 250px; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid var(--border-color, #ccc); font-family: inherit; resize: none;" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente mentre l'app ascolta!"></textarea>
             
             <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-top: 15px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left;">
                 In attesa della voce...
