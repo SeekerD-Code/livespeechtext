@@ -74,7 +74,7 @@
         position: absolute;
         z-index: 9999;
         top: 183px;
-        right: 950px; /* Lo posiziona in alto a destra, vicino ai tuoi controlli di cambio tema */
+        right: 850px; /* Lo sposta da destra a sinistra */
         background: rgba(37, 99, 235, 0.15);
         border: 1px solid rgba(37, 99, 235, 0.4);
         padding: 6px 14px;
