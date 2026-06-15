@@ -1,4 +1,4 @@
-const CACHE_NAME = 'livespeech-cache-v2'; // 🌟 Aggiornato a v2 per forzare il browser a ricaricare tutto
+const CACHE_NAME = 'livespeech-cache-v3'; // 🌟 Aggiornato a v3 per forzare il browser a ricaricare tutto
 const assetsToCache = [
     '/livespeechtext/',
     '/livespeechtext/index.html',
