@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+      <script>
+    // Se lo schermo è inferiore a 768px o è un dispositivo mobile, vai alla versione mobile
+    if (window.innerWidth <= 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        window.location.href = "mobile.html";
+    }
+    </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LiveSpeech Text | Free Live Audio Transcription</title>
