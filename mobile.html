@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Speech Text - Mobile Edition</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style-mobile.css"> 
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">🎙️ Live Speech Text <span style="font-size: 0.8rem; color: #3b82f6;">Mobile</span></div>
+        <nav class="main-nav">
+            <a href="https://seekerdcode.it" class="nav-link">Home Page</a>
+            <a href="#" id="link-app" class="nav-link active">App</a>
+            <a href="#" id="link-about" class="nav-link">About Us</a>
+            <a href="#" id="link-faq" class="nav-link">FAQ</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section id="sezione-app" class="tab-content active">
+            <p>Trascrizione vocale ottimizzata per il tuo smartphone. Parla liberamente.</p>
+            
+            <div class="controls-section" style="display: flex; gap: 10px;">
+                <button id="btn-ascolto" class="btn-primary" style="flex: 2;">🎤 Trascrivi da Microfono</button>
+                <button id="btn-cancella" class="btn-danger" style="flex: 1;">🗑️ Cancella</button>
+            </div>
+
+            <div class="status-badge" id="stato-app">Pronto ad ascoltare</div>
+
+            <div class="international-section" style="margin-bottom: 15px;">
+                <label for="select-lingua" class="theme-label">🎤 Lingua Lezione / Input:</label>
+                <select id="select-lingua" class="theme-select" style="width: 100%;">
+                    <option value="it-IT">Italiano (Italia)</option>
+                    <option value="en-US">English (US)</option>
+                    <option value="es-ES">Español (España)</option>
+                    <option value="fr-FR">Français (France)</option>
+                    <option value="de-DE">Deutsch (Deutschland)</option>
+                </select>
+            </div>
+
+            <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente mentre l'app ascolta!"></textarea>
+            
+            <div id="box-anteprima-ia" style="background-color: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-top: 15px; font-style: italic; font-size: 0.95rem; border: 1px dashed #bfdbfe; text-align: left;">
+                In attesa della voce...
+            </div>
+
+            <div class="download-section" style="margin-top: 15px;">
+                <button id="btn-download" style="display: none; width: 100%;">💾 Scarica Appunti (.txt)</button>
+            </div>
+        </section>
+
+        <section id="sezione-about" class="tab-content">
+            <h2>About Us</h2>
+            <p>Applicazione di trascrizione ottimizzata per dispositivi mobili.</p>
+        </section>
+
+        <section id="sezione-faq" class="tab-content">
+            <h2>Domande Frequenti (FAQ)</h2>
+            <div class="accordion"></div>
+        </section>
+    </main>
+
+    <script src="js/app-mobile.js?v=1.0"></script>
+    <script src="js/faq.js"></script>
+</body>
+</html>
