@@ -74,8 +74,8 @@
         position: absolute !important;
         width: 24px !important;
         height: auto !important;
-        top: -4px !important;
-        left: 115px !important; /* Centrato dinamicamente sulla S di Splash */
+        top: 0px !important;
+        left: 115px !important; 
         z-index: 5;
     }
 
