@@ -1,54 +1,63 @@
 /* --- UNICA MEDIA QUERY COMPATTA PER SMARTPHONE E TABLET (Sotto i 768px) --- */
 @media (max-width: 768px) {
 
-    /* --- RESET E SFONDO DELLA PAGINA MOBILE (Stile PC) --- */
+    /* --- RESET E SFONDO DELLA PAGINA MOBILE (Font Lexend Globale) --- */
     body {
-        background-color: #f0f4f9 !important; /* Colore di sfondo azzurrino/grigio morbido del PC */
+        background-color: #f0f4f9 !important;
         margin: 0;
         padding: 10px;
-        font-family: system-ui, -apple-system, sans-serif;
+        font-family: 'Lexend', sans-serif !important; /* Tutto il testo base passa a Lexend */
+        -webkit-font-smoothing: antialiased;
     }
 
-    /* --- LA CARD BIANCA ARROTONDATA (Uguale al PC) --- */
+    /* --- LA CARD BIANCA ARROTONDATA --- */
     .app-container {
         background: var(--bg-card, #ffffff) !important;
-        border-radius: 24px !important; /* Curvatura morbida elegante da App */
+        border-radius: 24px !important;
         padding: 20px 15px !important;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important; /* Ombra soft premium */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
         max-width: 100% !important;
         box-sizing: border-box;
         margin: 10px auto !important;
     }
 
-    /* --- LOGO, TITOLI ED ELEMENTI SCENICI (Luffy Hat + Sparkles) --- */
+    /* --- LOGO, TITOLI ED ELEMENTI SCENICI (Assegnazione Font Esatta) --- */
     .brand-header {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
         margin-bottom: 20px !important;
-        padding-top: 20px !important;
+        padding-top: 25px !important;
     }
 
+    /* "Live Speech Text" */
     .brand-header .main-title {
-        font-size: 1.8rem !important;
-        font-weight: bold !important;
-        line-height: 1.2 !important;
-        margin: 0 !important;
+        font-family: 'Fredericka the Great', serif !important;
+        font-size: 1.8rem !important; /* Regolato per l'effetto gessetto su mobile */
+        font-weight: 400 !important;
+        line-height: 1.3 !important;
+        margin: 5px 0 0 0 !important;
         color: #1e293b;
     }
 
+    /* "Seeker D. Code" */
     .seeker-text {
-        font-family: 'Oregano', cursive, sans-serif; /* Mantiene il carattere del PC */
-        font-size: 1.5rem !important;
-        color: #c29d58; /* Sostituisci col colore esatto del tuo brand text se diverso */
+        font-family: 'Splash', cursive !important;
+        font-size: 1.6rem !important; /* Bilanciato per evitare che i tratti calligrafici si taglino */
+        color: #c29d58; 
+        font-weight: 400 !important;
+        display: inline-block;
+        margin-bottom: 2px;
     }
 
+    /* "Assistente Appunti Vocali" */
     .sub-text-bold {
-        font-size: 1.1rem !important;
+        font-family: 'Oregano', cursive !important;
+        font-size: 1.4rem !important; /* Oregano ha un occhio piccolo, quindi su mobile serve un po' più grande */
         color: #475569;
-        margin-top: 5px !important;
-        font-weight: 500;
+        margin-top: 8px !important;
+        font-weight: 400 !important;
     }
 
     /* Posizionamento millimetrico del Cappello di Paglia su Mobile */
@@ -56,8 +65,8 @@
         position: absolute !important;
         width: 24px !important;
         height: auto !important;
-        top: -8px !important;
-        left: 110px !important; /* Centrato sopra la S di Seeker su schermo piccolo */
+        top: -12px !important;
+        left: 105px !important; /* Centrato dinamicamente sulla S di Splash */
         z-index: 5;
     }
 
@@ -66,48 +75,50 @@
         position: absolute !important;
         width: 160px !important;
         height: auto !important;
-        top: -20px !important;
+        top: -15px !important;
         left: 50% !important;
         transform: translateX(-50%) rotate(15deg) !important;
         opacity: 0.8;
         pointer-events: none;
     }
 
-    /* --- BARRA DEI CONTROLLI UNIFICATA GRIGIA (Adattata da PC) --- */
+    /* --- BARRA DEI CONTROLLI UNIFICATA GRIGIA --- */
     .top-right-controls-inline {
         display: flex !important;
-        flex-direction: column !important; /* Incapsula in verticale su smartphone */
+        flex-direction: column !important;
         gap: 15px !important;
         padding: 12px 15px !important;
-        background: rgba(0, 0, 0, 0.03) !important; /* Grigio chiaro trasparente del PC */
+        background: rgba(0, 0, 0, 0.03) !important;
         border-radius: 16px !important;
         margin-bottom: 20px !important;
         width: 100% !important;
         box-sizing: border-box;
     }
 
-    /* Menu Navigazione Orizzontale Compatto */
+    /* Menu Navigazione */
     .main-nav {
         display: flex !important;
         flex-direction: row !important;
         justify-content: center !important;
-        flex-wrap: nowrap !important; /* Impedisce di spezzarsi */
+        flex-wrap: nowrap !important;
         gap: 10px !important;
         width: 100% !important;
     }
 
     .nav-link {
+        font-family: 'Lexend', sans-serif !important;
         font-size: 0.8rem !important;
         padding: 4px 6px !important;
         color: #64748b;
         text-decoration: none;
-        font-weight: 500;
+        font-weight: 500 !important;
         white-space: nowrap !important;
     }
 
     .nav-link.active {
         color: #2563eb !important;
         border-bottom: 2px solid #2563eb;
+        font-weight: 600 !important;
     }
 
     /* Cluster di destra (Lingua + Tema) */
@@ -115,7 +126,7 @@
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
-        width: 100% !important; /* Prende tutto lo spazio inferiore nella barra */
+        width: 100% !important;
         border-top: 1px solid rgba(0, 0, 0, 0.05);
         padding-top: 10px;
     }
@@ -127,20 +138,23 @@
     }
 
     .theme-label {
+        font-family: 'Lexend', sans-serif !important;
         font-size: 0.8rem !important;
-        font-weight: 500;
+        font-weight: 400;
         color: #475569;
     }
 
     .theme-select {
+        font-family: 'Lexend', sans-serif !important;
         padding: 6px 10px !important;
         border-radius: 8px !important;
         border: 1px solid #cbd5e1 !important;
         background: #ffffff;
         font-size: 0.8rem !important;
+        font-weight: 500;
     }
 
-    /* Bottone Luna/Sole tondo (Identico al PC) */
+    /* Bottone Luna/Sole tondo */
     #theme-toggle {
         background: #cbd5e1 !important;
         border: none !important;
@@ -155,25 +169,28 @@
         box-shadow: none !important;
     }
 
-    /* --- SEZIONE CONTROLLI E BOTTONI OPERATIVI --- */
+    /* --- SEZIONE CONTROLLI E BOTTONI OPERATIVI (Stile Lexend) --- */
     .app-description {
+        font-family: 'Lexend', sans-serif !important;
         text-align: center;
         margin-bottom: 15px !important;
         color: #64748b;
         font-size: 0.85rem !important;
+        font-weight: 300;
     }
 
     .controls-section {
         display: flex !important;
-        flex-direction: column !important; /* Bottoni incolonnati e facili da premere col pollice */
+        flex-direction: column !important;
         gap: 8px !important;
         margin-bottom: 15px !important;
     }
 
     .controls-section button {
+        font-family: 'Lexend', sans-serif !important;
         width: 100% !important;
         padding: 12px !important;
-        font-weight: bold !important;
+        font-weight: 600 !important; /* Lexend rende benissimo con il peso 600 sui bottoni */
         border-radius: 10px !important;
         border: none !important;
         font-size: 0.9rem !important;
@@ -181,41 +198,43 @@
     }
 
     .btn-primary { background-color: #2563eb !important; color: white !important; }
-    .btn-secondary { background-color: #8b5cf6 Imbportant; color: white !important; } /* Tasto Call/Video viola */
     .btn-danger { background-color: #ef4444 !important; color: white !important; }
 
-    /* Nascondiamo il tasto Call/Video su smartphone perché i browser mobile non supportano la cattura schermo */
     #btn-cattura-sistema {
         display: none !important;
     }
 
     .status-badge {
+        font-family: 'Lexend', sans-serif !important;
         margin-bottom: 15px !important;
         text-align: center;
         padding: 8px !important;
         background-color: #eff6ff !important;
         color: #2563eb !important;
         border-radius: 8px !important;
-        font-weight: 500;
+        font-weight: 500 !important;
         font-size: 0.85rem !important;
     }
 
     /* --- AREA DI TESTO (TEXTAREA) --- */
     textarea {
+        font-family: 'Lexend', sans-serif !important;
         width: 100% !important;
         height: 220px !important;
         padding: 12px !important;
         box-sizing: border-box !important;
         border-radius: 12px !important;
         border: 1px solid #e2e8f0 !important;
-        font-family: inherit;
         font-size: 0.95rem !important;
+        font-weight: 400;
+        line-height: 1.6;
         resize: none !important;
         background-color: #f8fafc !important;
     }
 
     /* Anteprima in attesa della voce */
     .anteprima-azzurra {
+        font-family: 'Lexend', sans-serif !important;
         background-color: #f0fdf4 !important;
         color: #166534 !important;
         padding: 12px !important;
@@ -226,7 +245,7 @@
         border: 1px dashed #bbf7d0 !important;
     }
 
-    /* --- BANNER AD SENSE INSERITI NELLA CARD --- */
+    /* --- BANNER ADSENSE --- */
     .ads-container-mobile {
         margin: 15px auto !important;
         max-width: 320px !important;
@@ -235,7 +254,7 @@
         overflow: hidden !important;
     }
 
-    /* --- BADGE BADGE PWA FLUTTUANTE MOBILE --- */
+    /* --- BADGE PWA FLUTTUANTE --- */
     #pwa-mobile-badge {
         position: absolute !important;
         z-index: 9999;
@@ -249,8 +268,9 @@
     }
 
     #pwa-mobile-badge span {
+        font-family: 'Lexend', sans-serif !important;
         font-size: 0.75rem !important;
-        font-weight: bold !important;
+        font-weight: 600 !important;
         color: #2563eb !important;
     }
 
