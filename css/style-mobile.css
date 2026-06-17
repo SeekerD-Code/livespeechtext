@@ -14,11 +14,12 @@
     .app-container {
         background: var(--bg-card, #ffffff) !important;
         border-radius: 24px !important;
-        padding: 20px 15px !important;
+        padding: 10px 15px 20px 15px !important; /* Ridotto il padding superiore da 20px a 10px */
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
         max-width: 100% !important;
         box-sizing: border-box;
-        margin: 10px auto !important;
+        margin: 5px auto !important; /* Ridotto il margine esterno superiore */
+        position: relative !important; /* Fondamentale per fare da ancora al bottone del tema */
     }
 
     /* --- LOGO, TITOLI ED ELEMENTI SCENICI (Assegnazione Font Esatta) --- */
@@ -27,8 +28,8 @@
         flex-direction: column !important;
         align-items: center !important;
         text-align: center !important;
-        margin-bottom: 20px !important;
-        padding-top: 25px !important;
+        margin-bottom: 15px !important; /* Ridotto lo spazio sotto l'header */
+        padding-top: 5px !important; /* CROLLATO da 25px a 5px per eliminare il vuoto in alto! */
         position: relative !important; /* Crea il contesto di posizionamento corretto */
     }
 
@@ -166,17 +167,21 @@
 
     /* Bottone Luna/Sole tondo */
     #theme-toggle {
+        position: absolute !important; 
+        top: 20px !important;    /* Distanza dal bordo superiore della card */
+        right: 20px !important;  /* Distanza dal bordo destro della card */
+        z-index: 10 !important;   /* Sempre sopra a tutto per essere cliccabile */
         background: #cbd5e1 !important;
         border: none !important;
         border-radius: 50% !important;
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 1rem !important;
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 1.1rem !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         cursor: pointer !important;
-        box-shadow: none !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
     }
 
     /* --- SEZIONE CONTROLLI E BOTTONI OPERATIVI (Stile Lexend) --- */
