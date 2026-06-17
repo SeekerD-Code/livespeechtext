@@ -38,53 +38,72 @@
     </script>
 </head>
 <body>
+
+    <div id="pwa-mobile-badge" style="display: none;">
+        <span>Installa l'App</span>
+    </div>
+
     <div class="app-container">
         
         <header class="brand-header">
-            <div class="logo">
-                <span class="seeker-text">🎙️ Live Speech Text</span> 
-                <span class="mobile-badge-text">Mobile</span>
+            <div class="logo-container" style="position: relative; display: inline-block;">
+                <img src="assets/sparkles.png" class="magic-sparkles" alt="Sparkles">
+                <img src="assets/luffy-hat.png" class="luffy-hat" alt="Luffy Hat">
+                
+                <h1 class="main-title">
+                    <span class="seeker-text">Seeker D. Code</span>
+                    <br>
+                    Live Speech Text
+                </h1>
             </div>
-            
+            <h2 class="sub-text-bold">Assistente Appunti Vocali</h2>
+        </header>
+
+        <div class="top-right-controls-inline">
             <nav class="main-nav">
                 <a href="https://seekerdcode.it" class="nav-link">Home Page</a>
                 <a href="#" id="link-app" class="nav-link active">App</a>
                 <a href="#" id="link-about" class="nav-link">About Us</a>
                 <a href="#" id="link-faq" class="nav-link">FAQ</a>
             </nav>
-        </header>
+
+            <div class="controls-cluster">
+                <div class="lang-control-box">
+                    <label for="select-lingua" class="theme-label">🎤 Lingua:</label>
+                    <select id="select-lingua" class="theme-select">
+                        <option value="it-IT">Italiano (ITA)</option>
+                        <option value="en-US">English (US)</option>
+                        <option value="es-ES">Español (ESP)</option>
+                        <option value="fr-FR">Français (FRA)</option>
+                        <option value="de-DE">Deutsch (DEU)</option>
+                    </select>
+                </div>
+
+                <button id="theme-toggle" aria-label="Cambia Tema">🌙</button>
+            </div>
+        </div>
 
         <main class="container">
             <section id="sezione-app" class="tab-content active">
-                <p class="app-description">Trascrizione vocale ottimizzata per il tuo smartphone. Parla liberamente.</p>
+                <p class="app-description">Avvia l'ascolto e lascia che l'app scriva la lezione al posto tuo.</p>
                 
                 <div class="controls-section">
                     <button id="btn-ascolto" class="btn-primary">🎤 Trascrivi da Microfono</button>
-                    <button id="btn-cancella" class="btn-danger">🗑️ Cancella</button>
+                    <button id="btn-cattura-sistema" class="btn-secondary">💻 Trascrivi da Call / Video</button>
+                    <button id="btn-cancella" class="btn-danger">🗑️ Cancella Tutto</button>
                 </div>
 
                 <div class="status-badge" id="stato-app">Pronto ad ascoltare</div>
 
-                <div class="international-section">
-                    <label for="select-lingua" class="theme-label">🎤 Lingua Lezione / Input:</label>
-                    <select id="select-lingua" class="theme-select">
-                        <option value="it-IT">Italiano (Italia)</option>
-                        <option value="en-US">English (US)</option>
-                        <option value="es-ES">Español (España)</option>
-                        <option value="fr-FR">Français (France)</option>
-                        <option value="de-DE">Deutsch (Deutschland)</option>
-                    </select>
-                </div>
-
-                <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente mentre l'app ascolta!"></textarea>
+                <textarea id="area-appunti" placeholder="Il testo definitivo apparirà qui. Puoi modificarlo liberamente anche mentre l'app ascolta!"></textarea>
 
                 <div class="ads-container-mobile">
                     <ins class="adsbygoogle"
                          style="display:block"
                          data-ad-client="ca-pub-9544811471414500"
                          data-ad-slot="4489947913"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
+                         data-ad-format="horizontal"
+                         data-full-width-responsive="false"></ins>
                     <script>
                          (adsbygoogle = window.adsbygoogle || []).push({});
                     </script>
