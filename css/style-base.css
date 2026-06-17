@@ -61,6 +61,7 @@ main {
 #banner-laterale-sinistro {
     width: 160px;
     height: 600px;
+    overflow: hidden; /* Evita che qualsiasi elemento strabordi visivamente */
     background-color: #f1f5f9;
     border: 1px dashed #cbd5e1;
     border-radius: 8px;
