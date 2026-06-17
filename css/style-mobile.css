@@ -87,7 +87,7 @@
         top: -15px !important;
         left: 50% !important;
         transform: translateX(-50%) rotate(15deg) !important;
-        opacity: 0.8;
+        opacity: 0.6;
         pointer-events: none;
         z-index: 1 !important;
     }
