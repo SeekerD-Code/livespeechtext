@@ -1,104 +1,163 @@
 /* --- UNICA MEDIA QUERY COMPATTA PER SMARTPHONE E TABLET (Sotto i 768px) --- */
 @media (max-width: 768px) {
 
-    /* --- STILE BASE COMUNE PER I BADGE PWA --- */
-    #pwa-mobile-badge, #pwa-pc-badge {
-        position: absolute;
-        z-index: 9999;
-        background: rgba(37, 99, 235, 0.15); /* Sfondo blu sfumato effetto vetro */
-        border: 0.7px solid rgba(37, 99, 235, 0.4); 
-        padding: 6px 14px;
-        border-radius: 20px;
-        backdrop-filter: blur(4px);
-        cursor: pointer;
-        transition: all 0.3s ease;
+    /* --- RESET E SFONDO DELLA PAGINA MOBILE (Stile PC) --- */
+    body {
+        background-color: #f0f4f9 !important; /* Colore di sfondo azzurrino/grigio morbido del PC */
+        margin: 0;
+        padding: 10px;
+        font-family: system-ui, -apple-system, sans-serif;
     }
 
-    #pwa-mobile-badge span, #pwa-pc-badge span {
-        font-size: 0.85rem;
-        font-weight: bold;
-        color: #2563eb;
-        white-space: nowrap;
+    /* --- LA CARD BIANCA ARROTONDATA (Uguale al PC) --- */
+    .app-container {
+        background: var(--bg-card, #ffffff) !important;
+        border-radius: 24px !important; /* Curvatura morbida elegante da App */
+        padding: 20px 15px !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important; /* Ombra soft premium */
+        max-width: 100% !important;
+        box-sizing: border-box;
+        margin: 10px auto !important;
     }
 
-    .dark-mode #pwa-mobile-badge span, .dark-mode #pwa-pc-badge span {
-        color: #3b82f6; 
-    }
-
-    /* --- 📱 POSIZIONAMENTO SPECIFICO BADGE PWA MOBILE --- */
-    #pwa-mobile-badge {
-        position: absolute !important;
-        top: 155px; 
-        left: 74%;
-        transform: translateX(-50%);
-        padding: 3px 6px;
-        border-radius: 12px;
-    }
-    
-    #pwa-mobile-badge span {
-        font-size: 0.55rem;
-        white-space: normal;
-        text-align: center;
-        display: inline-block;
-        max-width: 65px;
-    }
-
-    #pwa-pc-badge {
-        display: none !important; /* Scompare su mobile */
-    }
-
-    /* --- HEADER E LOGO COMPATTO --- */
+    /* --- LOGO, TITOLI ED ELEMENTI SCENICI (Luffy Hat + Sparkles) --- */
     .brand-header {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        padding: 45px 10px 15px 10px !important; /* 45px in alto lascia spazio ai menu fluttuanti */
-        background: var(--bg-card, #fff) !important;
-        border-bottom: 1px solid var(--border-color, #e2e8f0) !important;
-        margin-bottom: 25px !important;
+        text-align: center !important;
+        margin-bottom: 20px !important;
+        padding-top: 20px !important;
     }
 
-    /* Si applica al div .logo dentro .brand-header */
-    .brand-header .logo {
-        font-weight: bold;
-        font-size: 1.3rem !important;
-        margin-bottom: 8px !important;
+    .brand-header .main-title {
+        font-size: 1.8rem !important;
+        font-weight: bold !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+        color: #1e293b;
     }
 
     .seeker-text {
-        font-size: 1.40rem !important; /* Unito e proporzionato per stare su una riga */
-        white-space: nowrap !important;
-        display: inline-block;
+        font-family: 'Oregano', cursive, sans-serif; /* Mantiene il carattere del PC */
+        font-size: 1.5rem !important;
+        color: #c29d58; /* Sostituisci col colore esatto del tuo brand text se diverso */
     }
 
-    .mobile-badge-text {
-        font-size: 0.8rem;
-        color: #3b82f6;
-        vertical-align: super;
+    .sub-text-bold {
+        font-size: 1.1rem !important;
+        color: #475569;
+        margin-top: 5px !important;
+        font-weight: 500;
     }
 
-    /* --- NAVIGAZIONE (MENU) --- */
+    /* Posizionamento millimetrico del Cappello di Paglia su Mobile */
+    .luffy-hat {
+        position: absolute !important;
+        width: 24px !important;
+        height: auto !important;
+        top: -8px !important;
+        left: 110px !important; /* Centrato sopra la S di Seeker su schermo piccolo */
+        z-index: 5;
+    }
+
+    /* Scintille Magiche scalate per lo smartphone */
+    .magic-sparkles {
+        position: absolute !important;
+        width: 160px !important;
+        height: auto !important;
+        top: -20px !important;
+        left: 50% !important;
+        transform: translateX(-50%) rotate(15deg) !important;
+        opacity: 0.8;
+        pointer-events: none;
+    }
+
+    /* --- BARRA DEI CONTROLLI UNIFICATA GRIGIA (Adattata da PC) --- */
+    .top-right-controls-inline {
+        display: flex !important;
+        flex-direction: column !important; /* Incapsula in verticale su smartphone */
+        gap: 15px !important;
+        padding: 12px 15px !important;
+        background: rgba(0, 0, 0, 0.03) !important; /* Grigio chiaro trasparente del PC */
+        border-radius: 16px !important;
+        margin-bottom: 20px !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* Menu Navigazione Orizzontale Compatto */
     .main-nav {
         display: flex !important;
-        flex-direction: row !important; /* Forza la disposizione orizzontale */
+        flex-direction: row !important;
         justify-content: center !important;
-        flex-wrap: nowrap !important; /* Impedisce di andare a capo */
-        gap: 8px !important;
+        flex-wrap: nowrap !important; /* Impedisce di spezzarsi */
+        gap: 10px !important;
         width: 100% !important;
-        margin: 15px 0 0 0 !important;
     }
 
     .nav-link {
-        font-size: 0.85rem !important;
-        padding: 5px 10px !important;
-        white-space: nowrap !important;
+        font-size: 0.8rem !important;
+        padding: 4px 6px !important;
+        color: #64748b;
         text-decoration: none;
+        font-weight: 500;
+        white-space: nowrap !important;
     }
 
-    /* --- SEZIONE CONTROLLI E BOTTONI --- */
+    .nav-link.active {
+        color: #2563eb !important;
+        border-bottom: 2px solid #2563eb;
+    }
+
+    /* Cluster di destra (Lingua + Tema) */
+    .controls-cluster {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important; /* Prende tutto lo spazio inferiore nella barra */
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding-top: 10px;
+    }
+
+    .lang-control-box {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .theme-label {
+        font-size: 0.8rem !important;
+        font-weight: 500;
+        color: #475569;
+    }
+
+    .theme-select {
+        padding: 6px 10px !important;
+        border-radius: 8px !important;
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff;
+        font-size: 0.8rem !important;
+    }
+
+    /* Bottone Luna/Sole tondo (Identico al PC) */
+    #theme-toggle {
+        background: #cbd5e1 !important;
+        border: none !important;
+        border-radius: 50% !important;
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        box-shadow: none !important;
+    }
+
+    /* --- SEZIONE CONTROLLI E BOTTONI OPERATIVI --- */
     .app-description {
         text-align: center;
-        margin-top: -10px !important;  /* Avvicina la scritta al titolo */
         margin-bottom: 15px !important;
         color: #64748b;
         font-size: 0.85rem !important;
@@ -106,86 +165,96 @@
 
     .controls-section {
         display: flex !important;
-        flex-direction: column !important; /* Bottoni incolonnati su mobile per comodità */
-        gap: 10px !important;
+        flex-direction: column !important; /* Bottoni incolonnati e facili da premere col pollice */
+        gap: 8px !important;
         margin-bottom: 15px !important;
-        width: 100%;
     }
 
     .controls-section button {
         width: 100% !important;
-        margin: 0 !important;
+        padding: 12px !important;
+        font-weight: bold !important;
+        border-radius: 10px !important;
+        border: none !important;
+        font-size: 0.9rem !important;
+        cursor: pointer;
     }
 
-    .btn-primary { padding: 12px !important; font-weight: bold; border-radius: 8px; border: none; background-color: #2563eb; color: white;}
-    .btn-danger { padding: 12px !important; font-weight: bold; border-radius: 8px; border: none; background-color: #ef4444; color: white;}
+    .btn-primary { background-color: #2563eb !important; color: white !important; }
+    .btn-secondary { background-color: #8b5cf6 Imbportant; color: white !important; } /* Tasto Call/Video viola */
+    .btn-danger { background-color: #ef4444 !important; color: white !important; }
+
+    /* Nascondiamo il tasto Call/Video su smartphone perché i browser mobile non supportano la cattura schermo */
+    #btn-cattura-sistema {
+        display: none !important;
+    }
 
     .status-badge {
         margin-bottom: 15px !important;
         text-align: center;
         padding: 8px !important;
-        background-color: #f1f5f9;
-        border-radius: 6px;
-        font-weight: 500;
-    }
-
-    .theme-select {
-        width: 100% !important;
-        padding: 10px !important;
+        background-color: #eff6ff !important;
+        color: #2563eb !important;
         border-radius: 8px !important;
-        border: 1px solid var(--border-color, #ccc) !important;
-        font-size: 0.95rem !important;
+        font-weight: 500;
+        font-size: 0.85rem !important;
     }
 
-    /* --- AREA DI TESTO --- */
+    /* --- AREA DI TESTO (TEXTAREA) --- */
     textarea {
         width: 100% !important;
-        height: 200px !important; /* Ridotto per evitare scroll infiniti su smartphone */
+        height: 220px !important;
         padding: 12px !important;
         box-sizing: border-box !important;
-        border-radius: 8px !important;
-        border: 1px solid var(--border-color, #ccc) !important;
+        border-radius: 12px !important;
+        border: 1px solid #e2e8f0 !important;
         font-family: inherit;
+        font-size: 0.95rem !important;
         resize: none !important;
+        background-color: #f8fafc !important;
     }
 
-    /* --- ELEMENTI SCENICI E ADVERSTISING --- */
+    /* Anteprima in attesa della voce */
+    .anteprima-azzurra {
+        background-color: #f0fdf4 !important;
+        color: #166534 !important;
+        padding: 12px !important;
+        border-radius: 10px !important;
+        margin-top: 15px !important;
+        font-style: italic;
+        font-size: 0.9rem !important;
+        border: 1px dashed #bbf7d0 !important;
+    }
+
+    /* --- BANNER AD SENSE INSERITI NELLA CARD --- */
     .ads-container-mobile {
         margin: 15px auto !important;
-        text-align: center;
-        max-width: 100%;
-    }
-
-    .banner-adv, #banner-principale {
-        width: 100% !important;
         max-width: 320px !important;
+        max-height: 50px !important;
         height: 50px !important;
-        line-height: 50px !important;
+        overflow: hidden !important;
+    }
+
+    /* --- BADGE BADGE PWA FLUTTUANTE MOBILE --- */
+    #pwa-mobile-badge {
+        position: absolute !important;
+        z-index: 9999;
+        top: 15px;
+        right: 15px;
+        background: rgba(37, 99, 235, 0.15) !important;
+        border: 1px solid rgba(37, 99, 235, 0.4) !important;
+        padding: 6px 12px !important;
+        border-radius: 20px !important;
+        backdrop-filter: blur(4px) !important;
+    }
+
+    #pwa-mobile-badge span {
         font-size: 0.75rem !important;
-        margin: 15px auto !important;
-        display: block !important;
+        font-weight: bold !important;
+        color: #2563eb !important;
     }
 
-    .magic-sparkles {
-        width: 200px !important;
-        height: 120px !important;
-        top: -30px !important;
-        transform: rotate(60deg) !important;
-        transform-origin: center center !important;
-        display: block !important;
-    }
-
-    /* --- DISATTIVAZIONI STRUMENTI DESKTOP --- */
-    #btn-cattura-sistema {
-        display: none !important; /* Nasconde il tasto Call/Video non supportato su mobile */
-    }
-
-    /* PROTEZIONE PIP MODE BANNER */
-    :picture-in-picture .banner-adv,
-    :picture-in-picture #banner-principale,
-    .pip-mode .banner-adv,
-    .pip-mode #banner-principale {
+    #pwa-pc-badge {
         display: none !important;
     }
-
 }
