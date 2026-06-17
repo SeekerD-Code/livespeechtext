@@ -29,6 +29,7 @@
         text-align: center !important;
         margin-bottom: 20px !important;
         padding-top: 25px !important;
+        position: relative !important; /* Crea il contesto di posizionamento corretto */
     }
 
     /* "Live Speech Text" */
@@ -41,6 +42,8 @@
         margin: 5px 0 0 0 !important;
         color: #05096c;
         transition: color 0.3s ease;
+        position: relative !important; /* Forza il testo a stare sopra */
+        z-index: 3 !important;
     }
 
     /* "Seeker D. Code" */
@@ -62,6 +65,8 @@
         color: #1e293b;
         margin-top: 5px !important;
         font-weight: 400 !important;
+        position: relative !important;
+        z-index: 3
     }
 
     /* Posizionamento millimetrico del Cappello di Paglia su Mobile */
@@ -70,7 +75,7 @@
         width: 24px !important;
         height: auto !important;
         top: -4px !important;
-        left: 175px !important; /* Centrato dinamicamente sulla S di Splash */
+        left: 115px !important; /* Centrato dinamicamente sulla S di Splash */
         z-index: 5;
     }
 
@@ -84,7 +89,7 @@
         transform: translateX(-50%) rotate(15deg) !important;
         opacity: 0.8;
         pointer-events: none;
-        z-index: 1 !important;
+        z-index: -1 !important;
     }
 
     /* --- BARRA DEI CONTROLLI UNIFICATA GRIGIA --- */
