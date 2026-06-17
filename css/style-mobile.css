@@ -69,8 +69,8 @@
         position: absolute !important;
         width: 24px !important;
         height: auto !important;
-        top: -12px !important;
-        left: 105px !important; /* Centrato dinamicamente sulla S di Splash */
+        top: -4px !important;
+        left: 175px !important; /* Centrato dinamicamente sulla S di Splash */
         z-index: 5;
     }
 
@@ -84,6 +84,7 @@
         transform: translateX(-50%) rotate(15deg) !important;
         opacity: 0.8;
         pointer-events: none;
+        z-index: 1 !important;
     }
 
     /* --- BARRA DEI CONTROLLI UNIFICATA GRIGIA --- */
