@@ -16,7 +16,7 @@ const selectLingua = document.getElementById('select-lingua');
 // Stato dell'applicazione
 let ascoltoAttivo = false;
 
-// MEMORIA GLOBALE DI SESSIONE (Messa a inizio file per non perderla mai durante i riavvii)
+// MEMORIA GLOBALE DI SESSIONE
 let testoConsolidatoSessione = "";
 
 // Inizializzazione Motore Vocale Cross-Browser
@@ -67,7 +67,7 @@ if (recognition) {
         let testoProvvisorio = '';
         let testoDefinitivoDellaSessione = '';
 
-        // Ricostruiamo sempre partendo da ZERO (i = 0) per non farci ingannare dai finti indici di Android
+        // Ricostruiamo sempre partendo da ZERO (i = 0) per i finti indici di Android
         for (let i = 0; i < event.results.length; ++i) {
             const trascrizione = event.results[i][0].transcript;
             if (event.results[i].isFinal) {
@@ -90,11 +90,11 @@ if (recognition) {
             
             // Se il blocco definitivo attuale è più lungo di quello che avevamo salvato prima, c'è testo nuovo!
             if (pulito.length > testoConsolidatoSessione.length) {
-                // Estraiamo SOLO la novità reale sottraendo la vecchia stringa
-                let testoNuovo REALE = pulito.substring(testoConsolidatoSessione.length).trim();
+                // Sottrazione della vecchia stringa per estrarre la novità (CORRETTO SENZA SPAZI INVENTATI)
+                let testoNuovoReale = pulito.substring(testoConsolidatoSessione.length).trim();
                 
-                if (testoNuovoREALE.length > 0) {
-                    const stringaDaAggiungere = testoNuovoREALE + " ";
+                if (testoNuovoReale.length > 0) {
+                    const stringaDaAggiungere = testoNuovoReale + " ";
                     
                     // Memorizziamo lo stato attuale del blocco definitivo
                     testoConsolidatoSessione = pulito;
@@ -122,7 +122,7 @@ if (recognition) {
     };
 
     recognition.onend = () => {
-        // Al reset della micro-sessione vocale, ripuliamo il vecchio blocco consolidato per essere pronti alla prossima frase
+        // Al reset della sessione vocale, svuotiamo la stringa di confronto
         testoConsolidatoSessione = "";
         
         if (ascoltoAttivo) {
@@ -145,12 +145,12 @@ function disattivaGrafica() {
     statoApp.style.color = "";
 }
 
-// Tasto Cancella Tutto (Ora azzera correttamente anche le memorie di testo)
+// Tasto Cancella Tutto
 if (btnCancella) {
     btnCancella.addEventListener('click', () => {
         if (confirm("Vuoi davvero cancellare tutto il testo?")) {
             areaAppunti.value = '';
-            testoConsolidatoSessione = ""; // AZZERAMENTO FONDAMENTALE
+            testoConsolidatoSessione = ""; 
             if (btnDownload) btnDownload.style.display = "none";
         }
     });
