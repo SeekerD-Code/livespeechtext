@@ -2,7 +2,6 @@
 const traduzioni = {
     'it-IT': { inAscolto: "In ascolto:", attesaVoce: "In attesa della voce...", pronto: "Pronto ad ascoltare", ascoltando: "🔴 Microfono attivo...", btnMicrofono: "🎤 Trascrivi" },
     'en-US': { inAscolto: "Listening:", attesaVoce: "Waiting for voice...", pronto: "Ready to listen", ascoltando: "🔴 Microphone active...", btnMicrofono: "🎤 Transcribe" }
-    // Aggiungi le altre lingue se le usi, per ora teniamo le principali per il test
 };
 
 // Elementi del DOM
@@ -17,7 +16,10 @@ const selectLingua = document.getElementById('select-lingua');
 // Stato dell'applicazione
 let ascoltoAttivo = false;
 
-// Inizializzazione Motore Vocale Cross-Browser senza alert bloccanti
+// MEMORIA GLOBALE DI SESSIONE (Messa a inizio file per non perderla mai durante i riavvii)
+let testoConsolidatoSessione = "";
+
+// Inizializzazione Motore Vocale Cross-Browser
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 var recognition = null;
 
@@ -60,60 +62,44 @@ if (recognition) {
         statoApp.style.color = "#b91c1c";
     };
 
-// Inserisci questa variabile FUORI da recognition.onresult (es. subito sopra l'inizio di recognition.onresult)
-    // Serve a tenere traccia del testo consolidato nelle scorse iterazioni senza basarsi sulla textarea
-    let testoConsolidatoSessione = "";
-
-    // Se hai un pulsante di cancellazione o interruzione, ricordati di azzerare questa variabile lì dentro:
-    // document.getElementById('btn-cancella').addEventListener('click', () => { testoConsolidatoSessione = ""; });
-
-    // --- CUORE DEL MECCANISMO MOBILE (Versione a Sovrascrittura Dinamica Anti-Accumulo) ---
+    // --- CUORE DEL MECCANISMO MOBILE ANTI-DUPLICAZIONE ---
     recognition.onresult = (event) => {
         let testoProvvisorio = '';
-        let nuoviPezziDefinitivi = '';
+        let testoDefinitivoDellaSessione = '';
 
-        // Ciclo standard sulle Speech API
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
+        // Ricostruiamo sempre partendo da ZERO (i = 0) per non farci ingannare dai finti indici di Android
+        for (let i = 0; i < event.results.length; ++i) {
             const trascrizione = event.results[i][0].transcript;
             if (event.results[i].isFinal) {
-                nuoviPezziDefinitivi += trascrizione + ' ';
+                testoDefinitivoDellaSessione += trascrizione + ' ';
             } else {
                 testoProvvisorio += trascrizione;
             }
         }
 
-        // 1. Aggiorna il Box Azzurro dell'ascolto immediato
+        // 1. Aggiorna il Box Azzurro (Anteprima Real-Time)
         if (testoProvvisorio) {
             if (boxAnteprima) boxAnteprima.innerHTML = `<strong>In ascolto:</strong> ${testoProvvisorio}`;
         } else {
-            if (boxAnteprima) boxAnteprima.textContent = traduzioni['it-IT'] ? traduzioni['it-IT'].attesaVoce : "In attesa della voce...";
+            if (boxAnteprima) boxAnteprima.textContent = traduzioni['it-IT'].attesaVoce;
         }
 
-        // 2. Gestione del testo definitivo con filtro sui duplicati progressivi
-        if (nuoviPezziDefinitivi) {
-            let pulito = nuoviPezziDefinitivi.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ").trim();
+        // 2. Gestione del Testo Confermato
+        if (testoDefinitivoDellaSessione) {
+            let pulito = testoDefinitivoDellaSessione.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ").trim();
             
-            if (pulito.length > 0) {
-                // Dividiamo in parole per fare un controllo di sovrapposizione progressiva
-                const paroleNuove = pulito.split(" ");
-                let frammentoDaAggiungere = [];
-
-                // Verifichiamo se le nuove parole sono già parzialmente incluse nel testo consolidato
-                for (let parola of paroleNuove) {
-                    // Se il testo consolidato non finisce già con questa specifica parola (seguita da spazio), allora è nuova!
-                    if (!testoConsolidatoSessione.endsWith(parola + " ")) {
-                        frammentoDaAggiungere.push(parola);
-                    }
-                }
-
-                // Se abbiamo trovato parole realmente inedite, procediamo
-                if (frammentoDaAggiungere.length > 0) {
-                    const stringaNuova = frammentoDaAggiungere.join(" ") + " ";
+            // Se il blocco definitivo attuale è più lungo di quello che avevamo salvato prima, c'è testo nuovo!
+            if (pulito.length > testoConsolidatoSessione.length) {
+                // Estraiamo SOLO la novità reale sottraendo la vecchia stringa
+                let testoNuovo REALE = pulito.substring(testoConsolidatoSessione.length).trim();
+                
+                if (testoNuovoREALE.length > 0) {
+                    const stringaDaAggiungere = testoNuovoREALE + " ";
                     
-                    // Alimentiamo la memoria storica della sessione
-                    testoConsolidatoSessione += stringaNuova;
+                    // Memorizziamo lo stato attuale del blocco definitivo
+                    testoConsolidatoSessione = pulito;
 
-                    // Stampiamo nella textarea gestendo il cursore/focus dell'utente
+                    // Scrittura pulita nella Textarea
                     const haIlFocus = (document.activeElement === areaAppunti);
                     if (haIlFocus) {
                         const inizioSel = areaAppunti.selectionStart;
@@ -121,11 +107,11 @@ if (recognition) {
                         const scrollTopSalvo = areaAppunti.scrollTop;
                         const lunghezzaAttuale = areaAppunti.value.length;
 
-                        areaAppunti.setRangeText(stringaNuova, lunghezzaAttuale, lunghezzaAttuale, 'end');
+                        areaAppunti.setRangeText(stringaDaAggiungere, lunghezzaAttuale, lunghezzaAttuale, 'end');
                         areaAppunti.setSelectionRange(inizioSel, fineSel);
                         areaAppunti.scrollTop = scrollTopSalvo;
                     } else {
-                        areaAppunti.value += stringaNuova;
+                        areaAppunti.value += stringaDaAggiungere;
                         areaAppunti.scrollTop = areaAppunti.scrollHeight;
                     }
 
@@ -136,7 +122,9 @@ if (recognition) {
     };
 
     recognition.onend = () => {
-        // Se l'utente non ha premuto "Ferma", il motore si riavvia da solo (Anti-timeout mobile)
+        // Al reset della micro-sessione vocale, ripuliamo il vecchio blocco consolidato per essere pronti alla prossima frase
+        testoConsolidatoSessione = "";
+        
         if (ascoltoAttivo) {
             try { recognition.start(); } catch (e) { console.error(e); }
         } else {
@@ -157,11 +145,12 @@ function disattivaGrafica() {
     statoApp.style.color = "";
 }
 
-// Tasto Cancella Tutto
+// Tasto Cancella Tutto (Ora azzera correttamente anche le memorie di testo)
 if (btnCancella) {
     btnCancella.addEventListener('click', () => {
         if (confirm("Vuoi davvero cancellare tutto il testo?")) {
             areaAppunti.value = '';
+            testoConsolidatoSessione = ""; // AZZERAMENTO FONDAMENTALE
             if (btnDownload) btnDownload.style.display = "none";
         }
     });
@@ -188,7 +177,7 @@ const tabs = document.querySelectorAll('.tab-content');
 
 links.forEach(link => {
     link.addEventListener('click', (e) => {
-        if (link.getAttribute('href') !== '#') return; // Lascia passare il tasto Home Page esterno
+        if (link.getAttribute('href') !== '#') return;
         e.preventDefault();
         
         links.forEach(l => l.classList.remove('active'));
