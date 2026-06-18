@@ -62,12 +62,12 @@ if (recognition) {
         statoApp.style.color = "#b91c1c";
     };
 
-    // --- CUORE DEL MECCANISMO MOBILE ANTI-DUPLICAZIONE ---
+// --- CUORE DEL MECCANISMO MOBILE (Filtro Granulare Doppioni Consecutivi) ---
     recognition.onresult = (event) => {
         let testoProvvisorio = '';
         let testoDefinitivoDellaSessione = '';
 
-        // Ricostruiamo sempre partendo da ZERO (i = 0) per i finti indici di Android
+        // 1. Raccogliamo tutto l'albero dei risultati sputato da Chrome
         for (let i = 0; i < event.results.length; ++i) {
             const trascrizione = event.results[i][0].transcript;
             if (event.results[i].isFinal) {
@@ -77,45 +77,65 @@ if (recognition) {
             }
         }
 
-        // 1. Aggiorna il Box Azzurro (Anteprima Real-Time)
+        // Update dell'anteprima nel Box Azzurro
         if (testoProvvisorio) {
             if (boxAnteprima) boxAnteprima.innerHTML = `<strong>In ascolto:</strong> ${testoProvvisorio}`;
         } else {
             if (boxAnteprima) boxAnteprima.textContent = traduzioni['it-IT'].attesaVoce;
         }
 
-        // 2. Gestione del Testo Confermato
+        // 2. Elaborazione del testo definitivo con algoritmo di de-duplicazione
         if (testoDefinitivoDellaSessione) {
             let pulito = testoDefinitivoDellaSessione.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ").trim();
             
-            // Se il blocco definitivo attuale è più lungo di quello che avevamo salvato prima, c'è testo nuovo!
-            if (pulito.length > testoConsolidatoSessione.length) {
-                // Sottrazione della vecchia stringa per estrarre la novità (CORRETTO SENZA SPAZI INVENTATI)
-                let testoNuovoReale = pulito.substring(testoConsolidatoSessione.length).trim();
-                
-                if (testoNuovoReale.length > 0) {
-                    const stringaDaAggiungere = testoNuovoReale + " ";
+            if (pulito.length > 0) {
+                // Dividiamo la frase in singole parole
+                const tutteLeParole = pulito.split(" ");
+                const paroleFiltrate = [];
+
+                // Algoritmo Anti-Balbuzie: se una parola è identica alla precedente, la scartiamo
+                for (let i = 0; i < tutteLeParole.length; i++) {
+                    if (i === 0 || tutteLeParole[i].toLowerCase() !== tutteLeParole[i - 1].toLowerCase()) {
+                        paroleFiltrate.push(tutteLeParole[i]);
+                    }
+                }
+
+                // Ricostruiamo la frase pulita senza doppioni consecutivi
+                let fraseSenzaDuplicati = paroleFiltrate.join(" ") + " ";
+
+                // Se la frase filtrata ha novità rispetto a quanto già stampato
+                if (fraseSenzaDuplicati.trim() !== testoConsolidatoSessione.trim()) {
                     
-                    // Memorizziamo lo stato attuale del blocco definitivo
-                    testoConsolidatoSessione = pulito;
-
-                    // Scrittura pulita nella Textarea
-                    const haIlFocus = (document.activeElement === areaAppunti);
-                    if (haIlFocus) {
-                        const inizioSel = areaAppunti.selectionStart;
-                        const fineSel = areaAppunti.selectionEnd;
-                        const scrollTopSalvo = areaAppunti.scrollTop;
-                        const lunghezzaAttuale = areaAppunti.value.length;
-
-                        areaAppunti.setRangeText(stringaDaAggiungere, lunghezzaAttuale, lunghezzaAttuale, 'end');
-                        areaAppunti.setSelectionRange(inizioSel, fineSel);
-                        areaAppunti.scrollTop = scrollTopSalvo;
+                    // Calcoliamo solo la parte nuova reale rispetto all'ultima volta
+                    let daAggiungere = "";
+                    if (fraseSenzaDuplicati.startsWith(testoConsolidatoSessione)) {
+                        daAggiungere = fraseSenzaDuplicati.substring(testoConsolidatoSessione.length);
                     } else {
-                        areaAppunti.value += stringaDaAggiungere;
-                        areaAppunti.scrollTop = areaAppunti.scrollHeight;
+                        daAggiungere = fraseSenzaDuplicati; // Fallback se Chrome stravolge la struttura
                     }
 
-                    if (btnDownload) btnDownload.style.display = "block";
+                    if (daAggiungere.trim().length > 0) {
+                        // Aggiorniamo la memoria storica
+                        testoConsolidatoSessione = fraseSenzaDuplicati;
+
+                        // Iniezione controllata nella Textarea
+                        const haIlFocus = (document.activeElement === areaAppunti);
+                        if (haIlFocus) {
+                            const inizioSel = areaAppunti.selectionStart;
+                            const fineSel = areaAppunti.selectionEnd;
+                            const scrollTopSalvo = areaAppunti.scrollTop;
+                            const lunghezzaAttuale = areaAppunti.value.length;
+
+                            areaAppunti.setRangeText(daAggiungere, lunghezzaAttuale, lunghezzaAttuale, 'end');
+                            areaAppunti.setSelectionRange(inizioSel, fineSel);
+                            areaAppunti.scrollTop = scrollTopSalvo;
+                        } else {
+                            areaAppunti.value += daAggiungere;
+                            areaAppunti.scrollTop = areaAppunti.scrollHeight;
+                        }
+
+                        if (btnDownload) btnDownload.style.display = "block";
+                    }
                 }
             }
         }
