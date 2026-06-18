@@ -166,36 +166,6 @@
         font-weight: 500;
     }
 
-    /* Bottone Luna/Sole tondo */
-    #theme-toggle {
-        position: fixed !important; 
-        top: 20px !important;    /* Distanza dal bordo superiore della card */
-        right: 25px !important;  /* SBATTUTO A DESTRA RISPETTO ALLO SCHERMO */
-        
-        left: auto !important;
-
-        /* Pulizia conflitti */
-        bottom: auto !important;
-        transform: none !important;
-        float: none !important;
-        margin: 0 !important;
-        
-        z-index: 9999 !important;   /* Sempre sopra a tutto per essere cliccabile */
-
-        /* Stile grafico tondo */
-        background: #cbd5e1 !important;
-        border: none !important;
-        border-radius: 50% !important;
-        width: 38px !important;
-        height: 38px !important;
-        font-size: 1.1rem !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        cursor: pointer !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
-    }
-
     /* --- SEZIONE CONTROLLI E BOTTONI OPERATIVI (Stile Lexend) --- */
     .app-description {
         font-family: 'Lexend', sans-serif !important;
@@ -305,3 +275,33 @@
         display: none !important;
     }
 }
+
+    /* Bottone Luna/Sole tondo */
+    #theme-toggle {
+        position: fixed !important; 
+        top: 20px !important;    /* Distanza dal bordo superiore della card */
+        right: 25px !important;  /* SBATTUTO A DESTRA RISPETTO ALLO SCHERMO */
+        
+        left: auto !important;
+
+        /* Pulizia conflitti */
+        bottom: auto !important;
+        transform: none !important;
+        float: none !important;
+        margin: 0 !important;
+        
+        z-index: 9999 !important;   /* Sempre sopra a tutto per essere cliccabile */
+
+        /* Stile grafico tondo */
+        background: #cbd5e1 !important;
+        border: none !important;
+        border-radius: 50% !important;
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 1.1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+    }
