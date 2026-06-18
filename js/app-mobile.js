@@ -60,54 +60,72 @@ if (recognition) {
         statoApp.style.color = "#b91c1c";
     };
 
-// --- CUORE DEL MECCANISMO MOBILE (Flusso continuo corretto anti-duplicazione) ---
-    recognition.onresult = (event) => {
-        let testovProvvisorio = '';
-        let testoDefinitivo = '';
+// Inserisci questa variabile FUORI da recognition.onresult (es. subito sopra l'inizio di recognition.onresult)
+    // Serve a tenere traccia del testo consolidato nelle scorse iterazioni senza basarsi sulla textarea
+    let testoConsolidatoSessione = "";
 
-        // Scorriamo tutti i risultati accumulati dall'inizio della sessione corrente
+    // Se hai un pulsante di cancellazione o interruzione, ricordati di azzerare questa variabile lì dentro:
+    // document.getElementById('btn-cancella').addEventListener('click', () => { testoConsolidatoSessione = ""; });
+
+    // --- CUORE DEL MECCANISMO MOBILE (Versione a Sovrascrittura Dinamica Anti-Accumulo) ---
+    recognition.onresult = (event) => {
+        let testoProvvisorio = '';
+        let nuoviPezziDefinitivi = '';
+
+        // Ciclo standard sulle Speech API
         for (let i = event.resultIndex; i < event.results.length; ++i) {
-            const risultato = event.results[i][0].transcript;
+            const trascrizione = event.results[i][0].transcript;
             if (event.results[i].isFinal) {
-                testoDefinitivo += risultato + ' ';
+                nuoviPezziDefinitivi += trascrizione + ' ';
             } else {
-                testovProvvisorio += risultato;
+                testoProvvisorio += trascrizione;
             }
         }
 
-        // 1. Gestione Testo In Tempo Reale (Provvisorio) -> Box Azzurro
-        if (testovProvvisorio) {
-            if (boxAnteprima) {
-                boxAnteprima.innerHTML = `<strong>In ascolto:</strong> ${testovProvvisorio}`;
-            }
+        // 1. Aggiorna il Box Azzurro dell'ascolto immediato
+        if (testoProvvisorio) {
+            if (boxAnteprima) boxAnteprima.innerHTML = `<strong>In ascolto:</strong> ${testoProvvisorio}`;
         } else {
             if (boxAnteprima) boxAnteprima.textContent = traduzioni['it-IT'] ? traduzioni['it-IT'].attesaVoce : "In attesa della voce...";
         }
 
-        // 2. Gestione Testo Confermato (Definitivo) -> Inserimento Non-Invasivo nella Textarea
-        if (testoDefinitivo) {
-            // Pulizia del testo mantenendo solo spazi singoli
-            let pulito = testoDefinitivo.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ").trim();
+        // 2. Gestione del testo definitivo con filtro sui duplicati progressivi
+        if (nuoviPezziDefinitivi) {
+            let pulito = nuoviPezziDefinitivi.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ").trim();
             
             if (pulito.length > 0) {
-                // CONTROLLO ANTI-DUPLICAZIONE EXTREMO: 
-                // Se la textarea contiene già esattamente questa frase alla fine, non aggiungerla di nuovo
-                const testoAttuale = areaAppunti.value;
-                if (!testoAttuale.endsWith(pulito + " ")) {
+                // Dividiamo in parole per fare un controllo di sovrapposizione progressiva
+                const paroleNuove = pulito.split(" ");
+                let frammentoDaAggiungere = [];
+
+                // Verifichiamo se le nuove parole sono già parzialmente incluse nel testo consolidato
+                for (let parola of paroleNuove) {
+                    // Se il testo consolidato non finisce già con questa specifica parola (seguita da spazio), allora è nuova!
+                    if (!testoConsolidatoSessione.endsWith(parola + " ")) {
+                        frammentoDaAggiungere.push(parola);
+                    }
+                }
+
+                // Se abbiamo trovato parole realmente inedite, procediamo
+                if (frammentoDaAggiungere.length > 0) {
+                    const stringaNuova = frammentoDaAggiungere.join(" ") + " ";
                     
+                    // Alimentiamo la memoria storica della sessione
+                    testoConsolidatoSessione += stringaNuova;
+
+                    // Stampiamo nella textarea gestendo il cursore/focus dell'utente
                     const haIlFocus = (document.activeElement === areaAppunti);
-                    
                     if (haIlFocus) {
                         const inizioSel = areaAppunti.selectionStart;
                         const fineSel = areaAppunti.selectionEnd;
                         const scrollTopSalvo = areaAppunti.scrollTop;
                         const lunghezzaAttuale = areaAppunti.value.length;
 
-                        areaAppunti.setRangeText(pulito + " ", lunghezzaAttuale, lunghezzaAttuale, 'end');
+                        areaAppunti.setRangeText(stringaNuova, lunghezzaAttuale, lunghezzaAttuale, 'end');
                         areaAppunti.setSelectionRange(inizioSel, fineSel);
                         areaAppunti.scrollTop = scrollTopSalvo;
                     } else {
-                        areaAppunti.value += pulito + " ";
+                        areaAppunti.value += stringaNuova;
                         areaAppunti.scrollTop = areaAppunti.scrollHeight;
                     }
 
