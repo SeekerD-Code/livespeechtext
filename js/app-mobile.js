@@ -60,49 +60,59 @@ if (recognition) {
         statoApp.style.color = "#b91c1c";
     };
 
-    // --- CUORE DEL MECCANISMO MOBILE (Flusso continuo senza blocchi rigidi) ---
+// --- CUORE DEL MECCANISMO MOBILE (Flusso continuo corretto anti-duplicazione) ---
     recognition.onresult = (event) => {
-        let testoProvvisorio = '';
+        let testovProvvisorio = '';
         let testoDefinitivo = '';
 
+        // Scorriamo tutti i risultati accumulati dall'inizio della sessione corrente
         for (let i = event.resultIndex; i < event.results.length; ++i) {
+            const risultato = event.results[i][0].transcript;
             if (event.results[i].isFinal) {
-                testoDefinitivo += event.results[i][0].transcript + ' ';
+                testoDefinitivo += risultato + ' ';
             } else {
-                testoProvvisorio += event.results[i][0].transcript;
+                testovProvvisorio += risultato;
             }
         }
 
         // 1. Gestione Testo In Tempo Reale (Provvisorio) -> Box Azzurro
-        if (testoProvvisorio) {
+        if (testovProvvisorio) {
             if (boxAnteprima) {
-                boxAnteprima.innerHTML = `<strong>In ascolto:</strong> ${testoProvvisorio}`;
+                boxAnteprima.innerHTML = `<strong>In ascolto:</strong> ${testovProvvisorio}`;
             }
         } else {
-            if (boxAnteprima) boxAnteprima.textContent = traduzioni['it-IT'].attesaVoce;
+            if (boxAnteprima) boxAnteprima.textContent = traduzioni['it-IT'] ? traduzioni['it-IT'].attesaVoce : "In attesa della voce...";
         }
 
         // 2. Gestione Testo Confermato (Definitivo) -> Inserimento Non-Invasivo nella Textarea
         if (testoDefinitivo) {
+            // Pulizia del testo mantenendo solo spazi singoli
             let pulito = testoDefinitivo.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ").trim();
+            
             if (pulito.length > 0) {
-                const haIlFocus = (document.activeElement === areaAppunti);
-                
-                if (haIlFocus) {
-                    const lunghezzaAttuale = areaAppunti.value.length;
-                    const inizioSel = areaAppunti.selectionStart;
-                    const fineSel = areaAppunti.selectionEnd;
-                    const scrollTopSalvo = areaAppunti.scrollTop;
+                // CONTROLLO ANTI-DUPLICAZIONE EXTREMO: 
+                // Se la textarea contiene già esattamente questa frase alla fine, non aggiungerla di nuovo
+                const testoAttuale = areaAppunti.value;
+                if (!testoAttuale.endsWith(pulito + " ")) {
+                    
+                    const haIlFocus = (document.activeElement === areaAppunti);
+                    
+                    if (haIlFocus) {
+                        const inizioSel = areaAppunti.selectionStart;
+                        const fineSel = areaAppunti.selectionEnd;
+                        const scrollTopSalvo = areaAppunti.scrollTop;
+                        const lunghezzaAttuale = areaAppunti.value.length;
 
-                    areaAppunti.setRangeText(pulito + " ", lunghezzaAttuale, lunghezzaAttuale, 'end');
-                    areaAppunti.setSelectionRange(inizioSel, fineSel);
-                    areaAppunti.scrollTop = scrollTopSalvo;
-                } else {
-                    areaAppunti.value += pulito + " ";
-                    areaAppunti.scrollTop = areaAppunti.scrollHeight;
+                        areaAppunti.setRangeText(pulito + " ", lunghezzaAttuale, lunghezzaAttuale, 'end');
+                        areaAppunti.setSelectionRange(inizioSel, fineSel);
+                        areaAppunti.scrollTop = scrollTopSalvo;
+                    } else {
+                        areaAppunti.value += pulito + " ";
+                        areaAppunti.scrollTop = areaAppunti.scrollHeight;
+                    }
+
+                    if (btnDownload) btnDownload.style.display = "block";
                 }
-
-                if (btnDownload) btnDownload.style.display = "block";
             }
         }
     };
