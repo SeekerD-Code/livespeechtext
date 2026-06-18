@@ -171,7 +171,14 @@
         position: absolute !important; 
         top: 20px !important;    /* Distanza dal bordo superiore della card */
         right: 5px !important;  /* Distanza dal bordo destro della card */
+        
+        /* 🚨 AZZERAMENTO DEI CONFLITTI: Cancella i vecchi comandi degli altri CSS */
         left: auto !important;   /* Annulla qualsiasi spinta a sinistra ereditata */
+        bottom: auto !important;
+        transform: none !important;
+        float: none !important;
+        margin: 0 !important;
+        
         z-index: 9999 !important;   /* Sempre sopra a tutto per essere cliccabile */
 
         /* Stile grafico tondo */
@@ -185,7 +192,7 @@
         align-items: center !important;
         justify-content: center !important;
         cursor: pointer !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
         
         /* Protezione contro i contenitori flessibili */
         float: none !important;
